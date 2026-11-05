@@ -2,24 +2,27 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
-  autonomyRange,
   getAllPatterns,
   getMomentNeighbors,
   getPattern,
-  getRelationGroups,
+  getRelations,
   momentHref,
   momentLabel,
   pad,
 } from "@/lib/patterns";
 import { MechanismFlow } from "@/components/MechanismFlow";
 import { Comparison } from "@/components/Comparison";
+import { Considerations } from "@/components/Considerations";
 import { Sources } from "@/components/Sources";
 import { Examples } from "@/components/Examples";
 import { ExternalLink } from "@/components/ExternalLink";
 import { RelatedPatterns } from "@/components/RelatedPatterns";
-import { PatternToc, type TocItem } from "@/components/PatternToc";
+import { PatternAside } from "@/components/PatternAside";
+import { JumpLinks } from "@/components/JumpLinks";
+import { DraftTag } from "@/components/DraftTag";
+import { ReviewFlags } from "@/components/ReviewFlags";
 import { TocDisclosure } from "@/components/TocDisclosure";
-import { Readout } from "@/components/Readout";
+import type { TocItem } from "@/components/PatternToc";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -39,32 +42,31 @@ export default async function PatternPage({ params }: Props) {
   if (!p) notFound();
 
   const { prev, next } = getMomentNeighbors(p);
-  const relations = getRelationGroups(p);
+  const relations = getRelations(p);
   const body = p.body;
+  const drafts = p.drafts ?? {};
 
   const momentName = momentLabel(p.moment);
-  const hasWhen = Boolean(body.whenToUse || body.whenNotToUse);
-  const hasField = Boolean(body.inTheField) || p.examples.length > 0;
+  const whenToUse = p.whenToUse ?? body.whenToUse;
   // An empty Sources section says less than no section; keep it in dev only.
   const showSources = p.sources.length > 0 || process.env.NODE_ENV !== "production";
   const showQuestions = p.showOpenQuestions && p.openQuestions.length > 0;
-  // Review flags are for the author, and only while the entry is unfinished.
-  // A reviewed or stable pattern that still carries them has had them handled.
-  const showReview = p.status === "draft" && p.review.length > 0;
-
-  const toc: TocItem[] = [
+  /* Everything below the mechanism, in reading order. */
+  const sections: TocItem[] = [
     body.problem ? { id: "problem", label: "Problem" } : null,
-    { id: "mechanism", label: "The mechanism" },
+    whenToUse ? { id: "when", label: "When to use" } : null,
+    p.considerations.length > 0 || body.considerations
+      ? { id: "considerations", label: "Design considerations" }
+      : null,
     { id: "contrast", label: "Without / with" },
-    hasWhen ? { id: "when", label: "When to use it" } : null,
-    body.considerations ? { id: "considerations", label: "Design considerations" } : null,
-    hasField ? { id: "in-the-field", label: "In the field" } : null,
+    p.examples.length > 0 || body.inTheField ? { id: "examples", label: "Examples" } : null,
     relations.length > 0 ? { id: "related", label: "Related patterns" } : null,
     p.crossReferences.length > 0 ? { id: "elsewhere", label: "Elsewhere" } : null,
     showSources ? { id: "sources", label: "Sources" } : null,
     showQuestions ? { id: "open-questions", label: "Still figuring out" } : null,
-    body.notes ? { id: "notes", label: "Notes" } : null,
   ].filter((item): item is TocItem => item !== null);
+
+  const toc: TocItem[] = [{ id: "mechanism", label: "The mechanism" }, ...sections];
 
   return (
     <div className="wrap pattern-layout">
@@ -82,30 +84,22 @@ export default async function PatternPage({ params }: Props) {
         </nav>
 
         <header className="pattern-head">
-          <p className="pattern-number">Pattern {p.number}</p>
+          <p className="label pattern-number">
+            Pattern {pad(p.number)} · {momentName}
+          </p>
           <h1 className="display">{p.name}</h1>
           <p className="lede">{p.intent}</p>
-
-          <Readout pattern={p} />
         </header>
 
-        {showReview && (
-          <aside className="review-flag" aria-labelledby="needs-review">
-            <h2 id="needs-review" className="review-flag-head">
-              Needs your review
-            </h2>
-            <p className="review-flag-note">
-              Drafted or unverified while this entry is a draft. Each item says what to check and
-              why.
-            </p>
-            <ul className="review-flag-list">
-              {p.review.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </aside>
-        )}
+        {/* Author-facing, never a reader's surface: development, or ?review. */}
+        <ReviewFlags items={p.review} />
 
+        {/* The hero: labelled by its own eyebrow, which carries id="mechanism". */}
+        <section className="section section-mechanism" aria-labelledby="mechanism">
+          <MechanismFlow steps={p.steps} />
+        </section>
+
+        <JumpLinks items={sections} />
         <TocDisclosure items={toc} />
 
         {body.problem && (
@@ -117,12 +111,40 @@ export default async function PatternPage({ params }: Props) {
           </section>
         )}
 
-        <section className="section" aria-labelledby="mechanism">
-          <h2 id="mechanism" className="section-head">
-            The mechanism
-          </h2>
-          <MechanismFlow steps={p.steps} />
-        </section>
+        {whenToUse && (
+          <section className="section" aria-labelledby="when">
+            <h2 id="when" className="section-head">
+              When to use <DraftTag when={drafts.whenToUse} />
+            </h2>
+            {p.whenToUse ? (
+              <p className="prose-lead">{p.whenToUse}</p>
+            ) : (
+              <div className="prose" dangerouslySetInnerHTML={{ __html: body.whenToUse! }} />
+            )}
+            {body.whenNotToUse && (
+              <>
+                <h3 className="subhead when-not-head">Leave it out when</h3>
+                <div className="prose" dangerouslySetInnerHTML={{ __html: body.whenNotToUse }} />
+              </>
+            )}
+          </section>
+        )}
+
+        {(p.considerations.length > 0 || body.considerations) && (
+          <section className="section" aria-labelledby="considerations">
+            <h2 id="considerations" className="section-head">
+              Design considerations <DraftTag when={drafts.considerations} />
+            </h2>
+            {p.considerations.length > 0 ? (
+              <Considerations items={p.considerations} />
+            ) : (
+              <div
+                className="prose considerations-prose"
+                dangerouslySetInnerHTML={{ __html: body.considerations! }}
+              />
+            )}
+          </section>
+        )}
 
         <section className="section" aria-labelledby="contrast">
           <h2 id="contrast" className="section-head">
@@ -141,44 +163,10 @@ export default async function PatternPage({ params }: Props) {
           />
         </section>
 
-        {hasWhen && (
-          <section className="section" aria-labelledby="when">
-            <h2 id="when" className="section-head">
-              When to use it
-            </h2>
-            <div className="when-grid">
-              {body.whenToUse && (
-                <div className="when-col">
-                  <h3 className="when-head">Use it when</h3>
-                  <div className="prose" dangerouslySetInnerHTML={{ __html: body.whenToUse }} />
-                </div>
-              )}
-              {body.whenNotToUse && (
-                <div className="when-col when-col-not">
-                  <h3 className="when-head">Leave it out when</h3>
-                  <div className="prose" dangerouslySetInnerHTML={{ __html: body.whenNotToUse }} />
-                </div>
-              )}
-            </div>
-          </section>
-        )}
-
-        {body.considerations && (
-          <section className="section" aria-labelledby="considerations">
-            <h2 id="considerations" className="section-head">
-              Design considerations
-            </h2>
-            <div
-              className="prose considerations"
-              dangerouslySetInnerHTML={{ __html: body.considerations }}
-            />
-          </section>
-        )}
-
-        {hasField && (
-          <section className="section" aria-labelledby="in-the-field">
-            <h2 id="in-the-field" className="section-head">
-              In the field
+        {(p.examples.length > 0 || body.inTheField) && (
+          <section className="section" aria-labelledby="examples">
+            <h2 id="examples" className="section-head">
+              Examples <DraftTag when={drafts.examples} />
             </h2>
             {body.inTheField && (
               <div className="prose" dangerouslySetInnerHTML={{ __html: body.inTheField }} />
@@ -192,7 +180,7 @@ export default async function PatternPage({ params }: Props) {
             <h2 id="related" className="section-head">
               Related patterns
             </h2>
-            <RelatedPatterns groups={relations} />
+            <RelatedPatterns relations={relations} />
           </section>
         )}
 
@@ -222,6 +210,14 @@ export default async function PatternPage({ params }: Props) {
             <h2 id="sources" className="section-head">
               Sources
             </h2>
+            {/* The notes paragraph carries the superscript citations into the
+                numbered list below it. */}
+            {body.notes && (
+              <div
+                className="prose source-notes"
+                dangerouslySetInnerHTML={{ __html: body.notes }}
+              />
+            )}
             <Sources sources={p.sources} file={p.file} />
           </section>
         )}
@@ -239,38 +235,30 @@ export default async function PatternPage({ params }: Props) {
           </aside>
         )}
 
-        {body.notes && (
-          <section className="section" aria-labelledby="notes">
-            <h2 id="notes" className="section-head">
-              Notes
-            </h2>
-            <div className="prose" dangerouslySetInnerHTML={{ __html: body.notes }} />
-          </section>
-        )}
-
         <nav className="pager" aria-label={`More ${momentName.toLowerCase()} patterns`}>
-          {prev ? (
-            <Link href={`/patterns/${prev.slug}`} className="pager-link">
-              <span className="label">← {pad(prev.number)}</span>
-              <span>{prev.name}</span>
-            </Link>
-          ) : (
-            <span />
-          )}
+          <Link href="/" className="pager-link pager-all">
+            ← All patterns
+          </Link>
           {next && (
             <Link href={`/patterns/${next.slug}`} className="pager-link pager-next">
-              <span className="label">{pad(next.number)} →</span>
-              <span>{next.name}</span>
+              <span className="label">
+                Next in {momentName.toLowerCase()} · {pad(next.number)} →
+              </span>
+              <span className="pager-name">{next.name}</span>
+            </Link>
+          )}
+          {!next && prev && (
+            <Link href={`/patterns/${prev.slug}`} className="pager-link pager-next">
+              <span className="label">
+                Back in {momentName.toLowerCase()} · {pad(prev.number)} ←
+              </span>
+              <span className="pager-name">{prev.name}</span>
             </Link>
           )}
         </nav>
-
-        <p className="pager-back">
-          <Link href={momentHref(p.moment)}>Back to {momentName}</Link>
-        </p>
       </article>
 
-      <PatternToc items={toc} />
+      <PatternAside pattern={p} toc={toc} />
     </div>
   );
 }

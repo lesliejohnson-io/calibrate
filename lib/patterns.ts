@@ -17,7 +17,8 @@ import {
   type RelationKey,
 } from "./schema";
 
-export type { InterfaceComponent } from "./schema";
+export type { InterfaceComponent, Verdict } from "./schema";
+export { VERDICTS, VERDICT_LABELS, VERDICT_SHAPES } from "./schema";
 export type {
   Domain,
   Evidence,
@@ -41,6 +42,9 @@ export {
   MOMENTS,
   RELATION_DEFINITIONS,
   REVERSIBILITY,
+  REVERSIBILITY_STATUS,
+  RISK_STATUS,
+  STATUS_SHAPES,
   REVERSIBILITY_DEFINITIONS,
   RISK_DEFINITIONS,
   RISKS,
@@ -49,6 +53,7 @@ export {
   RELATIONS,
   SOURCE_TYPES,
   SOURCE_TYPE_LABELS,
+  SOURCE_TYPE_ROW_LABELS,
   STATUSES,
   TRUST_JOBS,
   TRUST_JOB_PURPOSES,
@@ -66,6 +71,7 @@ export type Step = Frontmatter["steps"][number];
 export type Contrast = Frontmatter["without"];
 
 export type Source = Frontmatter["sources"][number];
+export type Consideration = Frontmatter["considerations"][number];
 export type Related = Frontmatter["related"][number];
 export type CrossReference = Frontmatter["crossReferences"][number];
 export type Example = Frontmatter["examples"][number];
@@ -144,6 +150,11 @@ function splitBody(markdown: string): Body {
     body[key] = marked.parse(texts.join("\n\n"), { async: false }) as string;
   }
   return body;
+}
+
+/** Which mark a pattern shows. Defaults to the slug (handoff §4). */
+export function thumbnailId(p: Pick<Pattern, "slug" | "thumbnail">): string {
+  return p.thumbnail ?? p.slug;
 }
 
 /** A Moment's own page. */
@@ -253,13 +264,13 @@ export function toCardData(p: Pattern): PatternCardData {
     slug: p.slug,
     number: p.number,
     name: p.name,
-    intent: p.intent,
+    intent: p.cardIntent ?? p.intent,
     moment: p.moment,
     trustJobs: p.trustJobs,
     domains: p.domains,
     status: p.status,
     aliases: p.aliases,
-    sourceCount: p.sources.length,
+    thumbnail: thumbnailId(p),
   };
 }
 
@@ -279,6 +290,30 @@ export function getMomentNeighbors(pattern: Pattern): {
   const siblings = getPatternsByMoment(pattern.moment);
   const i = siblings.findIndex((p) => p.slug === pattern.slug);
   return { prev: siblings[i - 1], next: siblings[i + 1], total: siblings.length };
+}
+
+/** One related pattern as the card shows it: "Requires · 05", then the note. */
+export type RelationEntry = {
+  key: RelationKey;
+  label: string;
+  pattern: Pattern;
+  note: string;
+};
+
+/**
+ * Every relationship touching this pattern as one flat list, in the order the
+ * group headings used to run. The cards carry their own relation label, so
+ * the grouping headings are gone and the list is read straight through.
+ */
+export function getRelations(pattern: Pattern): RelationEntry[] {
+  return getRelationGroups(pattern).flatMap((group) =>
+    group.entries.map((entry) => ({
+      key: group.key,
+      label: group.label,
+      pattern: entry.pattern,
+      note: entry.note,
+    })),
+  );
 }
 
 export type RelationGroup = {

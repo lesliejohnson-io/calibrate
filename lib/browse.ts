@@ -25,7 +25,8 @@ export type PatternCardData = {
   domains: Domain[];
   status: Status;
   aliases: string[];
-  sourceCount: number;
+  /** Key into the thumbnail map — the pattern's slug unless it names one. */
+  thumbnail: string;
 };
 
 export type { Domain, Moment, Status, TrustJob } from "./schema";
@@ -40,11 +41,8 @@ export type GroupBy = (typeof GROUP_BY)[number];
 export const GROUP_LABELS: Record<GroupBy, string> = {
   moment: "Moment",
   trustJob: "Trust job",
-  none: "None (A–Z)",
+  none: "A–Z",
 };
-
-/** Search only earns its place once the list is too long to scan (spec §4). */
-export const SEARCH_THRESHOLD = 12;
 
 export type BrowseState = {
   group: GroupBy;

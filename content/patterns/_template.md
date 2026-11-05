@@ -7,7 +7,17 @@
 
 number: 6
 name: "Pattern Name"
-intent: "One sentence: what the machine does and what it buys the human. Shown on cards and as the page lede."
+intent: "One sentence: what the machine does and what it buys the human. The page lede."
+# cardIntent: the index card's line, where the full intent is too long to sit
+# under a thumbnail. One short sentence, no example. Leave it out and the card
+# shows the intent.
+# cardIntent: "One short sentence for the card."
+
+# thumbnail: which mark from the thumbnail map this pattern shows. Defaults to
+# the slug, so name one only when two patterns share a drawing. The grammar is
+# in redesign-handoff.md §4: square = machine, circle = human, solid = in
+# control, diamond = a neutral point, solid triangle = direction.
+# thumbnail: "handoff"
 
 # --- Facets -----------------------------------------------------------------
 # moment: where in the control loop this sits. Exactly one. Drives grouping.
@@ -68,18 +78,34 @@ sources: []
 #    type: paper
 #    note: "Why it matters for this pattern"
 
-# examples: the "In the field" cards. `evidence` is required and is either
-# `observed` (a real system or incident) or `speculative` (your own concept) —
-# the distinction is what keeps the library honest. An image needs alt text.
+# whenToUse: one short paragraph on the conditions this pattern is for.
+# whenToUse: "Use this whenever ..."
+
+# considerations: each item is the rule as an instruction, then why it holds.
+# Three to six work best.
+considerations: []
+#  - rule: "Write the rule as a short imperative."
+#    why: "One or two sentences on why it holds and what breaks without it."
+
+# examples: figures under the Examples heading. `verdict` is required and is
+# either `applies` (the pattern in use) or `without` (what its absence costs) —
+# shown as a shape and a word, never colour alone. `alt` is required; leave
+# `image` out while the figure is still a placeholder and the slot renders as a
+# stated gap. Confirm an image's reuse terms before publishing it.
 examples: []
-#  - title: "What the example is called"
-#    domain: automotive
-#    evidence: observed
-#    caption: "One or two sentences on what this shows."
-#    url: "https://example.com"
-#    source: "Name of the source, shown as the link text"
-#    image: "/examples/my-image.png"
+#  - image: "/examples/my-image.png"
 #    alt: "What the image shows, for screen readers"
+#    credit: "Who it is from, e.g. BEA, AF447 Final Report, 2012, Figure 70"
+#    url: "https://example.com"
+#    verdict: applies
+#    caption: "One sentence on what this shows."
+
+# drafts: which of the three drafted fields still carry a DRAFT tag next to
+# their heading. Clear them one at a time as each is reviewed.
+# drafts:
+#   whenToUse: true
+#   considerations: true
+#   examples: true
 
 # --- Learning log -----------------------------------------------------------
 # openQuestions renders as the "Still figuring out" block. It shows whenever
@@ -128,26 +154,14 @@ with:
 The tension this pattern resolves, framed as competing forces — "the machine
 must keep going *and* the human must be ready". One to three short paragraphs.
 
-## When to use
-
-- A condition tied to risk or reversibility.
-- Another condition.
-
 ## When not to use
 
 - Where the cost of the pattern outweighs what it buys.
 - Another exclusion.
 
-## Design considerations
-
-- **Write each item as a bold imperative rule.** Then one or two sentences on
-  why it matters and what breaks without it. Aim for three to six items.
-
 ## In the field
 
-Example cards go here. Each one needs a domain, a caption, a source link, and a
-label that is either **Observed** (a real system or incident) or **Speculative**
-(the author's concept).
+Prose above the example figures, if the figures need an introduction.
 
 ## Notes
 

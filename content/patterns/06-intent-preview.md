@@ -2,6 +2,9 @@
 number: 6
 name: "Intent Preview"
 intent: "Before the machine acts, it shows what it is about to do, so a wrong plan is caught before it becomes a wrong action. A pilot sees the proposed route as a dashed line and checks it for unexpected turns before pressing execute."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "The machine shows what it is about to do, so a wrong plan is caught before it becomes a wrong action."
 
 moment: before
 trustJobs: [know, intervene]

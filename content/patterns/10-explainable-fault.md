@@ -2,6 +2,9 @@
 number: 10
 name: "Explainable Fault"
 intent: "When something goes wrong, the system names the actual fault in the operator's terms and points at what to do about it, instead of showing symptoms or a code. On the 777 a checklist icon sits beside the message."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "The system names the actual fault in the operator's terms and points at what to do."
 
 moment: failure
 trustJobs: [know, recover]

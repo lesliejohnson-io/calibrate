@@ -1,5 +1,6 @@
 import { getAllPatterns, toCardData } from "@/lib/patterns";
 import { PatternBrowser } from "@/components/PatternBrowser";
+import { IllustrationKey } from "@/components/IllustrationKey";
 
 export default function Home() {
   const patterns = getAllPatterns();
@@ -10,27 +11,26 @@ export default function Home() {
     .map((p) => p.updated)
     .sort()
     .at(-1);
+  const allDrafts = published.every((p) => p.status === "draft" || p.status === "seed");
 
   return (
     <div className="wrap">
-      <section className="hero">
-        <h1 className="display">Trust Layer Patterns</h1>
-        <p className="lede">
-          Patterns for autonomous machines that move, lift, cut, and fly, where a bad decision has
-          physical consequences.
-        </p>
-        <p className="label hero-meta">
-          {published.length} {published.length === 1 ? "pattern" : "patterns"}
-          {updated && ` · updated ${updated}`}
-        </p>
-        {/* Said once here instead of a DRAFT tag on every card. */}
-        <p className="hero-caveat">
-          All patterns are drafts and change as I learn. Status is shown only once a pattern has
-          been reviewed.
-        </p>
-      </section>
-
-      <PatternBrowser cards={cards} />
+      <PatternBrowser cards={cards}>
+        <header className="hero">
+          <h1 className="display">Trust Layer Patterns</h1>
+          <p className="lede">
+            Patterns for autonomous machines that move, lift, cut, and fly, where a bad decision has
+            physical consequences.
+          </p>
+          {/* Said once here instead of a DRAFT tag on every card. */}
+          <p className="label hero-meta">
+            {published.length} {published.length === 1 ? "pattern" : "patterns"}
+            {updated && ` · updated ${updated}`}
+            {allDrafts && " · all drafts"}
+          </p>
+          <IllustrationKey />
+        </header>
+      </PatternBrowser>
     </div>
   );
 }

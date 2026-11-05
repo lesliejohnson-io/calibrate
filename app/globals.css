@@ -1,35 +1,63 @@
 /* ---------- Tokens ---------- */
 /*
- * Values are taken verbatim from research/colors.css. Ink on background for
- * everything; the status colours appear only where something has a status,
- * and never without their shape and a text label beside them.
+ * The redesign palette (redesign-handoff.md §1). Warm neutral ground, ink on
+ * it for everything, and one fault colour that never appears without its ■.
+ *
+ * The legacy names (--bg, --rule, --edge, --panel) are kept as aliases of the
+ * new ones so the pages this pass does not touch — About, Changelog, Matrix,
+ * Review, 404 — move onto the new palette without being rewritten.
  */
 :root {
-  /* Base */
-  --bg: #F3F4F5;        /* page */
-  --surface: #FFFFFF;   /* cards, screens */
-  --panel: #E8EAED;     /* readout cells, console bezel */
-  --ink: #14171C;       /* text, diagrams, the loop */
-  --muted: #4B525C;     /* secondary text */
-  --edge: #757D88;      /* readout boxes, buttons, control borders (3:1+) */
-  --rule: #D5D9DE;      /* decorative dividers only, never a control */
+  /* Surfaces */
+  --ground: #F6F6F3;          /* page background */
+  --surface: #FFFFFF;         /* cards, panels, inputs */
+
+  /* Text */
+  --ink: #141414;             /* primary text, active states, rules */
+  --text-2: #2E2E2B;          /* lede, body prose */
+  --text-3: #45453F;          /* card intents, secondary text */
+  --muted: #5E5E5A;           /* labels, meta, captions */
+  --rail-upcoming: #6E6E69;   /* rail names not yet reached (4.5:1 on ground) */
+
+  /* Lines */
+  --line: #DEDED9;            /* section dividers, header/footer borders */
+  --border: #E3E3DE;          /* card borders */
+  --border-strong: #D4D4CE;   /* inputs, chips, mechanism steps */
+  --loop: #C9C9C3;            /* rail return path, upcoming dots */
+
+  /* Thumbnails */
+  --thumb-bg: #0A0A0A;
+  --thumb-ink: #FFFFFF;
 
   /* Status. Only where something has a status, always paired with a shape. */
-  --status-nominal: #17703F;  /* ●  low risk, reversible */
-  --status-caution: #8F5300;  /* ▲  elevated risk, costly to reverse */
-  --status-fault: #B3261E;    /* ■  critical risk, irreversible */
-  --on-fault: #FFFFFF;        /* text on a fault-filled button */
+  --fault: #C2410C;           /* ■ critical / irreversible / "Without it" */
+  --status-nominal: #15663C;  /* ● low risk, reversible */
+  --status-caution: #8A5000;  /* ▲ elevated risk, costly to reverse */
+  --status-fault: var(--fault);
+  --on-fault: #FFFFFF;
 
-  /* Tints behind status values. Text on a tint uses the matching status colour. */
-  --tint-nominal: #E3F1E8;
-  --tint-caution: #F7EBD6;
-  --tint-fault: #F8E1DF;
+  /* Tints behind status values. Text on a tint uses the matching colour. */
+  --tint-nominal: #E6F0E9;
+  --tint-caution: #F6EBD9;
+  --tint-fault: #FAE8E0;
 
-  --focus: var(--ink);  /* focus ring: 2px solid, 2px offset */
+  /* Legacy aliases — see the note above. */
+  --bg: var(--ground);
+  --panel: #EDEDE8;
+  --rule: var(--line);
+  --edge: #8A8A84;            /* 3:1 on ground: control borders */
+
+  /* The condensed face is gone; the pages still asking for it get the
+     display face, which is the tighter of the two that remain. */
+  --font-condensed: var(--font-display);
+
+  --focus: var(--ink);        /* focus ring: 2px solid, 2px offset */
 
   --gap: 40px;
-  /* Ruled boxes, not soft cards: enough radius to look cut, not rounded. */
-  --radius: 2px;
+  --wrap: 1360px;
+  --pad: 40px;
+  /* Ruled boxes, not soft cards. */
+  --radius: 4px;
   --radius-lg: 4px;
 
   color-scheme: light;
@@ -40,25 +68,41 @@
  * sync: once for the system preference (unless the reader has explicitly
  * chosen light), and once for an explicit choice of dark. Keeping the media
  * query means the site still follows the system setting without JavaScript.
+ *
+ * Dark values for the redesign tokens are not designed yet (handoff §6);
+ * these carry the existing dark scheme forward so nothing renders invisible.
  */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0E1013;
+    --ground: #0E1013;
     --surface: #16191E;
-    --panel: #1E2228;
-    --ink: #E6E9ED;
-    --muted: #9AA2AD;
-    --edge: #6B7380;
-    --rule: #2A2F36;
 
+    --ink: #E6E9ED;
+    --text-2: #D3D8DE;
+    --text-3: #B9C0C9;
+    --muted: #9AA2AD;
+    --rail-upcoming: #8A929D;
+
+    --line: #2A2F36;
+    --border: #2A2F36;
+    --border-strong: #353B44;
+    --loop: #3C434D;
+
+    --thumb-bg: #000000;
+    --thumb-ink: #FFFFFF;
+
+    --fault: #FF8A5B;
     --status-nominal: #4CC38A;
     --status-caution: #F2B33D;
-    --status-fault: #FF7A6B;
+    --status-fault: var(--fault);
     --on-fault: #0E1013;
 
     --tint-nominal: #13261C;
     --tint-caution: #2B2112;
     --tint-fault: #2E1715;
+
+    --panel: #1E2228;
+    --edge: #6B7380;
 
     color-scheme: dark;
   }
@@ -66,22 +110,35 @@
 
 /* Explicitly chosen dark. Mirror of the block above. */
 :root[data-theme="dark"] {
-  --bg: #0E1013;
+  --ground: #0E1013;
   --surface: #16191E;
-  --panel: #1E2228;
-  --ink: #E6E9ED;
-  --muted: #9AA2AD;
-  --edge: #6B7380;
-  --rule: #2A2F36;
 
+  --ink: #E6E9ED;
+  --text-2: #D3D8DE;
+  --text-3: #B9C0C9;
+  --muted: #9AA2AD;
+  --rail-upcoming: #8A929D;
+
+  --line: #2A2F36;
+  --border: #2A2F36;
+  --border-strong: #353B44;
+  --loop: #3C434D;
+
+  --thumb-bg: #000000;
+  --thumb-ink: #FFFFFF;
+
+  --fault: #FF8A5B;
   --status-nominal: #4CC38A;
   --status-caution: #F2B33D;
-  --status-fault: #FF7A6B;
+  --status-fault: var(--fault);
   --on-fault: #0E1013;
 
   --tint-nominal: #13261C;
   --tint-caution: #2B2112;
   --tint-fault: #2E1715;
+
+  --panel: #1E2228;
+  --edge: #6B7380;
 
   color-scheme: dark;
 }
@@ -99,11 +156,12 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--ground);
   color: var(--ink);
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 16px;
-  line-height: 1.55;
+  font-size: 17px;
+  line-height: 1.58;
+  font-feature-settings: "cv05" 1;
 }
 
 a {
@@ -119,9 +177,15 @@ code {
 }
 
 .wrap {
-  max-width: 1120px;
+  max-width: var(--wrap);
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 var(--pad);
+}
+
+@media (max-width: 720px) {
+  :root {
+    --pad: 20px;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -135,14 +199,29 @@ code {
   scroll-margin-top: 24px;
 }
 
+/*
+ * Uppercase monospace labels: "THE CONTROL LOOP", "RISK", "INTERVENE". The
+ * tracking is what keeps 11px caps legible; never set below 0.06em.
+ */
+.mono-label {
+  margin: 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
 /* Data values in running text: counts, dates, step numbers. Monospace, but
    not the uppercase letter-spaced eyebrow it used to be. */
 .label {
   margin: 0;
   font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 12px;
-  line-height: 16px;
-  font-weight: 500;
+  line-height: 17px;
+  font-weight: 400;
   letter-spacing: 0.01em;
   color: var(--muted);
 }
@@ -152,19 +231,20 @@ code {
 .section-head {
   margin: 0;
   font-family: var(--font-display), system-ui, sans-serif;
-  font-weight: 400;
-  font-size: 28px;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: clamp(26px, 3vw, 32px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
   color: var(--ink);
 }
 
 .subhead {
   margin: 0;
   font-family: var(--font-display), system-ui, sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 1.2;
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   color: var(--ink);
 }
 
@@ -194,23 +274,24 @@ code {
 .display {
   margin: 8px 0 0;
   font-family: var(--font-display), system-ui, sans-serif;
-  font-weight: 400;
-  font-size: clamp(40px, 7vw, 64px);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  font-size: clamp(38px, 6vw, 64px);
+  line-height: 1.03;
+  letter-spacing: -0.025em;
+  color: var(--ink);
 }
 
 .lede {
   margin: 16px 0 0;
-  max-width: 62ch;
-  font-size: 18px;
-  line-height: 1.6;
-  color: var(--ink);
+  max-width: 58ch;
+  font-size: 21px;
+  line-height: 31px;
+  color: var(--text-2);
 }
 
 /* ---------- Chrome ---------- */
 .site-header {
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--line);
 }
 
 .site-header-inner {
@@ -218,7 +299,7 @@ code {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  min-height: 64px;
+  min-height: 68px;
 }
 
 .brand {
@@ -229,7 +310,7 @@ code {
 }
 
 /* The lockup carries its own wordmark, so it is sized by height and lets its
-   3.40:1 ratio set the width. */
+   3.40:1 ratio set the width. Kept for anywhere wanting the mark at size. */
 .brand-logo {
   display: block;
   height: 38px;
@@ -237,10 +318,47 @@ code {
   flex: none;
 }
 
+/* The header lockup: mark and name on one line, never wrapped. */
+.brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  white-space: nowrap;
+}
+
+.brand-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 26px;
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+.brand-word {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 560px) {
+  .brand-word {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+}
+
 .site-nav {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 22px;
 }
 
 .site-nav-link {
@@ -255,13 +373,14 @@ code {
   text-underline-offset: 2px;
 }
 
-/* Theme toggle */
+/* Theme toggle: a 44px target around a 17px icon. */
 .theme-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -362,23 +481,6 @@ code {
   opacity: 0.7;
 }
 
-/* ---------- Home ---------- */
-.hero {
-  padding: 72px 0 40px;
-}
-
-.hero-meta {
-  margin-top: 24px;
-}
-
-/* Said once, instead of a DRAFT tag on every card. */
-.hero-caveat {
-  margin: 10px 0 0;
-  max-width: 62ch;
-  font-size: 15px;
-  color: var(--muted);
-}
-
 /* ---------- Loop hero (index) ---------- */
 /*
  * Five stations with drawn arrows between them and a return path from the last
@@ -477,7 +579,8 @@ a.station-body:hover .station-count {
  * same drawing, with the questions dropped and the stations shallower.
  */
 .loop-hero.is-compact {
-  margin: 0 0 40px;
+  /* Clear of the explainer paragraph above it on a Moment's page. */
+  margin: 32px 0 40px;
 }
 
 .is-compact .station-body {
@@ -622,174 +725,7 @@ a.station-body:hover .station-count {
   }
 }
 
-/* ---------- Controls row ---------- */
-.controls {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px 28px;
-  margin-top: 32px;
-  padding: 14px 0;
-  background: var(--bg);
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-}
-
-.control {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-}
-
-.control-inline {
-  margin-left: auto;
-  gap: 20px;
-}
-
-.control-label {
-  flex: none;
-}
-
-.tabs {
-  display: flex;
-  gap: 2px;
-  padding: 2px;
-  background: var(--panel);
-  border-radius: 2px;
-}
-
-.tab {
-  padding: 5px 14px;
-  border: 0;
-  border-radius: 2px;
-  background: transparent;
-  font-family: inherit;
-  font-size: 14px;
-  color: var(--muted);
-  cursor: pointer;
-}
-
-.tab:hover {
-  color: var(--ink);
-}
-
-.tab[aria-selected="true"] {
-  background: var(--surface);
-  color: var(--ink);
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.filter-chip {
-  padding: 4px 12px;
-  border: 1px solid var(--edge);
-  border-radius: 2px;
-  background: transparent;
-  font-family: inherit;
-  font-size: 13px;
-  color: var(--muted);
-  cursor: pointer;
-}
-
-.filter-chip:hover {
-  border-color: var(--edge);
-  color: var(--ink);
-}
-
-.filter-chip[aria-pressed="true"] {
-  border-color: var(--ink);
-  background: var(--panel);
-  color: var(--ink);
-  font-weight: 600;
-}
-
-.search input {
-  width: 220px;
-  padding: 6px 12px;
-  border: 1px solid var(--edge);
-  border-radius: 2px;
-  background: var(--surface);
-  font-family: inherit;
-  font-size: 14px;
-  color: var(--ink);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .tab,
-  .filter-chip {
-    transition:
-      background-color 0.15s ease,
-      color 0.15s ease,
-      border-color 0.15s ease;
-  }
-}
-
-@media (max-width: 760px) {
-  .controls {
-    gap: 12px 20px;
-  }
-  .control-inline {
-    margin-left: 0;
-    width: 100%;
-  }
-  .search input {
-    width: 100%;
-  }
-}
-
-/* Results */
-#pattern-results:focus {
-  outline: none;
-}
-
-.empty-results {
-  margin-top: 48px;
-  text-align: center;
-}
-
-.clear-filters {
-  margin-top: 12px;
-  padding: 6px 16px;
-  border: 1px solid var(--edge);
-  border-radius: 2px;
-  background: transparent;
-  font-family: inherit;
-  font-size: 14px;
-  color: var(--ink);
-  cursor: pointer;
-}
-
-.clear-filters:hover {
-  border-color: var(--ink);
-  color: var(--ink);
-}
-
-.result-count {
-  margin-top: 40px;
-  text-transform: none;
-  letter-spacing: 0.04em;
-}
-
-.clear-filters-inline {
-  padding: 0;
-  border: 0;
-  background: none;
-  font: inherit;
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  cursor: pointer;
-}
-
+/* Visible to screen readers, not on screen. */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -802,137 +738,537 @@ a.station-body:hover .station-count {
   border: 0;
 }
 
+/* ---------- Index layout ---------- */
+/*
+ * The rail is navigation, not a sidebar of extras, so it gets its own column
+ * at the page's left edge and the library starts beside it. Under 720px the
+ * rail stops being sticky and sits above the content as a short list.
+ */
+.index-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 56px;
+  align-items: start;
+  padding-bottom: 96px;
+}
+
+.index-main {
+  min-width: 0;
+}
+
+@media (max-width: 1080px) {
+  .index-layout {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 36px;
+  }
+}
+
+@media (max-width: 720px) {
+  .index-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+}
+
+.hero {
+  padding: 48px 0 0;
+}
+
+.hero-meta {
+  margin-top: 20px;
+}
+
+/* ---------- The rail ---------- */
+.rail {
+  position: sticky;
+  top: 24px;
+  align-self: flex-start;
+  padding-top: 56px;
+}
+
+@media (max-width: 720px) {
+  .rail {
+    position: static;
+    padding-top: 32px;
+    padding-bottom: 8px;
+  }
+}
+
+.rail-eyebrow {
+  margin-bottom: 38px;
+}
+
+/* The box the dots and names are measured from: dot centres at x=23, text
+   at x=48, return path at x=3. */
+.rail-body {
+  position: relative;
+}
+
+.rail-list {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * The return path and both caps in one element: 20px wide between x=3 and
+ * x=23 with 10px corners, left/top/bottom borders only. The top and bottom
+ * borders become half circles at that width, and the open right side is
+ * where the dot column takes over. Height is set from the component, which
+ * measures the last item so the bottom cap hugs the After dot rather than
+ * the bottom of an expanded After item.
+ */
+.rail-return {
+  position: absolute;
+  left: 3px;
+  top: -21px;
+  width: 20px;
+  height: calc(100% + 31px);
+  border: 2px solid var(--loop);
+  border-right: 0;
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.rail-item {
+  position: relative;
+  padding-bottom: 14px;
+}
+
+.rail-item:last-child {
+  padding-bottom: 0;
+}
+
+/* The lead-in above Before: a short line down from the top cap, then the
+   triangle landing on the dot. */
+.rail-lead::before,
+.rail-lead::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.rail-lead::before {
+  left: 22px;
+  top: -11px;
+  width: 2px;
+  height: 18px;
+  background: var(--loop);
+}
+
+.rail-lead::after {
+  left: 18px;
+  top: 7px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 8px solid var(--loop);
+}
+
+.rail-link {
+  display: block;
+  position: relative;
+  padding-left: 48px;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 12px dot, centred on x=23, 23px from the top of its item. */
+.rail-dot {
+  position: absolute;
+  left: 17px;
+  top: 17px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--loop);
+}
+
+/*
+ * The inner line: 2px at x=23, from under this item's dot to the top of the
+ * next one. It hangs off the item rather than the link so that it spans the
+ * whole item, including the question and count an active item expands to
+ * show — the link is only as tall as its own text.
+ */
+.rail-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 22px;
+  top: 31px;
+  bottom: -17px;
+  width: 2px;
+  background: var(--loop);
+}
+
+.rail-name {
+  display: block;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 26px;
+  letter-spacing: -0.01em;
+  color: var(--rail-upcoming);
+}
+
+.rail-question {
+  display: block;
+  margin-top: 6px;
+  font-size: 16px;
+  line-height: 23px;
+  color: var(--ink);
+}
+
+.rail-count {
+  display: block;
+  margin-top: 8px;
+}
+
+/* States. Passed and active are ink below the waterline; upcoming is the
+   loop grey, which is also what the return path is drawn in. */
+.rail-item.is-passed .rail-name {
+  color: var(--text-3);
+}
+
+.rail-item.is-active .rail-name {
+  color: var(--ink);
+}
+
+.rail-item.is-passed .rail-dot,
+.rail-item.is-active .rail-dot {
+  background: var(--ink);
+}
+
+.rail-item.is-passed::after,
+.rail-item.is-active::after {
+  background: var(--ink);
+}
+
+.rail-link:hover .rail-name {
+  color: var(--ink);
+}
+
+.rail-link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.rail-caption {
+  margin: 16px 0 0;
+  padding-left: 48px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+/* ---------- Illustration key ---------- */
+.key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin: 14px 0 0;
+}
+
+.key-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.key-item dt {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+  color: var(--ink);
+}
+
+.key-item dd {
+  margin: 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--muted);
+}
+
+.key-mark {
+  display: block;
+}
+
+/* ---------- Controls band ---------- */
+/* Between two hairlines, so it reads as instrumentation rather than content. */
+.controls {
+  margin-top: 28px;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+}
+
+.controls-row + .controls-row {
+  margin-top: 14px;
+}
+
+.control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1 1 320px;
+  min-width: 220px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.search input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px 0 40px;
+  font: inherit;
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  appearance: none;
+}
+
+.search input::placeholder {
+  color: var(--muted);
+}
+
+.search input:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.tabs,
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tab,
+.filter-chip {
+  min-height: 32px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.2;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.tab:hover,
+.filter-chip:hover {
+  border-color: var(--muted);
+}
+
+.tab[aria-selected="true"],
+.filter-chip[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--surface);
+  font-weight: 500;
+}
+
+.tab:focus-visible,
+.filter-chip:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* A chip is a 32px target by design; on touch it has to be 44. */
+@media (pointer: coarse) {
+  .tab,
+  .filter-chip {
+    min-height: 44px;
+    padding: 10px 16px;
+  }
+}
+
+.result-count {
+  margin-top: 40px;
+}
+
+.clear-filters,
+.clear-filters-inline {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.clear-filters {
+  margin-top: 12px;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.empty-results {
+  margin-top: 48px;
+}
+
 /* ---------- Grouped sections ---------- */
 .group {
-  margin-top: 56px;
+  margin-top: 64px;
   scroll-margin-top: 24px;
 }
 
 .group-head {
-  padding-bottom: 12px;
-  margin-bottom: 24px;
-  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-bottom: 20px;
 }
 
 .group-name {
   margin: 0;
   font-family: var(--font-display), system-ui, sans-serif;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 30px;
   line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--ink);
 }
 
 .group-question {
-  margin: 4px 0 0;
+  margin: 0;
+  font-size: 16px;
   color: var(--muted);
+}
+
+/* ---------- Thumbnails ---------- */
+.thumb {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 240 / 132;
+  background: var(--thumb-bg);
+  color: var(--thumb-ink);
 }
 
 /* ---------- Pattern cards ---------- */
 .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
 }
 
 .card-item {
   display: flex;
 }
 
+/*
+ * The whole card is the link, and every card in a row is the same height, so
+ * the trust-job labels along the bottom line up however long the intents run.
+ */
 .card {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   width: 100%;
-  padding: 20px;
+  height: 100%;
   background: var(--surface);
-  border: 1px solid var(--edge);
-  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
   text-decoration: none;
+  color: inherit;
 }
 
 .card:hover {
-  border-color: var(--edge);
+  border-color: var(--muted);
 }
 
-.card:hover .card-name {
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 2px;
+.card:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.card-thumb {
+  flex: none;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 14px 16px 14px;
 }
 
 .card-num {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 12px;
-  color: var(--muted);
+  display: block;
 }
 
 .card-name {
+  display: block;
+  margin-top: 2px;
   font-family: var(--font-display), system-ui, sans-serif;
-  font-size: 26px;
-  line-height: 1.1;
-}
-
-/* Clamped to three lines so cards stay on a grid. */
-.card-intent {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  overflow: hidden;
-  font-size: 15px;
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   color: var(--ink);
 }
 
-.card-foot {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
+.card-intent {
+  display: block;
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--text-3);
+}
+
+/* Pinned to the bottom edge, which is what equalizes the row. */
+.card-job {
+  display: block;
   margin-top: auto;
-  padding-top: 14px;
-}
-
-.card-sources {
-  margin-left: auto;
-}
-
-@media (max-width: 1000px) {
-  .cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 640px) {
-  .cards {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* The glossary marker on the About page's status list. */
-.status {
-  font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
-  font-weight: 600;
-  font-size: 13px;
-  line-height: 16px;
-  padding: 2px 7px;
-  border-radius: 2px;
-  border: 1px solid var(--edge);
-  color: var(--muted);
+  padding-top: 16px;
 }
 
 /* ---------- Pattern page ---------- */
-/* The TOC rail sits inside the standard wrap, so a pattern's text starts on
-   the same left edge as the logo and every other page. */
 .pattern-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 190px;
-  gap: 48px;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 56px;
   align-items: start;
+  padding-bottom: 96px;
 }
 
+/* The grid column already sets the measure; a max-width on top of it only
+   narrows the mechanism row until five steps no longer fit across. */
 .pattern {
   min-width: 0;
 }
@@ -956,17 +1292,18 @@ a.station-body:hover .station-count {
 .crumbs li + li::before {
   content: "/";
   margin-right: 8px;
-  color: var(--edge);
+  color: var(--border-strong);
 }
 
 .crumbs a {
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--border-strong);
 }
 
 .crumbs a:hover {
   color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 2px;
+  text-decoration-color: currentColor;
 }
 
 .crumbs [aria-current="page"] {
@@ -974,27 +1311,58 @@ a.station-body:hover .station-count {
 }
 
 .pattern-head {
-  padding: 24px 0 16px;
+  padding: 28px 0 0;
+}
+
+.pattern-number {
+  margin: 0;
+}
+
+.section {
+  margin-top: 56px;
+}
+
+.section-mechanism {
+  margin-top: 36px;
+}
+
+.section > .section-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* A short paragraph that is the whole of its section — "When to use". */
+.prose-lead {
+  margin: 0;
+  max-width: 68ch;
+  font-size: 17px;
+  line-height: 27px;
+  color: var(--text-2);
+}
+
+.when-not-head {
+  margin-top: 28px;
 }
 
 /*
- * Facet tags: ruled boxes in condensed type, the nameplate cue the readout
- * uses. No tag carries colour — none of these facets has a status.
+ * Facet tags: ruled boxes. No tag carries colour — none of these facets has
+ * a status. Kept for About, the matrix and the changelog.
  */
 .tag {
   display: inline-block;
-  font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
-  font-weight: 600;
-  font-size: 13px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.01em;
-  padding: 2px 7px;
-  border-radius: 2px;
-  border: 1px solid var(--edge);
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
   color: var(--muted);
 }
 
-/* Shown only once a pattern is reviewed or stable, so it is worth the ink. */
 .tag-status {
   border-color: var(--ink);
   color: var(--ink);
@@ -1009,169 +1377,520 @@ a.station-body:hover .station-count {
   border-style: dashed;
 }
 
-/* ---------- Instrument readout ---------- */
+/* ---------- Draft tag ---------- */
 /*
- * The facets as a console status display: ruled cells in one strip, condensed
- * labels over monospaced values. The 1px grid gap lets --edge show through as
- * the rules, so the cell count can change without re-doing the borders.
+ * Next to a heading whose content is drafted and not yet reviewed. Dashed so
+ * it reads as provisional at a glance, and spelled out so it survives a
+ * stylesheet that does not load.
  */
-.readout-block {
-  margin-top: 28px;
-}
-
-.readout {
-  display: grid;
-  /* min-content, so a cell is never narrower than the word it holds:
-     "Irreversible" used to wrap mid-word. */
-  grid-template-columns: repeat(6, minmax(min-content, 1fr));
-  gap: 1px;
-  margin: 0;
-  border: 1px solid var(--edge);
-  background: var(--edge);
-}
-
-/*
- * The key under the readout: both scales end to end, so a reader can see
- * where this pattern sits rather than only what its two values are. Each
- * value carries shape, colour and word together, exactly as the cells do.
- */
-.readout-key {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 36px;
-  margin: 14px 0 0;
+.draft-tag {
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.readout-key-scale {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 18px;
-}
-
-.readout-key-item {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 4px;
+  color: var(--muted);
   white-space: nowrap;
 }
 
-.readout-key-item.is-nominal {
-  color: var(--status-nominal);
-}
-
-.readout-key-item.is-caution {
-  color: var(--status-caution);
-}
-
-.readout-key-item.is-fault {
-  color: var(--status-fault);
-}
-
-.readout-cell {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-  padding: 10px 12px 12px;
+/* ---------- Mechanism ---------- */
+.mechanism {
+  padding: 22px 24px 24px;
   background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
 }
 
-.readout-label {
-  font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
-  font-size: 12px;
-  line-height: 14px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.mechanism-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-bottom: 18px;
+}
+
+.mechanism-arc {
+  margin: 0;
+  font-size: 15px;
   color: var(--muted);
 }
 
-.readout-value {
+.flow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  list-style: none;
   margin: 0;
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
-  line-height: 1.35;
-  color: var(--ink);
-  overflow-wrap: break-word;
+  padding: 0;
 }
 
-/*
- * Status cells. The shape is what carries the state when the colour cannot,
- * so it is never dropped at small sizes.
- */
-.readout-item {
+.flow-card {
+  display: flex;
+  flex-direction: column;
+  padding: 14px 14px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+/* The key moment is the one step the pattern turns on, so it is the one
+   thing on the page drawn in reverse. */
+.flow-card.is-key {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--surface);
+}
+
+.flow-num {
+  color: var(--muted);
+}
+
+.flow-card.is-key .flow-num {
+  color: var(--surface);
+  opacity: 0.85;
+}
+
+.flow-title {
+  margin-top: 6px;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.flow-detail {
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 21px;
+  color: var(--text-3);
+}
+
+.flow-card.is-key .flow-detail {
+  color: var(--surface);
+}
+
+/* The notes, pulled out from under their step so the cards keep equal
+   heights and the row can reflow at any width. */
+.flow-notes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px 32px;
+  margin-top: 18px;
+}
+
+.flow-note {
+  margin: 0;
+  padding-left: 14px;
+  border-left: 2px solid var(--border-strong);
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--text-2);
+}
+
+.flow-note strong {
+  color: var(--ink);
+}
+
+/* ---------- Jump links ---------- */
+.jump {
+  margin-top: 20px;
+}
+
+.jump-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.jump-pill {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 14px;
+  line-height: 1.3;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.jump-pill:hover {
+  border-color: var(--muted);
+}
+
+.jump-pill:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .jump-pill {
+    padding: 11px 16px;
+  }
+}
+
+/* ---------- Design considerations ---------- */
+.considerations {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.consideration {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 0 8px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.consideration-num {
+  padding-top: 3px;
+}
+
+.consideration-body {
+  margin: 0;
+  max-width: 68ch;
+  font-size: 16px;
+  line-height: 25px;
+  color: var(--text-2);
+}
+
+.consideration-rule {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---------- Without / with ---------- */
+.compare {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.panel {
+  padding: 18px 20px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+/* The only 1.5px border on the page: which of the two is the
+   recommendation is settled before the panel is read. */
+.panel-with {
+  border: 1.5px solid var(--ink);
+}
+
+.panel-label {
+  margin-bottom: 14px;
+}
+
+.seq {
+  margin: 0;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.seq-arrow {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.panel-caption {
+  margin: 10px 0 0;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--text-3);
+}
+
+/* ---------- Examples ---------- */
+.examples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 28px 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.example-figure {
+  margin: 0;
+}
+
+.example-image,
+.example-placeholder {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 4px;
+}
+
+.example-image {
+  object-fit: cover;
+  background: var(--panel);
+}
+
+/* A figure whose image is not cleared for reuse yet. It still says what it
+   will show, so the slot is a stated gap rather than a missing picture. */
+.example-placeholder {
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  text-align: center;
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+
+.example-credit {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--muted);
+}
+
+.example-credit a {
+  color: inherit;
+}
+
+/* The verdict is a shape and a word before it is a colour. */
+.example-verdict {
+  margin-top: 10px;
+  color: var(--ink);
+}
+
+.example-verdict.is-without {
+  color: var(--fault);
+}
+
+.example-caption {
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--text-2);
+}
+
+/* ---------- Related patterns ---------- */
+.relations {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.relation-card {
+  display: flex;
+  gap: 14px;
+  height: 100%;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.relation-card:hover {
+  border-color: var(--muted);
+}
+
+.relation-card:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.relation-thumb {
+  flex: none;
+  width: 88px;
+  height: 48px;
+  border-radius: 2px;
+}
+
+.relation-body {
+  min-width: 0;
+}
+
+.relation-label {
   display: block;
 }
-.readout-shape {
-  margin-right: 6px;
+
+.relation-name {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.relation-note {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-3);
+}
+
+/* ---------- Sources ---------- */
+/* The notes paragraph carries the superscript citations into the list. */
+.source-notes {
+  margin-bottom: 28px;
+}
+
+.sources {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+
+.source {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  gap: 0 12px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.source-num {
+  color: var(--muted);
+}
+
+.source-body {
+  min-width: 0;
+}
+
+.source-title {
+  display: block;
+  font-size: 15px;
+  line-height: 21px;
+  color: var(--ink);
+}
+
+.source-title a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.source-meta {
+  display: block;
+  margin-top: 2px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--muted);
+}
+
+.source-type {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* A source linked from a citation gets a moment of emphasis on arrival. */
+.source:target {
+  background: var(--panel);
+  box-shadow: 0 0 0 6px var(--panel);
+  border-radius: 2px;
+}
+
+@media (max-width: 560px) {
+  .source {
+    grid-template-columns: 32px minmax(0, 1fr);
+  }
+  .source-type {
+    grid-column: 2;
+    text-align: left;
+    margin-top: 4px;
+  }
+}
+
+/* ---------- Pattern aside ---------- */
+.pattern-aside {
+  position: sticky;
+  top: 24px;
+  align-self: flex-start;
+  padding-top: 72px;
+}
+
+.facts {
+  margin: 0;
+  border-top: 1px solid var(--ink);
+}
+
+.fact {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.fact-label {
+  margin: 0;
+}
+
+.fact-value {
+  margin: 3px 0 0;
+  font-size: 16px;
+  line-height: 22px;
+  color: var(--ink);
+}
+
+.fact-shape {
+  margin-right: 5px;
   font-size: 0.8em;
   vertical-align: 0.08em;
 }
 
-.readout-cell.is-nominal {
-  background: var(--tint-nominal);
-}
-
-.readout-cell.is-nominal .readout-value {
+.fact-value.is-nominal {
   color: var(--status-nominal);
 }
 
-.readout-cell.is-caution {
-  background: var(--tint-caution);
-}
-
-.readout-cell.is-caution .readout-value {
+.fact-value.is-caution {
   color: var(--status-caution);
 }
 
-.readout-cell.is-fault {
-  background: var(--tint-fault);
-}
-
-.readout-cell.is-fault .readout-value {
+.fact-value.is-fault {
   color: var(--status-fault);
 }
 
-/* Two columns on a phone; the gap keeps drawing the rules. */
-@media (max-width: 760px) {
-  .readout {
-    grid-template-columns: repeat(2, minmax(min-content, 1fr));
-  }
-
-  .readout-key {
-    flex-direction: column;
-    gap: 6px;
-  }
-}
-
-/* Table of contents */
+/* "On this page" — a 2px track with an ink segment on the active item. */
 .toc {
-  position: sticky;
-  top: 32px;
-  padding-top: 40px;
+  margin-top: 32px;
 }
 
 .toc-title {
-  margin-bottom: 12px;
+  margin: 0 0 12px;
 }
 
 .toc-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  border-left: 1px solid var(--rule);
+  border-left: 2px solid var(--line);
 }
 
 .toc-link {
   display: block;
-  padding: 5px 0 5px 12px;
-  margin-left: -1px;
+  padding: 5px 0 5px 14px;
+  margin-left: -2px;
   border-left: 2px solid transparent;
-  font-size: 14px;
-  line-height: 1.35;
+  font-size: 15px;
+  line-height: 21px;
   color: var(--muted);
   text-decoration: none;
 }
@@ -1181,24 +1900,85 @@ a.station-body:hover .station-count {
 }
 
 .toc-link[aria-current="true"] {
-  color: var(--ink);
-  font-weight: 600;
   border-left-color: var(--ink);
+  font-weight: 600;
+  color: var(--ink);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .toc-link {
-    transition:
-      color 0.15s ease,
-      border-color 0.15s ease;
+.toc-link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+@media (max-width: 1099px) {
+  .pattern-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .pattern-aside {
+    position: static;
+    padding-top: 48px;
+    max-width: 420px;
+  }
+  .toc {
+    display: none;
+  }
+  .toc-mobile {
+    display: block;
   }
 }
 
-/*
- * The narrow-screen table of contents. Collapsed, it is a button: a filled
- * bezel with a chevron, sized to its text. It used to be a full-width ruled
- * box with a label in it, which read as an empty input field.
- */
+/* ---------- Pager ---------- */
+.pager {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 72px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.pager-link {
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.pager-all {
+  font-size: 15px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pager-next {
+  text-align: right;
+}
+
+.pager-next .label {
+  display: block;
+}
+
+.pager-name {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.01em;
+}
+
+.pager-link:hover .pager-name,
+.pager-all:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pager-link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
 .toc-mobile {
   display: none;
   margin-top: 32px;
@@ -1243,19 +2023,6 @@ a.station-body:hover .station-count {
   margin-top: 14px;
 }
 
-@media (max-width: 1099px) {
-  .pattern-layout {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-  }
-  .toc {
-    display: none;
-  }
-  .toc-mobile {
-    display: block;
-  }
-}
-
 /* A line under a section heading that qualifies what follows. */
 .section-note {
   /* Collapses against the heading's 24px to sit 12px under its rule. */
@@ -1265,177 +2032,6 @@ a.station-body:hover .station-count {
   color: var(--muted);
 }
 
-/* When to use / when not to use */
-.when-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 32px;
-}
-
-.when-head {
-  margin: 0 0 8px;
-  font-family: var(--font-display), system-ui, sans-serif;
-  font-weight: 400;
-  font-size: 22px;
-  line-height: 1.2;
-}
-
-.when-col-not .when-head {
-  color: var(--muted);
-}
-
-.when-col .prose {
-  max-width: none;
-}
-
-@media (max-width: 860px) {
-  .when-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* Design considerations: the rule leads, the reasoning follows. */
-.considerations ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.considerations li {
-  padding: 16px 0;
-  border-bottom: 1px solid var(--rule);
-}
-
-.considerations li > strong:first-child {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--ink);
-  font-weight: 600;
-}
-
-/* In the field */
-.examples {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-}
-
-.example {
-  display: flex;
-  flex-direction: column;
-  background: var(--surface);
-  border: 1px solid var(--edge);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-
-.example-image {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-bottom: 1px solid var(--rule);
-}
-
-.example-body {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 20px;
-}
-
-.example-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 0;
-}
-
-.example-title {
-  margin: 0;
-  font-family: var(--font-display), system-ui, sans-serif;
-  font-weight: 400;
-  font-size: 22px;
-  line-height: 1.2;
-}
-
-.example-caption {
-  margin: 0;
-  font-size: 15px;
-  color: var(--ink);
-}
-
-.example-source {
-  margin: 0;
-  font-size: 14px;
-}
-
-.example-source a {
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-/* Related patterns */
-.relations {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-
-.relation-label {
-  margin-bottom: 12px;
-}
-
-.relation-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-}
-
-.relation-card {
-  display: grid;
-  grid-template-columns: 32px minmax(0, 1fr);
-  gap: 4px 12px;
-  height: 100%;
-  padding: 16px;
-  border: 1px solid var(--edge);
-  border-radius: var(--radius);
-  background: var(--surface);
-  text-decoration: none;
-}
-
-.relation-card:hover .relation-name {
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.relation-num {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 12px;
-  color: var(--muted);
-  padding-top: 4px;
-}
-
-.relation-name {
-  font-family: var(--font-display), system-ui, sans-serif;
-  font-size: 22px;
-  line-height: 1.2;
-}
-
-.relation-note {
-  grid-column: 2;
-  font-size: 14px;
-  color: var(--ink);
-}
-
-/* Elsewhere */
 .elsewhere {
   list-style: none;
   margin: 0;
@@ -1911,290 +2507,6 @@ a.station-body:hover .station-count {
   color: var(--ink);
 }
 
-.section {
-  margin-top: 64px;
-}
-
-.section > .section-head {
-  margin-bottom: 24px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--rule);
-}
-
-/* ---------- Mechanism flow ---------- */
-.flow {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
-  grid-template-rows: auto auto;
-  column-gap: var(--gap);
-  row-gap: 32px;
-}
-
-.flow-item {
-  grid-row: span 2;
-  display: grid;
-  grid-template-rows: subgrid;
-}
-
-.flow-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 16px;
-  background: var(--surface);
-  border: 1px solid var(--edge);
-  border-radius: var(--radius);
-}
-
-.flow-card.is-key {
-  background: var(--surface);
-  border: 2px solid var(--ink);
-  padding: 15px;
-}
-
-.flow-key {
-  position: absolute;
-  top: -22px;
-  left: 0;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 16px;
-  color: var(--ink);
-  white-space: nowrap;
-}
-
-.flow-num {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 11px;
-  color: var(--muted);
-}
-
-.flow-title {
-  font-size: 16px;
-  line-height: 1.3;
-}
-
-.flow-detail {
-  font-size: 14px;
-  line-height: 1.4;
-  color: var(--muted);
-}
-
-/* horizontal arrow between cards */
-.arrow-h {
-  position: absolute;
-  left: 100%;
-  top: 50%;
-  width: var(--gap);
-  height: 2px;
-  margin-top: -1px;
-  background: var(--edge);
-}
-
-.flow-card.is-key .arrow-h {
-  left: calc(100% + 1px);
-}
-
-.arrow-h::after {
-  content: "";
-  position: absolute;
-  right: 1px;
-  top: -4px;
-  border-left: 8px solid var(--edge);
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-}
-
-.arrow-v {
-  display: none;
-}
-
-/* note hanging under its step */
-.flow-note {
-  position: relative;
-  align-self: start;
-  margin: 0;
-  padding: 12px 14px;
-  border: 1px dashed var(--edge);
-  border-radius: var(--radius);
-  font-size: 14px;
-  line-height: 1.45;
-  color: var(--ink);
-}
-
-.flow-note::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -33px;
-  height: 32px;
-  border-left: 1.5px dashed var(--rule);
-}
-
-.flow-note-spacer {
-  display: block;
-}
-
-@media (max-width: 860px) {
-  .flow {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
-    row-gap: 0;
-    max-width: 480px;
-  }
-
-  .flow-item {
-    grid-row: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .arrow-h,
-  .flow-note-spacer {
-    display: none;
-  }
-
-  .flow-note {
-    margin-left: 24px;
-  }
-
-  .flow-note::before {
-    left: -13px;
-    top: 50%;
-    height: 0;
-    width: 12px;
-    border-left: 0;
-    border-top: 1.5px dashed var(--rule);
-  }
-
-  .flow-key {
-    position: static;
-  }
-
-  .arrow-v {
-    display: block;
-    position: relative;
-    align-self: center;
-    width: 2px;
-    height: 32px;
-    margin: 4px 0 8px;
-    background: var(--edge);
-  }
-
-  .arrow-v::after {
-    content: "";
-    position: absolute;
-    bottom: 1px;
-    left: -4px;
-    border-top: 8px solid var(--edge);
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-  }
-}
-
-/* ---------- Without / with ---------- */
-.compare {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
-}
-
-.panel {
-  padding: 24px;
-  border-radius: var(--radius-lg);
-}
-
-.panel-without {
-  background: var(--panel);
-}
-
-.panel-with {
-  background: var(--surface);
-  border: 1px solid var(--ink);
-}
-
-.panel h3 {
-  margin-bottom: 20px;
-}
-
-.seq {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: stretch;
-}
-
-.seq-item {
-  display: flex;
-  align-items: center;
-  flex: 1 1 0;
-  min-width: 0;
-}
-
-.chip {
-  flex: 1 1 auto;
-  min-width: 0;
-  min-height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 8px 10px;
-  border-radius: var(--radius);
-  font-size: 14px;
-  line-height: 1.3;
-}
-
-.chip-without {
-  background: var(--bg);
-  border: 1px dashed var(--edge);
-}
-
-.chip-with {
-  background: var(--surface);
-  border: 1px solid var(--edge);
-}
-
-.chip.is-key {
-  background: var(--surface);
-  border-color: var(--ink);
-}
-
-.seq-arrow {
-  position: relative;
-  flex: 0 0 28px;
-  height: 2px;
-  margin: 0 4px;
-  background: var(--edge);
-}
-
-.seq-arrow::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  top: -4px;
-  border-left: 7px solid var(--edge);
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-}
-
-.panel-caption {
-  margin: 20px 0 0;
-  color: var(--ink);
-}
-
-@media (max-width: 860px) {
-  .compare {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
 /* ---------- Interface illustrations ---------- */
 /*
  * Two drone consoles in the without / with panels: a bezel in --panel around a
@@ -2370,46 +2682,6 @@ a.station-body:hover .station-count {
   color: var(--muted);
 }
 
-/* ---------- Sources ---------- */
-.source-groups {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-}
-
-.source-group-label {
-  margin-bottom: 8px;
-}
-
-.sources {
-  margin: 0;
-  padding-left: 24px;
-  max-width: 72ch;
-}
-
-.source {
-  padding: 10px 0;
-  border-bottom: 1px solid var(--rule);
-}
-
-.source-title {
-  display: block;
-  font-weight: 600;
-}
-
-.source-title a {
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.source-meta,
-.source-note {
-  display: block;
-  font-size: 14px;
-  color: var(--muted);
-}
-
 /* ---------- Footnote citations ---------- */
 
 /* The superscript in the prose. Kept out of the line box so a cited sentence
@@ -2461,54 +2733,6 @@ a.station-body:hover .station-count {
   margin-top: 4px !important;
   font-size: 14px;
   color: var(--muted);
-}
-
-/* ---------- Pager ---------- */
-.pager {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-top: 80px;
-  padding-top: 24px;
-  border-top: 1px solid var(--rule);
-}
-
-.pager-link {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-height: 44px;
-  text-decoration: none;
-  font-family: var(--font-display), system-ui, sans-serif;
-  font-size: 22px;
-}
-
-.pager-link:hover {
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.pager-next {
-  text-align: right;
-  margin-left: auto;
-}
-
-.pager-back {
-  margin: 20px 0 0;
-  font-size: 14px;
-  color: var(--muted);
-}
-
-.pager-back a {
-  text-decoration: none;
-}
-
-.pager-back a:hover {
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 2px;
 }
 
 /* ---------- Out of envelope (404) ---------- */

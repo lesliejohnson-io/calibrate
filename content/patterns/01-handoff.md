@@ -2,6 +2,9 @@
 number: 1
 name: "The Handoff"
 intent: "The machine yields control on purpose: it signals the transfer, hands over its current state, and gives the human time to orient before they are accountable."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "The machine yields control on purpose and gives the human time to orient before they are accountable."
 
 moment: transition
 trustJobs: [intervene, predict]
@@ -35,6 +38,45 @@ without:
 with:
   steps: ["Early signal", "State briefing", "Confirmed takeover"]
   caption: "The transfer is announced, explained and acknowledged. Responsibility moves only once the human is oriented."
+
+# --- Drafted on the redesign canvas, 2026-11-05. Not yet reviewed: the DRAFT
+# tags next to these headings are cleared field by field in `drafts:` below.
+whenToUse: "Use this whenever a machine can reach the edge of what it can safely do and a person is expected to take over. It matters most at autonomy levels where the human isn't watching continuously, so they arrive cold."
+
+considerations:
+  - rule: "Trigger at a designed boundary."
+    why: "Decide in advance which conditions start a handoff, and start it before the machine runs out of options. A handoff that begins at the moment of failure is already late."
+  - rule: "Size the window to the human."
+    why: "Planned takeovers vary widely in how long they take. Base the orientation window on people who have been out of the loop, not on emergency takeover data."
+  - rule: "Brief all three levels."
+    why: "Tell the human what is happening, what it means, and what happens next. Raw state alone leaves them holding data instead of understanding."
+  - rule: "Clear the channel."
+    why: "Suspend unrelated displays and media once a handoff starts, so the briefing is the only thing competing for attention."
+  - rule: "Release only on acknowledgment."
+    why: "Responsibility moves when the human confirms, not when a timer expires. If nobody confirms, fall back to a safe stop rather than handing control to no one."
+
+examples:
+  # The AF447 figure is not in /public yet. BEA, AF447 Final Report, 2012,
+  # Figure 70 — confirm the BEA's reuse terms before publishing, and note on
+  # the credit line that the figure is used under those terms, not CC BY.
+  - alt: "ALKS transition-demand HMI"
+    verdict: applies
+    caption: "UN R157 names this moment the transition demand, and requires non-driving displays to suspend once it starts."
+  - alt: "AF447 cockpit, with the message display zone marked"
+    credit: "BEA, AF447 Final Report, 2012, Figure 70"
+    url: "https://www.faa.gov/sites/faa.gov/files/f-cp090601.en_.pdf"
+    verdict: without
+    caption: "Air France 447: the autopilot disconnected suddenly and the crew took over cold. The handoff arrived as a few lines of text in this zone."
+  - alt: "NTSB Tempe timeline figure"
+    credit: "NTSB HAR-19/03, 2019"
+    url: "https://www.ntsb.gov/investigations/accidentreports/reports/har1903.pdf"
+    verdict: without
+    caption: "Tempe, 2018: the system never alerted the safety operator, and the operator was not monitoring."
+
+drafts:
+  whenToUse: true
+  considerations: true
+  examples: true
 
 related:
   - slug: shared-mental-model

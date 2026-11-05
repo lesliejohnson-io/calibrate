@@ -75,7 +75,7 @@ export default async function MomentPage({ params }: Props) {
           {cards.length > 0 && (
             <ul className="cards">
               {cards.map((card) => (
-                <PatternCard key={card.slug} pattern={card} showMoment={false} />
+                <PatternCard key={card.slug} pattern={card} />
               ))}
             </ul>
           )}

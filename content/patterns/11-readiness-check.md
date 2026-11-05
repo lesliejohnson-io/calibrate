@@ -2,6 +2,9 @@
 number: 11
 name: "Readiness Check"
 intent: "The system confirms the human is actually able to supervise — looking, present, hands available — and escalates when they are not, instead of treating a body in the seat as a human in the loop."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "The system confirms the human can actually supervise, and escalates when they cannot."
 
 moment: before
 trustJobs: [intervene]

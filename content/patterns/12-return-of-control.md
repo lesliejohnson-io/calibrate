@@ -2,6 +2,9 @@
 number: 12
 name: "Return of Control"
 intent: "When the machine takes control back from the human, it does so visibly and only once conditions are right, and it does not keep re-asserting itself against what the human is doing."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "The machine takes control back visibly, only when conditions are right, and doesn't fight the human."
 
 moment: transition
 trustJobs: [intervene, predict]

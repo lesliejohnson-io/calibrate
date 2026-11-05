@@ -2,6 +2,9 @@
 number: 15
 name: "Stop Anywhere"
 intent: "Anyone near or responsible for the machine can always stop it, through one unmistakable control that works in every mode, and the stop holds until a human deliberately releases it."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "Anyone near the machine can always stop it with one control, and the stop holds until released."
 
 moment: during
 trustJobs: [intervene]

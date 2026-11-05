@@ -10,23 +10,31 @@ import {
   groupCards,
   isFiltered,
   parseState,
-  SEARCH_THRESHOLD,
   stateToQuery,
   type BrowseState,
   type Domain,
-  type GroupBy,
   type PatternCardData,
 } from "@/lib/browse";
 import { humanize } from "@/lib/format";
-import { LoopHero } from "./LoopHero";
+import { MOMENTS, type Moment } from "@/lib/schema";
+import { MomentRail, type RailNode } from "./MomentRail";
 import { PatternCard } from "./PatternCard";
 
 /**
- * The index's controls and results. State lives in the URL so a view can be
- * linked and shared, but the component renders server-side in its default
- * state first, so the full library is in the HTML without JavaScript.
+ * The index: the control-loop rail on the left, the library on the right.
+ *
+ * State lives in the URL so a view can be linked and shared, but the
+ * component renders server-side in its default state first, so the whole
+ * library is in the HTML without JavaScript.
  */
-export function PatternBrowser({ cards }: { cards: PatternCardData[] }) {
+export function PatternBrowser({
+  cards,
+  children,
+}: {
+  cards: PatternCardData[];
+  /** The page's own masthead, which sits above the controls in the column. */
+  children?: React.ReactNode;
+}) {
   const [state, setState] = useState<BrowseState>(DEFAULT_STATE);
   const tabsRef = useRef<HTMLDivElement>(null);
 
@@ -48,13 +56,16 @@ export function PatternBrowser({ cards }: { cards: PatternCardData[] }) {
   const visible = useMemo(() => filterCards(cards, state), [cards, state]);
   const groups = useMemo(() => groupCards(visible, state.group), [visible, state.group]);
 
-  const loopNodes = useMemo(
-    () =>
-      (["before", "during", "transition", "failure", "after"] as const).map((moment) => ({
-        moment,
-        count: visible.filter((c) => c.moment === moment).length,
-      })),
+  const railNodes = useMemo<RailNode[]>(
+    () => MOMENTS.map((moment) => ({ moment, count: visible.filter((c) => c.moment === moment).length })),
     [visible],
+  );
+
+  // Section anchors only exist while grouping by Moment; otherwise the rail
+  // sends people to the Moment's own page rather than a link that goes nowhere.
+  const railHref = useCallback(
+    (moment: Moment) => (state.group === "moment" ? `#moment-${moment}` : `/moments/${moment}`),
+    [state.group],
   );
 
   const toggleDomain = (domain: Domain) => {
@@ -83,72 +94,20 @@ export function PatternBrowser({ cards }: { cards: PatternCardData[] }) {
   };
 
   return (
-    <>
-      {/* Section anchors only exist while grouping by Moment; otherwise send
-          people to the Moment's own page rather than a link that goes nowhere. */}
-      <LoopHero
-        nodes={loopNodes}
-        hrefFor={
-          state.group === "moment"
-            ? (moment) => `#moment-${moment}`
-            : (moment) => `/moments/${moment}`
-        }
-        linkEmpty={state.group !== "moment"}
-      />
+    <div className="index-layout">
+      <MomentRail nodes={railNodes} hrefFor={railHref} />
 
-      <div className="controls">
-        <div className="control">
-          <span className="ui-label control-label" id="group-by-label">
-            Group by
-          </span>
-          <div className="tabs" role="tablist" aria-labelledby="group-by-label" ref={tabsRef}>
-            {GROUP_BY.map((group, i) => {
-              const selected = state.group === group;
-              return (
-                <button
-                  key={group}
-                  type="button"
-                  role="tab"
-                  id={`tab-${group}`}
-                  aria-selected={selected}
-                  aria-controls="pattern-results"
-                  tabIndex={selected ? 0 : -1}
-                  className="tab"
-                  onClick={() => update({ ...state, group })}
-                  onKeyDown={(e) => onTabKeyDown(e, i)}
-                >
-                  {GROUP_LABELS[group]}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+      <div className="index-main">
+        {children}
 
-        <div className="control">
-          <span className="ui-label control-label" id="domain-label">
-            Domain
-          </span>
-          <div className="chips" role="group" aria-labelledby="domain-label">
-            {domains.map((domain) => (
-              <button
-                key={domain}
-                type="button"
-                className="filter-chip"
-                aria-pressed={state.domains.includes(domain)}
-                onClick={() => toggleDomain(domain)}
-              >
-                {humanize(domain)}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Seeds have no control of their own: ?status=all still reveals them,
-            which is all the About page promises. */}
-        {cards.length >= SEARCH_THRESHOLD && (
-          <div className="control control-inline">
+        <div className="controls">
+          <div className="controls-row">
             <label className="search">
               <span className="sr-only">Search patterns</span>
+              <svg className="search-icon" viewBox="0 0 16 16" aria-hidden="true">
+                <circle cx="7" cy="7" r="4.75" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                <path d="M10.5 10.5 14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
               <input
                 type="search"
                 placeholder="Search patterns"
@@ -156,62 +115,100 @@ export function PatternBrowser({ cards }: { cards: PatternCardData[] }) {
                 onChange={(e) => update({ ...state, query: e.target.value })}
               />
             </label>
-          </div>
-        )}
-      </div>
 
-      <div
-        id="pattern-results"
-        role="tabpanel"
-        aria-labelledby={`tab-${state.group}`}
-        tabIndex={-1}
-      >
-        {groups.length === 0 ? (
-          <div className="empty empty-results">
-            <p>No patterns match these filters.</p>
-            <button type="button" className="clear-filters" onClick={() => update(DEFAULT_STATE)}>
+            <div className="control">
+              <span className="mono-label" id="group-by-label">
+                Group by
+              </span>
+              <div className="tabs" role="tablist" aria-labelledby="group-by-label" ref={tabsRef}>
+                {GROUP_BY.map((group, i) => {
+                  const selected = state.group === group;
+                  return (
+                    <button
+                      key={group}
+                      type="button"
+                      role="tab"
+                      id={`tab-${group}`}
+                      aria-selected={selected}
+                      aria-controls="pattern-results"
+                      tabIndex={selected ? 0 : -1}
+                      className="tab"
+                      onClick={() => update({ ...state, group })}
+                      onKeyDown={(e) => onTabKeyDown(e, i)}
+                    >
+                      {GROUP_LABELS[group]}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="controls-row">
+            <span className="mono-label" id="domain-label">
+              Domain
+            </span>
+            {/* Seeds have no control of their own: ?status=all still reveals
+                them, which is all the About page promises. */}
+            <div className="chips" role="group" aria-labelledby="domain-label">
+              {domains.map((domain) => (
+                <button
+                  key={domain}
+                  type="button"
+                  className="filter-chip"
+                  aria-pressed={state.domains.includes(domain)}
+                  onClick={() => toggleDomain(domain)}
+                >
+                  {humanize(domain)}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div id="pattern-results" role="tabpanel" aria-labelledby={`tab-${state.group}`} tabIndex={-1}>
+          {groups.length === 0 ? (
+            <div className="empty empty-results">
+              <p>No patterns match these filters.</p>
+              <button type="button" className="clear-filters" onClick={() => update(DEFAULT_STATE)}>
+                Clear filters
+              </button>
+            </div>
+          ) : (
+            groups.map((group) => (
+              <section
+                key={group.key}
+                id={group.anchor}
+                className="group"
+                aria-labelledby={group.name ? `group-${group.key}` : undefined}
+              >
+                {group.name && (
+                  <header className="group-head">
+                    <h2 id={`group-${group.key}`} className="group-name">
+                      {group.name}
+                    </h2>
+                    {group.purpose && <p className="group-question">{group.purpose}</p>}
+                  </header>
+                )}
+                <ul className="cards">
+                  {group.cards.map((card) => (
+                    <PatternCard key={card.slug} pattern={card} />
+                  ))}
+                </ul>
+              </section>
+            ))
+          )}
+        </div>
+
+        {isFiltered(state) && groups.length > 0 && (
+          <p className="result-count label">
+            {visible.length} of {cards.length} patterns shown ·{" "}
+            <button type="button" className="clear-filters-inline" onClick={() => update(DEFAULT_STATE)}>
               Clear filters
             </button>
-          </div>
-        ) : (
-          groups.map((group) => (
-            <section
-              key={group.key}
-              id={group.anchor}
-              className="group"
-              aria-labelledby={group.name ? `group-${group.key}` : undefined}
-            >
-              {group.name && (
-                <header className="group-head">
-                  <h2 id={`group-${group.key}`} className="group-name">
-                    {group.name}
-                  </h2>
-                  {group.purpose && <p className="group-question">{group.purpose}</p>}
-                </header>
-              )}
-              <ul className="cards">
-                {group.cards.map((card) => (
-                  <PatternCard
-                    key={card.slug}
-                    pattern={card}
-                    showMoment={state.group !== "moment"}
-                    showTrustJob={state.group !== "trustJob"}
-                  />
-                ))}
-              </ul>
-            </section>
-          ))
+          </p>
         )}
       </div>
-
-      {isFiltered(state) && groups.length > 0 && (
-        <p className="result-count label">
-          {visible.length} of {cards.length} patterns shown ·{" "}
-          <button type="button" className="clear-filters-inline" onClick={() => update(DEFAULT_STATE)}>
-            Clear filters
-          </button>
-        </p>
-      )}
-    </>
+    </div>
   );
 }

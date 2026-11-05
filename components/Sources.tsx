@@ -1,12 +1,14 @@
-import { sourceAnchor, sourceGroups, type Source } from "@/lib/patterns";
+import { sourceAnchor, sourceGroups, SOURCE_TYPE_ROW_LABELS, type Source } from "@/lib/patterns";
 import { ExternalLink } from "./ExternalLink";
 
 /**
- * A numbered list grouped by source type, numbered continuously so a source
- * can be cited as "[3]" regardless of which group it sits in. That running
- * order comes from `sourceGroups`, which is also what assigns footnote
- * numbers — the number here and the superscript in the prose are the same
- * number. Untyped sources fall under "Other" rather than being hidden.
+ * One numbered list: number, title and authors on the left, the kind of
+ * source right-aligned (redesign-handoff.md §3).
+ *
+ * The numbering still comes from `sourceGroups`, which is also what assigns
+ * the footnote numbers in the prose — the list is that running order
+ * flattened, so a "[3]" in the notes and the third row here stay the same
+ * source. The type headings are gone; each row carries its own label.
  */
 export function Sources({ sources, file }: { sources: Source[]; file: string }) {
   if (sources.length === 0) {
@@ -24,36 +26,28 @@ export function Sources({ sources, file }: { sources: Source[]; file: string }) 
     );
   }
 
-  const groups = sourceGroups(sources);
+  const rows = sourceGroups(sources).flatMap((group) =>
+    group.items.map((source, i) => ({ source, type: group.type, n: group.start + i })),
+  );
 
   return (
-    <div className="source-groups">
-      {groups.map((group) => (
-        <div key={group.type} className="source-group">
-          {groups.length > 1 && (
-            <h3 className="subgroup-head source-group-label">{group.label}</h3>
-          )}
-          <ol className="sources" start={group.start}>
-            {group.items.map((s, i) => (
-              <li
-                key={`${s.title}-${i}`}
-                className="source"
-                id={s.id ? sourceAnchor(s.id) : undefined}
-              >
-                <span className="source-title">
-                  {s.url ? <ExternalLink href={s.url}>{s.title}</ExternalLink> : s.title}
-                </span>
-                {(s.author || s.year) && (
-                  <span className="source-meta">
-                    {[s.author, s.year].filter(Boolean).join(" · ")}
-                  </span>
-                )}
-                {s.note && <span className="source-note">{s.note}</span>}
-              </li>
-            ))}
-          </ol>
-        </div>
+    <ol className="sources">
+      {rows.map(({ source: s, type, n }) => (
+        <li key={n} className="source" id={s.id ? sourceAnchor(s.id) : undefined} value={n}>
+          <span className="label source-num" aria-hidden="true">
+            {n}
+          </span>
+          <span className="source-body">
+            <span className="source-title">
+              {s.url ? <ExternalLink href={s.url}>{s.title}</ExternalLink> : s.title}
+            </span>
+            {(s.author || s.year) && (
+              <span className="source-meta">{[s.author, s.year].filter(Boolean).join(" · ")}</span>
+            )}
+          </span>
+          <span className="mono-label source-type">{SOURCE_TYPE_ROW_LABELS[type]}</span>
+        </li>
       ))}
-    </div>
+    </ol>
   );
 }

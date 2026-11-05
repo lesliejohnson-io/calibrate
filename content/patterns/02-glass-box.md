@@ -2,6 +2,9 @@
 number: 2
 name: "The Glass Box"
 intent: "The machine shows its reasoning, not just its output, so operators can trust or override it with context."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "The machine shows its reasoning, not just its output, so operators can trust or override it with context."
 
 moment: during
 trustJobs: [know, calibrate]

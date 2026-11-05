@@ -2,6 +2,9 @@
 number: 9
 name: "Learning Loop"
 intent: "What operators notice in the field — oddities, near-misses, workarounds — is easy to report, reaches the people who can change the machine, and visibly leads to changes. This is how After feeds back into Before."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "What operators notice in the field reaches the people who can change the machine, and visibly does."
 
 moment: after
 trustJobs: [recover]

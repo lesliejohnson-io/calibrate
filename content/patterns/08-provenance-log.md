@@ -2,6 +2,9 @@
 number: 8
 name: "Provenance Log"
 intent: "Every action that changed the machine's state is recorded with who or what did it, in a way nobody can quietly alter. After Tempe, investigators rebuilt what the car detected and when from its own data."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "Every state change is recorded with who or what did it, in a way nobody can quietly alter."
 
 moment: after
 trustJobs: [know]

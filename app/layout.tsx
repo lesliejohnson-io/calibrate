@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  Archivo,
-  IBM_Plex_Sans,
-  IBM_Plex_Sans_Condensed,
-  IBM_Plex_Mono,
-} from "next/font/google";
+import { Inter, Inter_Tight, JetBrains_Mono } from "next/font/google";
 import { ExternalLink } from "@/components/ExternalLink";
 import { ByIcon, CcIcon } from "@/components/LicenseIcons";
-import { BrandLogo } from "@/components/BrandLogo";
+import { BrandMark } from "@/components/BrandLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import "./globals.css";
 
@@ -18,14 +13,23 @@ import "./globals.css";
  */
 const THEME_SCRIPT = `try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}`;
 
-const display = Archivo({ subsets: ["latin"], variable: "--font-display" });
-const sans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "600"], variable: "--font-sans" });
-const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: "500", variable: "--font-mono" });
-/* Condensed labels are the nameplate cue the readout is built on. */
-const condensed = IBM_Plex_Sans_Condensed({
+/* Display face: headings, card names, rail moment names. */
+const display = Inter_Tight({
   subsets: ["latin"],
-  weight: ["600"],
-  variable: "--font-condensed",
+  weight: ["500", "600", "700"],
+  variable: "--font-display",
+});
+/* Prose: lede, body, card intents. */
+const sans = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-sans",
+});
+/* Data: labels, numbers, meta, verdicts. */
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
@@ -39,7 +43,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable} ${condensed.variable} ${mono.variable}`}>
+    <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
@@ -47,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <header className="site-header">
           <div className="wrap site-header-inner">
             <Link href="/" className="brand" aria-label="Trust Layer Patterns — home">
-              <BrandLogo className="brand-logo" />
+              <BrandMark />
             </Link>
             <nav className="site-nav" aria-label="Main">
               <Link href="/" className="site-nav-link">
@@ -55,6 +59,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </Link>
               <Link href="/about" className="site-nav-link">
                 About
+              </Link>
+              <Link href="/changelog" className="site-nav-link">
+                Changelog
               </Link>
               <ThemeToggle />
             </nav>

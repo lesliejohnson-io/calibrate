@@ -19,3 +19,20 @@ export function BrandLogo({ className }: { className?: string }) {
     </svg>
   );
 }
+
+/**
+ * The header lockup: the TLP monogram in its box, then the name set in the
+ * mono face on one line (redesign-handoff.md §1). The full drawn lockup
+ * above is kept for the places that want the mark at size.
+ *
+ * Hidden from assistive tech: the home link that wraps it is labelled, so
+ * announcing the name twice would only repeat it.
+ */
+export function BrandMark() {
+  return (
+    <span className="brand-lockup" aria-hidden="true">
+      <span className="brand-box">TLP</span>
+      <span className="brand-word">Trust Layer Patterns</span>
+    </span>
+  );
+}

@@ -2,6 +2,9 @@
 number: 7
 name: "Capability Disclosure"
 intent: "Before the human hands over control, the machine says what it cannot do and where it will not run, then refuses to engage outside those conditions. Super Cruise offers hands-free driving only on roads GM has mapped."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "The machine says what it cannot do and where it will not run, then refuses to engage outside those limits."
 
 moment: before
 trustJobs: [know]

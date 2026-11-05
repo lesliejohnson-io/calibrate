@@ -119,6 +119,21 @@ export const SOURCE_TYPE_LABELS: Record<(typeof SOURCE_TYPES)[number] | "other",
  * everything that follows from it, and "After" alone read as a single instant.
  * The stored value stays `after`, so content files are untouched.
  */
+/**
+ * The same vocabulary in the singular, for the label on one row of the
+ * Sources list. "Incident report" is cut to "Incident" there: the row is
+ * right-aligned in a narrow column and the word "report" earns nothing.
+ */
+export const SOURCE_TYPE_ROW_LABELS: Record<(typeof SOURCE_TYPES)[number] | "other", string> = {
+  paper: "Paper",
+  book: "Book",
+  standard: "Standard",
+  "incident-report": "Incident",
+  article: "Article",
+  talk: "Talk",
+  other: "Source",
+};
+
 export const MOMENT_LABELS: Record<Moment, string> = {
   before: "Before",
   during: "During",
@@ -281,24 +296,40 @@ const sourceSchema = z.object({
   type: z.enum(SOURCE_TYPES).optional(),
 });
 
+/**
+ * What an example shows: the pattern applied, or the cost of leaving it out.
+ * Rendered as a shape plus a word — "● Applies the pattern", "■ Without it" —
+ * so the verdict never rests on colour.
+ */
+export const VERDICTS = ["applies", "without"] as const;
+export type Verdict = (typeof VERDICTS)[number];
+
+export const VERDICT_LABELS: Record<Verdict, string> = {
+  applies: "Applies the pattern",
+  without: "Without it",
+};
+
+export const VERDICT_SHAPES: Record<Verdict, string> = {
+  applies: "●",
+  without: "■",
+};
+
 const exampleSchema = z
   .object({
-    title: z.string().min(1),
-    domain: z.enum(DOMAINS),
-    evidence: z.enum(EVIDENCE),
+    /** A path in /public. Left out while the figure is still a placeholder. */
+    image: z.string().min(1).optional(),
+    alt: z.string().min(1),
+    /** e.g. "BEA, AF447 Final Report, 2012, Figure 70". */
+    credit: z.string().min(1).optional(),
+    verdict: z.enum(VERDICTS),
     caption: z.string().min(1),
     url: z.url().optional(),
-    source: z.string().min(1).optional(),
-    image: z.string().min(1).optional(),
-    alt: z.string().min(1).optional(),
+    domain: z.enum(DOMAINS).optional(),
+    evidence: z.enum(EVIDENCE).optional(),
   })
   .refine((e) => !e.image || e.alt, {
     message: "an example with an image needs alt text",
     path: ["alt"],
-  })
-  .refine((e) => !e.source || e.url, {
-    message: "a source label needs a url to link to",
-    path: ["url"],
   });
 
 /**
@@ -312,6 +343,28 @@ export type InterfaceComponent = (typeof INTERFACE_COMPONENTS)[number];
 const interfaceSchema = z.object({
   component: z.enum(INTERFACE_COMPONENTS),
 });
+
+/**
+ * One design consideration: the rule stated as an instruction, then the one
+ * or two sentences that say why it holds. Keeping the two apart is what lets
+ * the page set the rule in bold and the reason in running text.
+ */
+const considerationSchema = z.object({
+  rule: z.string().min(1),
+  why: z.string().min(1),
+});
+
+/**
+ * Which drafted sections still carry a DRAFT tag. Cleared field by field as
+ * each one is reviewed, rather than all at once with the pattern's status.
+ */
+const draftsSchema = z
+  .object({
+    whenToUse: z.boolean().optional(),
+    considerations: z.boolean().optional(),
+    examples: z.boolean().optional(),
+  })
+  .optional();
 
 const relatedSchema = z.object({
   slug: z.string().min(1),
@@ -352,6 +405,19 @@ export const frontmatterSchema = z
     name: z.string().min(1),
     intent: z.string().min(1).max(240, "keep the intent to one sentence (240 characters)"),
 
+    /**
+     * The index card's line, where the full intent is a sentence too long to
+     * sit under a thumbnail at 260px. One sentence, no example — the examples
+     * live on the pattern page (redesign-handoff.md §2). A pattern without
+     * one shows its `intent` on the card, which is the right answer whenever
+     * the intent is already short.
+     */
+    cardIntent: z
+      .string()
+      .min(1)
+      .max(160, "a card line is one short sentence (160 characters)")
+      .optional(),
+
     moment: z.enum(MOMENTS),
     trustJobs: z
       .array(z.enum(TRUST_JOBS))
@@ -380,6 +446,22 @@ export const frontmatterSchema = z
         "two sources share the same id; a citation could not tell them apart",
       ),
     examples: z.array(exampleSchema).default([]),
+
+    /**
+     * One short paragraph on the conditions this pattern is for. Frontmatter
+     * rather than a body heading: it is a fixed field of the entry, and the
+     * page renders it in a fixed place.
+     */
+    whenToUse: z.string().min(1).optional(),
+    considerations: z.array(considerationSchema).default([]),
+    drafts: draftsSchema,
+
+    /**
+     * Which mark from the thumbnail map this pattern shows. Defaults to the
+     * slug, which is what every pattern so far uses; name one explicitly only
+     * when two patterns share a drawing.
+     */
+    thumbnail: z.string().min(1).optional(),
 
     openQuestions: z.array(z.string().min(1)).default([]),
     showOpenQuestions: z.boolean().optional(),

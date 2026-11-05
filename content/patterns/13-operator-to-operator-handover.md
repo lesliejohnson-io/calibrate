@@ -2,6 +2,9 @@
 number: 13
 name: "Operator-to-Operator Handover"
 intent: "When responsibility for a machine passes between people — shift change, remote operator to local — the system carries its true state across, including work in progress and anything disabled, rather than relying on memory and paper."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "When responsibility passes between people, the system carries its true state across."
 
 moment: transition
 trustJobs: [know]

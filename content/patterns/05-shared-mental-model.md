@@ -2,6 +2,9 @@
 number: 5
 name: "Shared Mental Model"
 intent: "The interface keeps what the human believes about the system’s state in sync with what that state actually is, so human and machine can predict each other."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "What the human believes about the system's state stays in sync with what that state actually is."
 
 moment: during
 trustJobs: [predict, know]

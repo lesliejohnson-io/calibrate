@@ -2,6 +2,9 @@
 number: 3
 name: "Graceful Degradation"
 intent: "When the system can’t do what it’s supposed to, it steps down to a defined fallback state and says so — without panic or silence."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "When it can't do its job, the system steps down to a defined fallback and says so."
 
 moment: failure
 trustJobs: [recover, know]

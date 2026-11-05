@@ -2,6 +2,9 @@
 number: 4
 name: "Appropriate Friction"
 intent: "Before a high-stakes action, the interface asks the operator to slow down. A drone operator overriding a no-fly boundary has to hold the button for two seconds and confirm the zone, so a stray tap can’t send it there."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "Before a high-stakes action, the interface makes the operator slow down and confirm."
 
 moment: before
 trustJobs: [intervene, know]

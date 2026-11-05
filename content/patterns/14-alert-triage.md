@@ -2,6 +2,9 @@
 number: 14
 name: "Alert Triage"
 intent: "Alerts are ranked by how urgently a human must act, and the ranking is visible in colour, position and sound, so the critical signal is not buried in a flood of equals."
+# The index card's line (redesign-handoff.md §2). Drafted on the redesign
+# canvas, 2026-11-05 — not yet reviewed.
+cardIntent: "Alerts are ranked by how urgently a human must act, so the critical one isn't buried."
 
 moment: during
 trustJobs: [know, intervene]

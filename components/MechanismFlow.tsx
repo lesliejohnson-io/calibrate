@@ -1,36 +1,59 @@
 import type { Step } from "@/lib/patterns";
+import { pad } from "@/lib/format";
 
 /**
- * The mechanism diagram: steps left-to-right with arrows, notes hanging
- * beneath their step on a dashed connector. Stacks vertically on phones.
+ * The mechanism as the pattern page's hero: a white panel holding the steps
+ * as a row of cards, with the key moment inverted, and the step notes
+ * underneath as callouts that name the step they belong to
+ * (redesign-handoff.md §3).
+ *
+ * Pulling the notes out from under their step is what lets the cards keep
+ * equal heights and lets the row reflow at any width: the note says "At 02"
+ * instead of relying on sitting in the second column.
  */
 export function MechanismFlow({ steps }: { steps: Step[] }) {
+  const notes = steps
+    .map((step, i) => ({ number: pad(i + 1), note: step.note }))
+    .filter((n): n is { number: string; note: string } => Boolean(n.note));
+
+  const first = steps[0]?.title.toLowerCase();
+  const last = steps.at(-1)?.title.toLowerCase();
+
   return (
-    <ol
-      className="flow"
-      style={{ "--cols": steps.length } as React.CSSProperties}
-      aria-label="Mechanism, step by step"
-    >
-      {steps.map((step, i) => {
-        const last = i === steps.length - 1;
-        return (
-          <li key={step.title} className="flow-item">
-            <div className={`flow-card${step.key ? " is-key" : ""}`}>
-              {step.key && <span className="flow-key">Key moment</span>}
-              <span className="flow-num">{String(i + 1).padStart(2, "0")}</span>
-              <strong className="flow-title">{step.title}</strong>
-              <span className="flow-detail">{step.detail}</span>
-              {!last && <span className="arrow-h" aria-hidden="true" />}
-            </div>
-            {step.note ? (
-              <p className="flow-note">{step.note}</p>
-            ) : (
-              <span className="flow-note-spacer" aria-hidden="true" />
-            )}
-            {!last && <span className="arrow-v" aria-hidden="true" />}
+    <div className="mechanism">
+      <div className="mechanism-head">
+        <h2 id="mechanism" className="mono-label">
+          The mechanism
+        </h2>
+        {first && last && (
+          <p className="mechanism-arc">
+            {first} &rarr; {last}
+          </p>
+        )}
+      </div>
+
+      <ol className="flow" aria-label="Mechanism, step by step">
+        {steps.map((step, i) => (
+          <li key={step.title} className={`flow-card${step.key ? " is-key" : ""}`}>
+            <span className="label flow-num">
+              {pad(i + 1)}
+              {step.key && " · Key moment"}
+            </span>
+            <strong className="flow-title">{step.title}</strong>
+            <span className="flow-detail">{step.detail}</span>
           </li>
-        );
-      })}
-    </ol>
+        ))}
+      </ol>
+
+      {notes.length > 0 && (
+        <div className="flow-notes">
+          {notes.map((n) => (
+            <p key={n.number} className="flow-note">
+              <strong>At {n.number}:</strong> {n.note}
+            </p>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
