@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Inter, Inter_Tight, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { ExternalLink } from "@/components/ExternalLink";
 import { ByIcon, CcIcon } from "@/components/LicenseIcons";
 import { BrandMark } from "@/components/BrandLogo";
@@ -13,23 +13,55 @@ import "./globals.css";
  */
 const THEME_SCRIPT = `try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}`;
 
+/*
+ * Fonts are self-hosted rather than pulled from `next/font/google`.
+ *
+ * `next/font/google` fetches each family from fonts.googleapis.com at build
+ * time and has no retry: when that request fails, the build fails with
+ * "An error occurred in `next/font`" and takes the whole deploy with it.
+ * That is exactly what happened on the first deploy after this site changed
+ * families, because the restored build cache held the previous ones. Shipping
+ * the files removes the network from the build entirely.
+ *
+ * Each file is the `latin` subset of the family's variable font, taken from
+ * Google Fonts (Inter and Inter Tight under the SIL Open Font License, as is
+ * JetBrains Mono). The variable axis covers every weight the CSS asks for, so
+ * one file per family replaces the fixed weights we used to request. The
+ * `latin` subset carries U+0000-00FF, which covers the accented characters in
+ * the patterns and the source list; the geometric glyphs in the diagrams
+ * (U+25xx) are outside every Google latin subset and render from the system
+ * fallback, as they already did.
+ *
+ * To add a weight, nothing needs to change. To add glyph coverage, add the
+ * matching `latin-ext` file with its own unicode-range.
+ */
+
 /* Display face: headings, card names, rail moment names. */
-const display = Inter_Tight({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+const display = localFont({
+  src: "./fonts/InterTight-Variable-latin.woff2",
+  weight: "100 900",
+  style: "normal",
+  display: "swap",
   variable: "--font-display",
+  fallback: ["system-ui", "sans-serif"],
 });
 /* Prose: lede, body, card intents. */
-const sans = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+const sans = localFont({
+  src: "./fonts/Inter-Variable-latin.woff2",
+  weight: "100 900",
+  style: "normal",
+  display: "swap",
   variable: "--font-sans",
+  fallback: ["system-ui", "sans-serif"],
 });
 /* Data: labels, numbers, meta, verdicts. */
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
+const mono = localFont({
+  src: "./fonts/JetBrainsMono-Variable-latin.woff2",
+  weight: "100 800",
+  style: "normal",
+  display: "swap",
   variable: "--font-mono",
+  fallback: ["ui-monospace", "monospace"],
 });
 
 export const metadata: Metadata = {
