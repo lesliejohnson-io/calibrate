@@ -1,62 +1,22 @@
-import {
-  autonomyRange,
-  humanize,
-  REVERSIBILITY_STATUS,
-  RISK_STATUS,
-  STATUS_SHAPES,
-  type Pattern,
-} from "@/lib/patterns";
+import type { Pattern } from "@/lib/patterns";
 import { PatternToc, type TocItem } from "./PatternToc";
 
 /**
- * The pattern page's right-hand column: the facts, then "On this page"
- * (redesign-handoff.md §3).
+ * The pattern page's right-hand column: "On this page", and nothing else.
  *
- * Risk and reversibility keep their shape as well as their colour, so the
- * state is legible without seeing the hue. The shape is hidden from screen
- * readers — the value's own word ("Critical") is what they announce, and
- * "black square critical" is noise.
+ * It used to open with a facts list — moment, domains, status, source count —
+ * above the nav. Those facts are all stated on the page itself (the moment in
+ * the breadcrumb, the sources in their own section), so the column was
+ * repeating the page back at itself and pushing the one thing that earns a
+ * fixed position down the screen. The nav is sticky, so it is now a column
+ * that does one job while the article scrolls past it.
+ *
+ * `pattern` is kept in the signature because the facts are a deliberate
+ * removal rather than a deletion: putting a row back is adding it here.
  */
-function Fact({
-  label,
-  value,
-  status,
-}: {
-  label: string;
-  value: string;
-  status?: "nominal" | "caution" | "fault";
-}) {
-  return (
-    <div className="fact">
-      <dt className="mono-label fact-label">{label}</dt>
-      <dd className={`fact-value${status ? ` is-${status}` : ""}`}>
-        {status && (
-          <span className="fact-shape" aria-hidden="true">
-            {STATUS_SHAPES[status]}
-          </span>
-        )}
-        {value}
-      </dd>
-    </div>
-  );
-}
-
-export function PatternAside({ pattern: p, toc }: { pattern: Pattern; toc: TocItem[] }) {
+export function PatternAside({ toc }: { pattern: Pattern; toc: TocItem[] }) {
   return (
     <aside className="pattern-aside">
-      <dl className="facts">
-        <Fact label="Risk" value={humanize(p.risk)} status={RISK_STATUS[p.risk]} />
-        <Fact
-          label="Reversibility"
-          value={humanize(p.reversibility)}
-          status={REVERSIBILITY_STATUS[p.reversibility]}
-        />
-        <Fact label="Trust jobs" value={p.trustJobs.map(humanize).join(", ")} />
-        <Fact label="Autonomy" value={autonomyRange(p.autonomy)} />
-        <Fact label="Domains" value={p.domains.map(humanize).join(", ")} />
-        <Fact label="Status" value={`${humanize(p.status)} · updated ${p.updated}`} />
-      </dl>
-
       <PatternToc items={toc} />
     </aside>
   );

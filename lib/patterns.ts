@@ -183,6 +183,17 @@ function readPattern(file: string): Pattern {
 
   const { body, citations } = applyCitations(splitBody(content), parsed.data.sources, rel);
 
+  // The tale's source is validated the same way a [cite:] is: naming a source
+  // that is not on the page fails the build rather than rendering a tale whose
+  // citation links nowhere.
+  const tale = parsed.data.cautionaryTale;
+  if (tale && !parsed.data.sources.some((source) => source.id === tale.sourceId)) {
+    throw new Error(
+      `${rel}: cautionaryTale.sourceId is "${tale.sourceId}", ` +
+        `which is not the id of any source in this file.`,
+    );
+  }
+
   return {
     ...parsed.data,
     slug: file.replace(/\.md$/, "").replace(/^\d+-/, ""),
@@ -266,7 +277,6 @@ export function toCardData(p: Pattern): PatternCardData {
     name: p.name,
     intent: p.cardIntent ?? p.intent,
     moment: p.moment,
-    trustJobs: p.trustJobs,
     domains: p.domains,
     status: p.status,
     aliases: p.aliases,

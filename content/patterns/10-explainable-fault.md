@@ -21,25 +21,26 @@ steps:
     detail: "A sensor, link or subsystem fails"
   - title: "Diagnose it"
     detail: "Find the cause behind the symptoms"
-    note: "On JT610 the crew met the symptoms — stick shaker, airspeed and altitude disagreement, repeated nose-down trim — with nothing naming the miscalibrated angle-of-attack sensor behind them. The AOA DISAGREE alert was not working on that aircraft."
   - title: "Name it in the operator's terms"
     detail: "The condition, not an error code"
     key: true
   - title: "Point at the response"
     detail: "The procedure that goes with it"
-    note: "The 777's EICAS puts a checklist icon next to a message whenever an electronic checklist has to be completed, so the fault and its response arrive together."
   - title: "Record it"
     detail: "So maintenance inherits the diagnosis"
 
 antiPattern: "Symptoms Without a Cause"
+
+interface:
+  component: explainable-fault
 
 without:
   steps: ["Fault occurs", "Symptoms only", "Wrong diagnosis"]
   caption: "Symptoms Without a Cause: the crew gets the downstream effects and has to infer the fault under time pressure. On the flight before JT610 the captain attributed the trim behaviour to the speed trim system — a different system entirely."
 
 with:
-  steps: ["Fault occurs", "Cause named", "Response to hand"]
-  caption: "The alert names the condition in terms the operator recognises and carries the procedure with it, so the diagnosis is not left to inference."
+  steps: ["Fault occurs", "Cause named", "Response to hand", "Fault recorded"]
+  caption: "The alert names the condition in terms the operator recognizes and carries the procedure with it, so the diagnosis isn't left to inference. Because the fault has a name, it's logged and reaches maintenance before the next flight."
 
 related:
   - slug: graceful-degradation
@@ -86,6 +87,8 @@ sources:
     note: "The chapter is built on three considerations: define what counts as an error, identify where errors come from, and provide paths forward from failure. The third is this pattern's second half stated for software — an error the user cannot act on is only half communicated. It also names returning control to the user as the usual path forward when a system fails."
 
 review:
+  - "Needs a cautionary tale"
+  - "Demo: the checklist line reads \"CHECKLIST  AOA DISAGREE\" — the checklist named for the condition, which is the pattern's own logic. No source here names a real 737 checklist for this alert, so the label is drafted, not sourced."
   - "Mechanism steps: drafted. The research has definition, incident and interface example but no mechanism; the two step notes are sourced, the titles and details are not."
   - "KNKT final report (JT610) is flagged in the research as a primary source to pull. Every JT610 claim here rests on secondary reporting until it is."
 

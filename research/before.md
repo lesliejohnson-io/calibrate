@@ -77,8 +77,90 @@ Pairs with Appropriate Friction. Intent Preview answers "what is it about to do?
 ### Research
 - Amershi et al., "Guidelines for Human-AI Interaction," CHI 2019. Guideline 1: make clear what the system can do. Guideline 2: make clear how well it can do it, including how often it may make mistakes.
 
-### Open
-- Find a warehouse or industrial robotics example (e.g., an AMR that declares its operating zone or payload limits on the operator tablet).
+### Industrial leads checked (2026-11-06)
+
+Three leads were checked against primary sources. Only sources actually opened
+and read are recorded here.
+
+**1. Crane rated capacity devices — HOLDS UP, with a twist.** This is the best
+industrial candidate, but not for the reason expected. ASME B30.5-2004 draws
+the exact line this pattern is about, in its own definitions (p. 21):
+
+- *rated capacity indicator* — "a device that automatically monitors radius,
+  load weight, and load rating and warns the crane operator of an overload
+  condition."
+- *rated capacity (load) limiter* — "a device that automatically monitors
+  radius, load weight, and load rating and prevents movements of the crane,
+  which would result in an overload condition."
+
+Warns versus prevents, named and separated in a safety standard. That is
+Capability Disclosure and its anti-pattern as a definition pair.
+
+The twist: neither standard *requires* the enforcing version. ASME 5-1.9.9.2
+says cranes of 3 tons or more "shall have a load indicator, rated capacity
+indicator, or rated capacity (load) limiter" — any one of the three satisfies
+it. OSHA 29 CFR 1926.1416(e)(4)(i) does the same for cranes over 6,000 lb
+manufactured after 29 March 2003: "at least one of the following: load weighing
+device, load moment (or rated capacity) indicator, or load moment (or rated
+capacity) limiter." So the regulation mandates that the limit be *known*, and
+leaves enforcement optional. The only OSHA device described as acting on its
+own is the anti two-blocking device, which "automatically prevents damage" —
+and that is about the block hitting the boom tip, not rated capacity.
+
+Also useful: OSHA treats these as "operational aids" and allows a crane to keep
+working on temporary alternative measures while one is broken — Category II
+devices get 30 calendar days to repair, Category I get 7 (§1926.1416(d), (e)).
+
+**2. Forklift capacity data plates — HOLDS UP as the anti-pattern, and is
+sharper than expected.** 29 CFR 1910.178 does *not* actually require a capacity
+data plate. It requires only that "all nameplates and markings are in place and
+are maintained in a legible condition" ((a)(6)), and that plates be changed
+after a modification that affects capacity ((a)(4), which also requires the
+manufacturer's prior written approval). The capacity duty itself falls on the
+human: "Only loads within the rated capacity of the truck shall be handled"
+((o)(2)), with "Vehicle capacity" listed as a training topic ((l)(3)(i)(H)).
+Nothing in the section requires the truck to prevent an over-capacity lift.
+
+That is Fine Print Limits stated in regulation: the limit is printed on a plate,
+the operator is trained on it, and the machine does nothing to hold the line.
+
+**3. ISO 3691-4 driverless trucks — DOES NOT HOLD UP. Do not cite.** The
+standard is paywalled and was not read. Searching returned only vendor blogs,
+a TUV whitepaper and ISO's own catalogue abstract — nothing that verifies any
+requirement about operator-facing displays of operating zones or payload limits.
+The abstract does note that the operating zone's condition significantly affects
+safe operation, but that is scope language, not a display requirement. This lead
+needs the actual standard text before anything from it goes on a page.
+
+### Primary sources pulled (2026-11-06)
+
+NTSB/HAR-17/02 was pulled and read, which closes the "Primary source to pull"
+flag above and resolves two previously unsourced details on the pattern page:
+
+- **Footnote 17, p. 23:** "The 10-page-long section in the owner's manual
+  concerning driver assistance, which addresses TACC and Autosteer, contains
+  16 items designated as warnings and 4 items designated as cautions." The
+  ten-page / sixteen / four counts are the report's own.
+- **Footnote 61, p. 43:** Autopilot "uses vehicle GPS data, commercially
+  available road data, and camera recognition of speed signs to determine the
+  type of road and the speed limit of the roadway on which the vehicle travels."
+  The car could tell what kind of road it was on.
+- **p. 23:** "the firmware's logic did not restrict the system's use based on
+  functional road classification; the system had no hard constraint concerning
+  road classification."
+- **p. 44:** of the 37 minutes on Autopilot, "the system detected his hands on
+  the steering wheel for only 25 seconds"; the longest gap was nearly 6 minutes.
+- **p. 22:** the set cruise speed was "9 mph over the posted speed limit of
+  65 mph" — the 74 mph figure.
+- **Conclusion 5 and Recommendation H-17-41:** manufacturers should
+  "Incorporate system safeguards that limit the use of automated vehicle control
+  systems to those conditions for which they were designed."
+
+### Still open
+- An AMR or forklift that declares its operating zone or payload limits on the
+  operator's tablet rather than in a commissioning document. Leads 1 and 2 are
+  regulation, not interface: neither shows a screen an operator reads. ISO
+  3691-4 may still contain one, but the text has to be bought and read first.
 
 ### Sources
 - [EHS Today on NTSB Williston findings](https://www.ehstoday.com/safety/ntsb-fatal-crash-involving-tesla-autopilot-resulted-driver-errors-overreliance-automation)
@@ -87,7 +169,11 @@ Pairs with Appropriate Friction. Intent Preview answers "what is it about to do?
 - [Insurance Journal on operational limitations](https://amp.insurancejournal.com/news/national/2017/09/13/464033.htm)
 - [GMC Super Cruise](https://www.gmc.com/supercruise)
 - [Microsoft Guidelines for Human-AI Interaction](https://www.microsoft.com/research/blog/guidelines-for-human-ai-interaction-design/)
-- Primary source to pull: NTSB report HAR-17/02 (Williston)
+- Pulled and read 2026-11-06: [NTSB/HAR-17/02 (Williston)](https://www.ntsb.gov/investigations/AccidentReports/Reports/HAR1702.pdf)
+- Pulled and read 2026-11-06: [ASME B30.5-2004, Public.Resource.Org copy](https://law.resource.org/pub/us/cfr/ibr/002/asme.b30.5.2004.pdf) — incorporated by reference into 29 CFR 1926.1414 and 1926.1433
+- Pulled and read 2026-11-06: [OSHA 29 CFR 1926.1416, Operational aids](https://www.osha.gov/laws-regs/regulations/standardnumber/1926/1926.1416)
+- Pulled and read 2026-11-06: [OSHA 29 CFR 1910.178, Powered industrial trucks](https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.178)
+- NOT read, do not cite: ISO 3691-4 (paywalled; only vendor summaries were available)
 
 ---
 

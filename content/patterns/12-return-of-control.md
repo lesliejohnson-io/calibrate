@@ -21,13 +21,11 @@ steps:
     detail: "They have taken over, or never left"
   - title: "Machine stands back"
     detail: "Visibly, and without arguing"
-    note: "When the driver steers, Super Cruise pulses the light bar blue and stands back. Standing back is a state the human can see, not an internal flag."
   - title: "Conditions are met"
     detail: "The state the machine needs to resume"
   - title: "Human confirms"
     detail: "A deliberate act, not a timeout"
     key: true
-    note: "ISO 13850 is the strict version: a stop is maintained until reset, and reset requires an intentional human action at the place the stop was triggered."
   - title: "Machine resumes"
     detail: "Announced, once — not repeatedly"
 
@@ -91,6 +89,8 @@ sources:
     note: "A stop is maintained until reset, and reset requires an intentional human action at the location where the stop was triggered. The same principle as a requirement: the machine does not decide on its own when the human is finished. Read from a manufacturer datasheet, not the standard itself."
 
 review:
+  - "Needs demo (see DEMOS.md)"
+  - "Needs a cautionary tale"
   - "Mechanism steps: drafted. Steps 2 and 4 carry sourced notes; the titles, details and the five-step shape are mine."
   - "Primary source to pull: the KNKT final report (JT610). NTSB ASR-19-01 has been pulled and added as a source — it carries Boeing's four pilot-response assumptions and the fatality figures, but not the repeated-activation or post-crash design-change claims, which stay on secondary sources."
 

@@ -1,4 +1,4 @@
-# Trust Layer Patterns — Sources
+# Calibrate — Sources
 
 Paste each block into the matching pattern file's frontmatter, replacing `sources: []`.
 Each `# comment` line explains what the source contributes to the pattern. YAML ignores comments, so you can keep them as notes for yourself.

@@ -8,7 +8,7 @@ the files here takes the network out of the build.
 
 | File | Family | Axis | Source |
 | --- | --- | --- | --- |
-| `InterTight-Variable-latin.woff2` | Inter Tight | `wght` 100–900 | Google Fonts, `latin` subset |
+| `Archivo-Variable-latin.woff2` | Archivo | `wght` 100–900 | Google Fonts, `latin` subset |
 | `Inter-Variable-latin.woff2` | Inter | `wght` 100–900 | Google Fonts, `latin` subset |
 | `JetBrainsMono-Variable-latin.woff2` | JetBrains Mono | `wght` 100–800 | Google Fonts, `latin` subset |
 
@@ -19,11 +19,18 @@ Glyphs outside it — the geometric shapes in the diagrams (U+25xx) and the
 arrows `←` `→` — are in no Google latin subset and render from the system
 fallback, as they did before.
 
+Archivo replaced Inter Tight as the display face. Its `latin` subset is four
+codepoints narrower (U+02BB, U+0329, U+2002, U+200B); none is used anywhere in
+the site, and all four would fall back rather than fail. Note that Archivo's
+default instance is `wght` 600 where Inter Tight's was 400, which only matters
+if a rule ever asks for the family without naming a weight.
+
 ## Licence
 
 All three families are licensed under the SIL Open Font License, Version 1.1:
 
-- Inter and Inter Tight — Copyright (c) The Inter Project Authors
+- Archivo — Copyright (c) Omnibus-Type
+- Inter — Copyright (c) The Inter Project Authors
 - JetBrains Mono — Copyright (c) JetBrains s.r.o.
 
 The licence text is at <https://openfontlicense.org/open-font-license-official-text/>.

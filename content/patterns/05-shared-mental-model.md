@@ -40,6 +40,8 @@ with:
   caption: "Each side can anticipate the other, so they share a workspace safely."
 
 review:
+  - "Needs demo (see DEMOS.md)"
+  - "Needs a cautionary tale"
   - "Unsourced claim: “a machine with no model of what the operator expects it to do cannot tell when that expectation has gone wrong”. The two-way sync is argued, not sourced: Sarter and Woods cover the operator's model diverging from the system's mode, not the reverse."
 
 sources:

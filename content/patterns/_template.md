@@ -83,6 +83,33 @@ sources: []
 
 # considerations: each item is the rule as an instruction, then why it holds.
 # Three to six work best.
+# REQUIRED IN PRACTICE. The incident this pattern came from: a real event,
+# from physical autonomy, that the sources on this page actually record. Every
+# field is needed once the block exists, and `sourceId` must be the id of a
+# source below or the build fails. Never write one from memory or from a
+# secondary summary: if the research has no tale, leave this out and put
+# "Needs a cautionary tale" in `review:` instead of inventing one.
+# cautionaryTale:
+#   title: "American Airlines Flight 965 at Cali"   # the incident's full name
+#   date: "20 December 1995"
+#   place: "Buga, Colombia"
+#   story: >-
+#     Three or four sentences. What the machine did, what the human saw, and
+#     what it cost. Figures and units exactly as the source gives them.
+#   sourceId: aa965-findings
+
+# REQUIRED IN PRACTICE. The one-sentence answer to the tale, rendered after
+# "Therefore:" above the demo. One sentence, imperative, no hedging.
+# therefore: >-
+#   Show the path before it is flown, and make committing to it a separate act
+#   from proposing it.
+
+# The interactive without / with demo. The component name has to be in
+# INTERFACE_COMPONENTS in lib/schema.ts. Write the concept in DEMOS.md first;
+# until one is built, put "Needs demo (see DEMOS.md)" in `review:`.
+# interface:
+#   component: "flight-computer"
+
 considerations: []
 #  - rule: "Write the rule as a short imperative."
 #    why: "One or two sentences on why it holds and what breaks without it."
@@ -118,6 +145,14 @@ openQuestions: []
 # --- Diagrams ---------------------------------------------------------------
 # 3–6 steps work best. Add `note:` to hang an annotation under a step, and
 # `key: true` on the one step that is the pattern's key moment.
+#
+# A step `note:` is for design advice the steps alone do not carry — "friction
+# scales with consequence", "hand off at a designed boundary". It is NOT the
+# place for evidence: if a note states a fact the Sources section already
+# states, the page is saying the same thing twice and the note is the weaker
+# copy, because it has no citation and no room to explain itself. Put the
+# fact in the source's own `note:`, or in the body where it can be cited, and
+# leave the step without one.
 steps:
   - title: "Step one"
     detail: "Short detail"

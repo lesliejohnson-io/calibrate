@@ -1,11 +1,15 @@
 import type { Contrast, InterfaceComponent } from "@/lib/patterns";
 import { DroneRelease } from "./illustrations/DroneRelease";
+import { ExplainableFault } from "./illustrations/ExplainableFault";
+import { FlightComputer } from "./illustrations/FlightComputer";
 
 const ILLUSTRATIONS: Record<
   InterfaceComponent,
   (props: { variant: "without" | "with" }) => React.ReactElement
 > = {
   "drone-release": DroneRelease,
+  "flight-computer": FlightComputer,
+  "explainable-fault": ExplainableFault,
 };
 
 /**
@@ -55,10 +59,13 @@ export function Comparison({
     <div className={`compare${Illustration ? " compare-interface" : ""}`}>
       <section className="panel panel-without" aria-labelledby="without-label">
         <h3 id="without-label" className="mono-label panel-label">
-          {antiPattern ? `Anti-pattern: ${antiPattern}` : "Without"}
+          {!Illustration && antiPattern ? `Anti-pattern: ${antiPattern}` : "Without"}
         </h3>
         {Illustration ? <Illustration variant="without" /> : <Sequence steps={without.steps} />}
-        <p className="panel-caption">{without.caption}</p>
+        {/* With a demo, the anti-pattern section immediately above already
+            names the failure and states it in a sentence; repeating it under
+            the panel says the same thing three times on one screen. */}
+        {!Illustration && <p className="panel-caption">{without.caption}</p>}
       </section>
 
       <section className="panel panel-with" aria-labelledby="with-label">

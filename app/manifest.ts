@@ -3,12 +3,12 @@ import type { MetadataRoute } from "next";
 /**
  * Lets the site be installed to a phone home screen. `maskable` is a separate
  * entry because Android crops adaptive icons to a circle, so that version
- * sets the monogram smaller, inside the safe zone.
+ * sets the mark smaller, inside the safe zone.
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Trust Layer Patterns",
-    short_name: "Trust Layer",
+    name: "Calibrate",
+    short_name: "Calibrate",
     description:
       "Named, reusable design patterns for the trust layer between humans and autonomous machines.",
     start_url: "/",

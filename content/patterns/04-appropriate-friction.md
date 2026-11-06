@@ -46,6 +46,9 @@ with:
   steps: ["Initiate", "Friction step", "Deliberate commit"]
   caption: "A pause that restates the consequence catches slips before they become incidents."
 
+review:
+  - "Needs a cautionary tale"
+
 sources:
   - id: cox-2016
     title: "Design Frictions for Mindful Interactions: The Case for Microboundaries"

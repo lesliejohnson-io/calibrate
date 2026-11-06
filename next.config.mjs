@@ -25,6 +25,15 @@ const RENAMED = {
 };
 
 /**
+ * Pages that have been taken down, pointed at whatever now answers the
+ * question they used to. `/matrix` held the risk × reversibility view; those
+ * two ratings are no longer shown anywhere, so the patterns index is the
+ * honest destination. A 308 rather than a 404 because the page was linked
+ * from About and may be bookmarked.
+ */
+const RETIRED = [{ source: "/matrix", destination: "/", permanent: true }];
+
+/**
  * Permanent redirects for every URL that is not the canonical one:
  *
  *  - Renamed or merged slugs, from the map above.
@@ -50,11 +59,13 @@ async function redirects() {
     .filter((slug) => /^\d+-/.test(slug))
     .map((slug) => [slug, slug.replace(/^\d+-/, "")]);
 
-  return [...Object.entries(RENAMED), ...numbered].map(([from, to]) => ({
+  const patterns = [...Object.entries(RENAMED), ...numbered].map(([from, to]) => ({
     source: `/patterns/${from}`,
     destination: `/patterns/${to}`,
     permanent: true,
   }));
+
+  return [...patterns, ...RETIRED];
 }
 
 /** @type {import('next').NextConfig} */

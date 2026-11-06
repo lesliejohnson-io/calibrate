@@ -21,11 +21,9 @@ steps:
     detail: "A human is nominally responsible"
   - title: "Check it"
     detail: "Eyes, head position, hands, presence"
-    note: "Super Cruise watches with an infrared camera on the steering column, tracking head position and eye movement rather than asking for a periodic wheel tug."
   - title: "Escalate when it fails"
     detail: "Quietly, then insistently"
     key: true
-    note: "The ladder runs light bar flashing green, then flashing red with chimes and seat vibration, then a voice prompt to take control."
   - title: "Act if nobody answers"
     detail: "Slow to a stop rather than continue"
   - title: "Re-check while running"
@@ -78,6 +76,8 @@ sources:
     note: "The calibration argument behind the pattern: reliance has to match capability, and a supervisor who has stopped supervising is the clearest case of it not doing so."
 
 review:
+  - "Needs demo (see DEMOS.md)"
+  - "Needs a cautionary tale"
   - "Mechanism steps: drafted. The escalation ladder in steps 3 and 4 is sourced from Super Cruise; the step titles, details and the fifth step are not."
   - "Unsourced claim: “The NTSB's framing after Williston was that humans are very poor at monitoring automated systems”. It comes from the research notes, but the Williston report (NTSB/HAR-17/02) is not among this entry's sources — it is cited on capability-disclosure. Either add it here or drop the sentence's attribution."
 

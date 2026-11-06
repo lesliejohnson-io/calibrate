@@ -21,11 +21,9 @@ steps:
     detail: "Something the operator may need to act on"
   - title: "Rank it by urgency"
     detail: "Act now, act soon, be aware"
-    note: "CS 25.1322 uses three levels: Warning for immediate awareness and immediate response, Caution for immediate awareness and subsequent response, Advisory for awareness that may need a response."
     key: true
   - title: "Encode the rank"
     detail: "Colour, position and sound carry it"
-    note: "Colour is reserved, not decorative: red for Warnings, amber or yellow for Cautions, and Advisories any colour except red or green. Warnings and Cautions have to reach the crew through at least two senses."
   - title: "Suppress the rest"
     detail: "Consequences of a fault, not new faults"
   - title: "Link to the response"
@@ -78,6 +76,8 @@ sources:
     note: "Observed. Course material on alerting design, and the source for the 777 EICAS checklist icon that links a message to the procedure it needs."
 
 review:
+  - "Needs demo (see DEMOS.md)"
+  - "Needs a cautionary tale"
   - "Mechanism steps: drafted. Steps 2 and 3 carry sourced notes; the titles, details, and steps 4 and 5 are mine. Step 4 in particular — suppressing consequential alarms — is standard alarm-management practice but is not in the research."
 
 openQuestions:

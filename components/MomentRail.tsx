@@ -129,8 +129,6 @@ export function MomentRail({
 
   return (
     <nav className="rail" aria-label="The control loop">
-      <p className="mono-label rail-eyebrow">The control loop</p>
-
       <div className="rail-body">
         <span
           className="rail-return"

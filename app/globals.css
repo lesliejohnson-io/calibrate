@@ -30,6 +30,17 @@
   --thumb-ink: #FFFFFF;
 
   /* Status. Only where something has a status, always paired with a shape. */
+  /*
+   * Critical stays warm on purpose. The ■ already carries the state, so the
+   * colour could be anything -- but a cool highlight on "Critical" reads calm,
+   * and this scale runs ● nominal / ▲ caution / ■ fault, so the worst state
+   * has to be the hottest of the three or the ranking inverts.
+   *
+   * #C2410C clears AA on --ground (4.78:1) and --surface (5.18:1) but lands at
+   * 4.41:1 on --panel, just under the floor. This predates the colour work and
+   * is not introduced here; #C4302B fixes it (4.70:1 on --panel) if the fault
+   * colour ever moves to a true red.
+   */
   --fault: #C2410C;           /* ■ critical / irreversible / "Without it" */
   --status-nominal: #15663C;  /* ● low risk, reversible */
   --status-caution: #8A5000;  /* ▲ elevated risk, costly to reverse */
@@ -40,6 +51,25 @@
   --tint-nominal: #E6F0E9;
   --tint-caution: #F6EBD9;
   --tint-fault: #FAE8E0;
+
+  /*
+   * Highlight, shared with the portfolio site. Deliberately NOT a status: it
+   * carries no severity, never substitutes for --fault, and never needs a
+   * shape beside it. It is the one colour on the site allowed to mean nothing
+   * more than "this is the thing".
+   *
+   * Nothing reads from it yet -- the pages are still ink-on-ground throughout.
+   * It is defined here so the two sites share one highlight once there is
+   * somewhere to spend it (links, active nav, the rail's current position).
+   *
+   * Light #1B4551: 9.62:1 on --ground, 10.41:1 on --surface, 8.87:1 on
+   * --panel. Dark #2E7E96: 4.12:1 on --ground and 3.81:1 on --surface, both
+   * under the 4.5:1 floor -- fine for rules and fills, but swap to #3590AC
+   * (same hue and saturation, lighter) before it sets small text in dark mode.
+   */
+  --accent: #1B4551;
+  --accent-tint: #DAE5E6;
+  --on-accent: #FFFFFF;
 
   /* Legacy aliases — see the note above. */
   --bg: var(--ground);
@@ -101,6 +131,10 @@
     --tint-caution: #2B2112;
     --tint-fault: #2E1715;
 
+    --accent: #2E7E96;
+    --accent-tint: #14242B;
+    --on-accent: #FFFFFF;
+
     --panel: #1E2228;
     --edge: #6B7380;
 
@@ -136,6 +170,10 @@
   --tint-nominal: #13261C;
   --tint-caution: #2B2112;
   --tint-fault: #2E1715;
+
+  --accent: #2E7E96;
+  --accent-tint: #14242B;
+  --on-accent: #FFFFFF;
 
   --panel: #1E2228;
   --edge: #6B7380;
@@ -231,7 +269,7 @@ code {
 .section-head {
   margin: 0;
   font-family: var(--font-display), system-ui, sans-serif;
-  font-weight: 600;
+  font-weight: 700;
   font-size: clamp(26px, 3vw, 32px);
   line-height: 1.15;
   letter-spacing: -0.015em;
@@ -241,7 +279,7 @@ code {
 .subhead {
   margin: 0;
   font-family: var(--font-display), system-ui, sans-serif;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 19px;
   line-height: 1.25;
   letter-spacing: -0.01em;
@@ -274,7 +312,7 @@ code {
 .display {
   margin: 8px 0 0;
   font-family: var(--font-display), system-ui, sans-serif;
-  font-weight: 600;
+  font-weight: 700;
   font-size: clamp(38px, 6vw, 64px);
   line-height: 1.03;
   letter-spacing: -0.025em;
@@ -326,26 +364,20 @@ code {
   white-space: nowrap;
 }
 
-.brand-box {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 26px;
-  border: 1.5px solid var(--ink);
-  border-radius: 3px;
-  font-family: var(--font-display), system-ui, sans-serif;
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.02em;
+/* The mark from app/icon.svg, at cap height beside the word. */
+.brand-mark {
+  display: block;
+  width: 22px;
+  height: 22px;
+  flex: none;
+  color: var(--ink);
 }
 
 .brand-word {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 @media (max-width: 560px) {
@@ -1063,10 +1095,31 @@ a.station-body:hover .station-count {
 }
 
 .tabs,
+/* The domain filter is one segmented bar, not a scatter of separate pills:
+   the options are a single either/or set, and butting them together says so
+   before the labels are read. Adjacent borders are overlapped by -1px rather
+   than doubled, so the divider between two segments is one hairline. */
 .chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 0;
+}
+
+.chips .filter-chip {
+  border-radius: 0;
+}
+
+.chips .filter-chip + .filter-chip {
+  margin-left: -1px;
+}
+
+/* A pressed or focused segment owns both of its edges, so it has to sit above
+   the neighbour whose border it is overlapping. */
+.chips .filter-chip:hover,
+.chips .filter-chip:focus-visible,
+.chips .filter-chip[aria-pressed="true"] {
+  position: relative;
+  z-index: 1;
 }
 
 .tab,
@@ -1332,6 +1385,67 @@ a.station-body:hover .station-count {
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 20px;
+}
+
+/* ---------- The pair above the demo ----------
+ *
+ * Anti-pattern and pattern as two columns: the page's argument is the
+ * comparison between them, and stacked in one column the reader meets the
+ * answer only after scrolling the mistake out of view. The demo below spans
+ * the full measure, because it is the same two things again, operable.
+ *
+ * Below 900px the grid collapses to one column — at that width two columns of
+ * prose are too narrow to read, and the stacked order (mistake, then answer)
+ * is still the right one.
+ */
+.pattern-duo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 48px;
+  align-items: start;
+  margin-top: 56px;
+}
+
+.duo-col > .section-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* A pattern with no named anti-pattern leaves one column; it should take the
+   measure rather than sit in a half-width well. */
+.duo-col:only-child {
+  grid-column: 1 / -1;
+}
+
+/* The columns set their own measure; the prose caps inside them would
+   otherwise hold the text to a width the column has already undercut. */
+.duo-col .prose-lead,
+.duo-col .therefore {
+  max-width: none;
+}
+
+.duo-col .therefore {
+  margin-top: 0;
+}
+
+.section-demo {
+  margin-top: 40px;
+}
+
+/* First thing in its section, so there is no heading margin to collapse into
+   and the pull-up in .section-note has to be cancelled. */
+.section-note-lead {
+  margin-top: 0;
+}
+
+@media (max-width: 899px) {
+  .pattern-duo {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
 }
 
 /* A short paragraph that is the whole of its section — "When to use". */
@@ -1827,6 +1941,18 @@ a.station-body:hover .station-count {
   top: 24px;
   align-self: flex-start;
   padding-top: 72px;
+  /* The column is only the nav now, so it can hold the viewport for the whole
+     scroll. A long table of contents scrolls inside itself rather than
+     running off the bottom and becoming unreachable. */
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* The nav is the column, so it does not need the gap that separated it from
+   the facts list above it. */
+.pattern-aside .toc {
+  margin-top: 0;
 }
 
 .facts {
@@ -1915,12 +2041,10 @@ a.station-body:hover .station-count {
     grid-template-columns: minmax(0, 1fr);
     gap: 0;
   }
+  /* The column holds nothing but the rail, and the rail is replaced here by
+     .toc-mobile — so the aside has nothing left to show and would otherwise
+     sit under the article as an empty 48px of padding. */
   .pattern-aside {
-    position: static;
-    padding-top: 48px;
-    max-width: 420px;
-  }
-  .toc {
     display: none;
   }
   .toc-mobile {
@@ -2027,6 +2151,15 @@ a.station-body:hover .station-count {
 .section-note {
   /* Collapses against the heading's 24px to sit 12px under its rule. */
   margin: -12px 0 24px;
+  /* ...but after the "Therefore:" block there is no heading margin to
+     collapse into, so the pull-up has to be cancelled. */
+}
+
+.therefore + .section-note {
+  margin-top: 18px;
+}
+
+.section-note {
   max-width: 62ch;
   font-size: 14px;
   color: var(--muted);
@@ -2656,7 +2789,7 @@ a.station-body:hover .station-count {
 .prose h2,
 .prose h3 {
   font-family: var(--font-display), system-ui, sans-serif;
-  font-weight: 400;
+  font-weight: 700;
   color: var(--ink);
   line-height: 1.2;
 }
@@ -2889,4 +3022,383 @@ a.station-body:hover .station-count {
 :focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 3px;
+}
+
+
+/* ---------- Cautionary tale, anti-pattern, therefore ---------- */
+.tale-head {
+  font-size: clamp(22px, 2.4vw, 28px);
+}
+
+.tale-dateline {
+  margin: 6px 0 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tale-story {
+  margin: 14px 0 0;
+  max-width: 62ch;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+/* The one-sentence answer to the tale, set apart from the prose around it. */
+.therefore {
+  margin: 14px 0 0;
+  max-width: 62ch;
+  padding-left: 14px;
+  border-left: 3px solid var(--ink);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+/* ---------- Flight computer printout (Intent Preview, Explainable Fault) ----
+ *
+ * A machine printing to a fixed-width display, one line at a time. The
+ * typographic job is to keep three kinds of line apart without relying on
+ * colour: live text is full-strength, a proposal or a spent line is dimmed,
+ * and a state change is a rule of em dashes. A fault line carries the ⚠ as
+ * well as its colour, so it survives greyscale and both themes.
+ *
+ * Lines never move once printed — `is-gone` fades them in place rather than
+ * collapsing the box, because a display that reflows while it prints is
+ * impossible to read and, for the anti-pattern, would hide the very thing
+ * the demo is about: the route leaving the screen.
+ */
+.fc-log {
+  min-height: 132px;
+  margin: 0 0 14px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.fc-line {
+  margin: 0;
+  white-space: pre;
+  color: var(--ink);
+  transition: opacity 240ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-line {
+    transition: none;
+  }
+}
+
+.fc-line.is-dim {
+  color: var(--muted);
+}
+
+.fc-line.is-fault {
+  color: var(--status-fault);
+}
+
+.fc-line.is-rule {
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+/* Printed, then superseded: still on the display, no longer in force. */
+.fc-line.is-gone {
+  opacity: 0.22;
+  text-decoration: line-through;
+}
+
+.fc-warn {
+  margin-right: 6px;
+}
+
+/* The query field: label, monospace input, and the same action as Enter. */
+.fc-entry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.fc-entry-label {
+  padding: 0;
+  font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.fc-input {
+  width: 5.5em;
+  padding: 6px 8px;
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 2px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.fc-go,
+.fc-approve,
+.fc-discard,
+.fc-guess {
+  padding: 6px 12px;
+  background: none;
+  border: 1px solid var(--edge);
+  border-radius: 2px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.fc-approve {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--surface);
+}
+
+.fc-go:disabled,
+.fc-approve:disabled,
+.fc-discard:disabled,
+.fc-guess:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.fc-go:hover:not(:disabled),
+.fc-discard:hover:not(:disabled),
+.fc-guess:hover:not(:disabled) {
+  background: var(--panel);
+}
+
+/* The choice the anti-pattern never offered. */
+.fc-choices {
+  margin: 0 0 12px;
+  padding: 0;
+  border: 0;
+}
+
+.fc-choice {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding: 7px 8px;
+  border: 1px solid var(--edge);
+  border-radius: 2px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.fc-choice + .fc-choice {
+  margin-top: 6px;
+}
+
+.fc-choice input {
+  grid-column: 1;
+  margin: 0;
+}
+
+.fc-choice-name {
+  grid-column: 2;
+  color: var(--ink);
+}
+
+.fc-choice-dist {
+  grid-column: 3;
+  color: var(--muted);
+}
+
+.fc-choice-note {
+  grid-column: 2 / -1;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.fc-choice.is-fault {
+  border-color: var(--status-fault);
+}
+
+.fc-choice.is-fault .fc-choice-name,
+.fc-choice.is-fault .fc-choice-note {
+  color: var(--status-fault);
+}
+
+/* Dashed, because a route that has only been proposed must never read as
+   the route being flown. The label says the same thing in words. */
+.fc-proposal {
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  border: 1px dashed var(--edge);
+  border-radius: 2px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 14px;
+}
+
+.fc-proposal-label {
+  margin: 0 0 4px;
+  font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.fc-actions,
+.fc-guesses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* The question the anti-pattern display leaves to the operator. */
+.fc-ask {
+  margin: 0 0 10px;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink);
+}
+
+
+/* ---------- CRT screen (the printed flight displays) ----------
+ *
+ * Black glass, phosphor green: the printed demos are meant to read as a
+ * flight deck readout rather than as part of the page, so the screen stops
+ * following the theme and is the same in light and dark. The bezel around it
+ * still does follow, which is what keeps it looking like a device sitting on
+ * the page rather than a hole cut in it.
+ *
+ * The colours are fixed hex rather than tokens for that reason — a token
+ * would re-theme the one element whose whole point is that it does not. Green
+ * on black is roughly 15:1, and every state that matters still carries a
+ * glyph or a word (⚠, "Off approach", "not active"), so nothing here is
+ * holding meaning in hue alone.
+ */
+.console-crt {
+  --crt-green: #3cff5e;
+  --crt-mid: #1f9c38;
+  --crt-dim: #12642a;
+  --crt-black: #050705;
+
+  background: var(--crt-black);
+  border-color: #000;
+  color: var(--crt-green);
+  font-variant-ligatures: none;
+}
+
+.console-crt .fc-line {
+  color: var(--crt-green);
+}
+
+.console-crt .fc-line.is-dim {
+  color: var(--crt-mid);
+}
+
+/* Brighter than the body text, not a different hue: on a monochrome display
+   a fault announces itself by intensity, and the ⚠ carries the rest. */
+.console-crt .fc-line.is-fault {
+  color: #b9ffc6;
+  font-weight: 700;
+}
+
+.console-crt .fc-line.is-rule {
+  color: var(--crt-mid);
+}
+
+.console-crt .fc-line.is-gone {
+  opacity: 0.3;
+}
+
+.console-crt .fc-entry-label,
+.console-crt .fc-proposal-label,
+.console-crt .console-hint,
+.console-crt .fc-choice-dist,
+.console-crt .fc-choice-note {
+  color: var(--crt-mid);
+}
+
+.console-crt .fc-ask {
+  color: var(--crt-green);
+}
+
+.console-crt .fc-input {
+  background: #0c120d;
+  border-color: var(--crt-dim);
+  color: var(--crt-green);
+  caret-color: var(--crt-green);
+}
+
+.console-crt .fc-go,
+.console-crt .fc-discard,
+.console-crt .fc-guess,
+.console-crt .console-reset {
+  background: none;
+  border-color: var(--crt-dim);
+  color: var(--crt-green);
+}
+
+.console-crt .fc-go:hover:not(:disabled),
+.console-crt .fc-discard:hover:not(:disabled),
+.console-crt .fc-guess:hover:not(:disabled),
+.console-crt .console-reset:hover {
+  background: #0f2415;
+  border-color: var(--crt-mid);
+}
+
+.console-crt .fc-approve {
+  background: var(--crt-green);
+  border-color: var(--crt-green);
+  color: var(--crt-black);
+}
+
+.console-crt .fc-approve:hover:not(:disabled) {
+  background: #7cff94;
+}
+
+.console-crt .fc-choice {
+  border-color: var(--crt-dim);
+  color: var(--crt-green);
+}
+
+.console-crt .fc-choice input {
+  accent-color: var(--crt-green);
+}
+
+.console-crt .fc-choice-name {
+  color: var(--crt-green);
+}
+
+.console-crt .fc-choice.is-fault {
+  border-color: var(--crt-mid);
+}
+
+.console-crt .fc-choice.is-fault .fc-choice-name,
+.console-crt .fc-choice.is-fault .fc-choice-note {
+  color: #b9ffc6;
+}
+
+.console-crt .fc-proposal {
+  border-color: var(--crt-dim);
+}
+
+.console-crt .fc-proposal .fc-line.is-dim {
+  color: var(--crt-mid);
+}
+
+/* The focus ring has to clear black glass, not the page background. */
+.console-crt :focus-visible {
+  outline: 2px solid var(--crt-green);
+  outline-offset: 2px;
 }

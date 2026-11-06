@@ -4,21 +4,14 @@ import { SocialLinks } from "@/components/SocialLinks";
 import { PatternToc, type TocItem } from "@/components/PatternToc";
 import { TocDisclosure } from "@/components/TocDisclosure";
 import {
-  AUTONOMY_LEVELS,
   EVIDENCE_DEFINITIONS,
   getAllPatterns,
   humanize,
   RELATION_DEFINITIONS,
   RELATIONS,
   RELATION_LABELS,
-  REVERSIBILITY,
-  REVERSIBILITY_DEFINITIONS,
-  RISK_DEFINITIONS,
-  RISKS,
   STATUS_DEFINITIONS,
   STATUSES,
-  TRUST_JOBS,
-  TRUST_JOB_PURPOSES,
 } from "@/lib/patterns";
 
 export const metadata: Metadata = {
@@ -49,10 +42,7 @@ const TOC: TocItem[] = [
   { id: "what", label: "What a pattern means here" },
   { id: "anatomy", label: "Anatomy of a pattern page" },
   { id: "status", label: "Status" },
-  { id: "trust-jobs", label: "Trust jobs" },
-  { id: "autonomy", label: "The autonomy scale" },
   { id: "relations", label: "How patterns relate" },
-  { id: "risk", label: "Risk and reversibility" },
   { id: "evidence", label: "Observed and speculative examples" },
   { id: "cite", label: "How to cite" },
   { id: "who", label: "The author" },
@@ -96,8 +86,8 @@ export default function AboutPage() {
               What narrows this library is the second half: <strong>autonomy with physical
               consequences</strong>. Most AI pattern libraries cover AI inside software, where a bad
               output is a bad output. Here the machine moves, cuts, lifts or drives, so a
-              miscalibrated handoff is measured in seconds and metres. That is why every pattern
-              carries a risk and a reversibility, and why friction is sometimes the feature.
+              miscalibrated handoff is measured in seconds and metres. That is why these patterns
+              weigh consequence so heavily, and why friction is sometimes the feature.
             </p>
           </div>
         </section>
@@ -141,47 +131,6 @@ export default function AboutPage() {
           </p>
         </section>
 
-        <section className="section" aria-labelledby="trust-jobs">
-          <h2 id="trust-jobs" className="section-head">
-            Trust jobs
-          </h2>
-          <p className="prose">
-            What the human actually needs from the machine at that moment. A pattern does one or
-            two of these; more than two usually means it is really two patterns.
-          </p>
-          <dl className="defs">
-            {TRUST_JOBS.map((job) => (
-              <div key={job} className="def">
-                <dt>
-                  <span className="tag">{humanize(job)}</span>
-                </dt>
-                <dd>{TRUST_JOB_PURPOSES[job]}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        <section className="section" aria-labelledby="autonomy">
-          <h2 id="autonomy" className="section-head">
-            The autonomy scale
-          </h2>
-          <p className="prose">
-            Each pattern names the range of automation levels it applies to. The scale below takes
-            SAE&apos;s driving-automation levels as its reference point, generalized because this
-            library also covers robots, drones and warehouse systems.
-          </p>
-          <dl className="defs">
-            {AUTONOMY_LEVELS.map((level) => (
-              <div key={level.level} className="def">
-                <dt>
-                  <span className="level-num">{level.level}</span> {level.name}
-                </dt>
-                <dd>{level.detail}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
         <section className="section" aria-labelledby="relations">
           <h2 id="relations" className="section-head">
             How patterns relate
@@ -196,33 +145,6 @@ export default function AboutPage() {
               <div key={relation} className="def">
                 <dt>{RELATION_LABELS[relation]}</dt>
                 <dd>{RELATION_DEFINITIONS[relation]}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        <section className="section" aria-labelledby="risk">
-          <h2 id="risk" className="section-head">
-            Risk and reversibility
-          </h2>
-          <p className="prose">
-            Together these decide how much friction a pattern can justify. They are not used to
-            navigate the library — they are there to be argued with, and to show where the
-            coverage is thin. The{" "}
-            <Link href="/matrix">risk × reversibility view</Link> lays every pattern out on both
-            axes.
-          </p>
-          <dl className="defs">
-            {RISKS.map((risk) => (
-              <div key={risk} className="def">
-                <dt>{humanize(risk)}</dt>
-                <dd>{RISK_DEFINITIONS[risk]}</dd>
-              </div>
-            ))}
-            {REVERSIBILITY.map((reversibility) => (
-              <div key={reversibility} className="def">
-                <dt>{humanize(reversibility)}</dt>
-                <dd>{REVERSIBILITY_DEFINITIONS[reversibility]}</dd>
               </div>
             ))}
           </dl>
@@ -256,14 +178,14 @@ export default function AboutPage() {
           <div className="prose">
             <p>Cite an individual pattern, not the library as a whole:</p>
             <p className="cite-format">
-              Johnson, L. (2026). {"{Pattern name}"}. Trust Layer Patterns. {SITE}/patterns/
+              Johnson, L. (2026). {"{Pattern name}"}. Calibrate. {SITE}/patterns/
               {"{slug}"}
             </p>
             {example && (
               <>
                 <p>For example:</p>
                 <p className="cite-format">
-                  Johnson, L. (2026). {example.name}. Trust Layer Patterns. {SITE}/patterns/
+                  Johnson, L. (2026). {example.name}. Calibrate. {SITE}/patterns/
                   {example.slug}
                 </p>
               </>

@@ -1,9 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <!-- TLP monogram from public/icons/trust-layer-patterns-logo.svg -->
-  <rect width="512" height="512" fill="#000000"/>
-  <g fill="#ffffff" transform="translate(256 256) scale(4.975829) translate(-57.2476 -52.3942) translate(19 10)">
-    <path transform="translate(0.610798 68.073846)" d="M 6.703125 0 L 6.703125 -41.5 L 0.59375 -41.5 L 0.59375 -51.359375 L 23.078125 -51.359375 L 23.078125 -41.5 L 16.984375 -41.5 L 16.984375 0 Z M 6.703125 0"/>
-    <path transform="translate(24.288035 68.073846)" d="M 2.265625 0 L 2.265625 -51.359375 L 12.5625 -51.359375 L 12.5625 -8.734375 L 23.140625 -8.734375 L 23.140625 0 Z M 2.265625 0"/>
-    <path transform="translate(48.025064 68.073846)" d="M 2.265625 -51.359375 L 15.84375 -51.359375 C 19.945312 -51.359375 22.875 -50.03125 24.625 -47.375 C 26.382812 -44.726562 27.265625 -40.859375 27.265625 -35.765625 C 27.265625 -30.660156 26.488281 -26.8125 24.9375 -24.21875 C 23.382812 -21.625 20.59375 -20.328125 16.5625 -20.328125 L 12.375 -20.328125 L 12.375 0 L 2.265625 0 Z M 12.96875 -29.59375 C 14.207031 -29.59375 15.113281 -29.820312 15.6875 -30.28125 C 16.269531 -30.738281 16.648438 -31.394531 16.828125 -32.25 C 17.015625 -33.113281 17.109375 -34.34375 17.109375 -35.9375 C 17.109375 -38.09375 16.867188 -39.644531 16.390625 -40.59375 C 15.910156 -41.550781 14.953125 -42.03125 13.515625 -42.03125 L 12.375 -42.03125 L 12.375 -29.59375 Z M 12.96875 -29.59375"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!--
+    The Calibrate mark: a circle over a full-width bar. Next.js serves this as
+    the site favicon through the App Router `app/icon.svg` convention.
+
+    The background stays transparent so the mark sits directly on the browser's
+    own tab strip, and the fill follows `prefers-color-scheme` so it stays
+    legible in both: #141414 is the light theme ink, #E6E9ED the dark theme
+    ink, matching the ink token in app/globals.css. The `fill` attributes
+    repeat the light value as a fallback for any renderer that drops <style>.
+
+    This is the only file under the `icon` convention on purpose. Next.js
+    emits one <link rel="icon"> per base name, so an `app/icon.png` beside it
+    would win and the theme switch above would never run.
+
+    The opaque rasters (app/apple-icon.png and public/icons/*) use a black tile
+    with a white mark instead, because PNG cannot switch on theme and iOS
+    composites a transparent Apple touch icon onto black.
+  -->
+  <style>
+    .mark { fill: #141414; }
+    @media (prefers-color-scheme: dark) {
+      .mark { fill: #E6E9ED; }
+    }
+  </style>
+  <rect class="mark" y="37" width="64" height="9" fill="#141414"/>
+  <circle class="mark" cx="32" cy="25" r="12" fill="#141414"/>
 </svg>

@@ -45,6 +45,8 @@ related:
     note: "When the ladder runs out of fallbacks, the system escalates by handing control back."
 
 review:
+  - "Needs demo (see DEMOS.md)"
+  - "Needs a cautionary tale"
   - "No citations placed. All three sentences in Notes are design advice rather than claims about the world, and a strict pass found nothing a source could carry."
 
 sources:

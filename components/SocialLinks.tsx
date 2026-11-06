@@ -1,5 +1,5 @@
 const MAILTO =
-  "mailto:leslie@lesliejohnson.io?subject=" + encodeURIComponent("From Trust Layer Patterns Site");
+  "mailto:leslie@lesliejohnson.io?subject=" + encodeURIComponent("From Calibrate Site");
 
 const LINKS = [
   {

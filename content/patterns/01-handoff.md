@@ -84,6 +84,8 @@ related:
     note: "The state briefing only works if the human's model of the situation is already current."
 
 review:
+  - "Needs demo (see DEMOS.md)"
+  - "Needs a cautionary tale"
   - "Check Bainbridge citation placement. Bainbridge supports why a late or cold takeover fails — the operator has been monitoring for rare failures with skills gone rusty from disuse — not the \"hand off early, at a designed boundary\" claim the sentence leads with. There is no sentence in the body making that point on its own, so the citation was removed rather than moved."
 
 sources:

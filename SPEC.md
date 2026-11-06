@@ -1,4 +1,4 @@
-# Trust Layer Patterns — Layout Spec
+# Calibrate — Layout Spec
 
 **Site:** trust-layer-patterns.vercel.app
 **Purpose:** A reference library of named, reusable design patterns for the trust layer between humans and autonomous machines. It is for practitioners, and it is also the author's learning tool.
@@ -116,7 +116,7 @@ Top to bottom:
 
 1. **Header bar:** site name · "Working library" tag · nav: Patterns / Moments / About.
 2. **Hero:**
-   - H1 "Trust Layer Patterns"
+   - H1 "Calibrate"
    - Positioning sentence (§1)
    - Meta line: `N patterns · updated YYYY-MM-DD`
 3. **Control-loop diagram (navigation):** a horizontal loop of the five Moments (Before → During → Transition → Failure → After, with After feeding back to Before). Each node shows its name and pattern count and links to that section's anchor. On mobile it becomes a vertical stepper. This is the signature visual of the site, so keep it simple and typographic, not illustrated.

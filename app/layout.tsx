@@ -24,8 +24,8 @@ const THEME_SCRIPT = `try{var t=localStorage.getItem("theme");if(t==="dark"||t==
  * the files removes the network from the build entirely.
  *
  * Each file is the `latin` subset of the family's variable font, taken from
- * Google Fonts (Inter and Inter Tight under the SIL Open Font License, as is
- * JetBrains Mono). The variable axis covers every weight the CSS asks for, so
+ * Google Fonts (Archivo, Inter and JetBrains Mono, all under the SIL Open
+ * Font License). The variable axis covers every weight the CSS asks for, so
  * one file per family replaces the fixed weights we used to request. The
  * `latin` subset carries U+0000-00FF, which covers the accented characters in
  * the patterns and the source list; the geometric glyphs in the diagrams
@@ -36,9 +36,10 @@ const THEME_SCRIPT = `try{var t=localStorage.getItem("theme");if(t==="dark"||t==
  * matching `latin-ext` file with its own unicode-range.
  */
 
-/* Display face: headings, card names, rail moment names. */
+/* Display face: headings, card names, rail moment names. Also stands in for
+   --font-condensed, which globals.css aliases to this variable. */
 const display = localFont({
-  src: "./fonts/InterTight-Variable-latin.woff2",
+  src: "./fonts/Archivo-Variable-latin.woff2",
   weight: "100 900",
   style: "normal",
   display: "swap",
@@ -65,7 +66,7 @@ const mono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Trust Layer Patterns", template: "%s · Trust Layer Patterns" },
+  title: { default: "Calibrate", template: "%s · Calibrate" },
   description:
     "Named, reusable design patterns for the trust layer between humans and autonomous machines.",
   /* REMOVE AT DOMAIN LAUNCH. Keeps the whole site out of search indexes while
@@ -82,7 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <header className="site-header">
           <div className="wrap site-header-inner">
-            <Link href="/" className="brand" aria-label="Trust Layer Patterns — home">
+            <Link href="/" className="brand" aria-label="Calibrate — home">
               <BrandMark />
             </Link>
             <nav className="site-nav" aria-label="Main">

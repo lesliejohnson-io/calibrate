@@ -21,7 +21,6 @@ steps:
     detail: "An oddity, a near-miss, a workaround"
   - title: "Reporting is easy"
     detail: "Low effort, and no blame attached"
-    note: "The ASRS is voluntary, confidential and non-punitive. NASA and the FAA set it up in 1975, with NASA holding the reports rather than the authority that enforces. Reporting has to cost less than staying quiet."
   - title: "It reaches who can change it"
     detail: "Engineering and training, not just the file"
     key: true
@@ -29,7 +28,6 @@ steps:
     detail: "The machine, the procedure or the training"
   - title: "The loop closes visibly"
     detail: "Reporters can see what their report changed"
-    note: "The ASRS feeds reports back out as safety alerts and CALLBACK, published monthly since 1979. A loop whose far end nobody can see stops being used."
 
 antiPattern: "Reported and Forgotten"
 
@@ -85,6 +83,8 @@ sources:
     note: "CHI 2019. Guideline 15 is to encourage granular feedback during regular interaction — the intake half of this pattern, stated for software."
 
 review:
+  - "Needs demo (see DEMOS.md)"
+  - "Needs a cautionary tale"
   - "Mechanism steps: drafted. The research has definition, incidents and an interface example but no mechanism; the two step notes are sourced, the titles and details are not."
   - "Lion Air detail rests on two secondary reports (Leeham, AIN). The KNKT preliminary and final reports are the primary sources and have not been pulled."
 

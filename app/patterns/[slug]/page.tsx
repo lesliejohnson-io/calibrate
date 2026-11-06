@@ -18,13 +18,14 @@ import { Examples } from "@/components/Examples";
 import { ExternalLink } from "@/components/ExternalLink";
 import { RelatedPatterns } from "@/components/RelatedPatterns";
 import { PatternAside } from "@/components/PatternAside";
-import { JumpLinks } from "@/components/JumpLinks";
 import { DraftTag } from "@/components/DraftTag";
 import { ReviewFlags } from "@/components/ReviewFlags";
 import { TocDisclosure } from "@/components/TocDisclosure";
 import type { TocItem } from "@/components/PatternToc";
+import { CautionaryTale } from "@/components/CautionaryTale";
 
 type Props = { params: Promise<{ slug: string }> };
+
 
 export function generateStaticParams() {
   return getAllPatterns().map((p) => ({ slug: p.slug }));
@@ -58,7 +59,6 @@ export default async function PatternPage({ params }: Props) {
     p.considerations.length > 0 || body.considerations
       ? { id: "considerations", label: "Design considerations" }
       : null,
-    { id: "contrast", label: "Without / with" },
     p.examples.length > 0 || body.inTheField ? { id: "examples", label: "Examples" } : null,
     relations.length > 0 ? { id: "related", label: "Related patterns" } : null,
     p.crossReferences.length > 0 ? { id: "elsewhere", label: "Elsewhere" } : null,
@@ -66,7 +66,17 @@ export default async function PatternPage({ params }: Props) {
     showQuestions ? { id: "open-questions", label: "Still figuring out" } : null,
   ].filter((item): item is TocItem => item !== null);
 
-  const toc: TocItem[] = [{ id: "mechanism", label: "The mechanism" }, ...sections];
+  const tale = p.cautionaryTale;
+  const taleNumber = tale ? p.citations[tale.sourceId] : undefined;
+  const demo = p.interface?.component;
+
+  const toc: TocItem[] = [
+    tale ? { id: "tale", label: tale.title } : null,
+    p.antiPattern ? { id: "anti-pattern", label: `Anti-pattern: ${p.antiPattern}` } : null,
+    { id: "solution", label: p.name },
+    { id: "mechanism", label: "The mechanism" },
+    ...sections,
+  ].filter((item): item is TocItem => item !== null);
 
   return (
     <div className="wrap pattern-layout">
@@ -79,14 +89,11 @@ export default async function PatternPage({ params }: Props) {
             <li>
               <Link href={momentHref(p.moment)}>{momentName}</Link>
             </li>
-            <li aria-current="page">{p.name}</li>
+            <li aria-current="page">Pattern {pad(p.number)}</li>
           </ol>
         </nav>
 
         <header className="pattern-head">
-          <p className="label pattern-number">
-            Pattern {pad(p.number)} · {momentName}
-          </p>
           <h1 className="display">{p.name}</h1>
           <p className="lede">{p.intent}</p>
         </header>
@@ -94,12 +101,54 @@ export default async function PatternPage({ params }: Props) {
         {/* Author-facing, never a reader's surface: development, or ?review. */}
         <ReviewFlags items={p.review} />
 
-        {/* The hero: labelled by its own eyebrow, which carries id="mechanism". */}
+        {tale && <CautionaryTale tale={tale} number={taleNumber} />}
+
+        {/* The mistake and the answer to it, side by side: the pair is the
+            argument, and reading one directly after the other down a single
+            column loses the comparison the page is making. The demo below
+            spans both, because it is the same two things again, operable. */}
+        <div className="pattern-duo">
+          {p.antiPattern && (
+            <section className="duo-col" aria-labelledby="anti-pattern">
+              <h2 id="anti-pattern" className="section-head">
+                Anti-pattern: {p.antiPattern}
+              </h2>
+              <p className="prose-lead">{p.without.caption}</p>
+            </section>
+          )}
+
+          <section className="duo-col" aria-labelledby="solution">
+            <h2 id="solution" className="section-head">
+              {p.name}
+            </h2>
+            {p.therefore && (
+              <p className="therefore">
+                <strong>Therefore:</strong> {p.therefore}
+              </p>
+            )}
+          </section>
+        </div>
+
+        <section className="section section-demo" aria-label={`${p.name}: without and with`}>
+          {demo && (
+            <p className="section-note section-note-lead">
+              A working demo of the control, not a screenshot.
+            </p>
+          )}
+          <Comparison
+            without={p.without}
+            withPattern={p.with}
+            antiPattern={p.antiPattern}
+            illustration={demo}
+          />
+        </section>
+
         <section className="section section-mechanism" aria-labelledby="mechanism">
           <MechanismFlow steps={p.steps} />
         </section>
 
-        <JumpLinks items={sections} />
+        {/* The jump pills used to repeat these as chips; the sticky "On this
+            page" nav carries them, so the pills were the same list twice. */}
         <TocDisclosure items={toc} />
 
         {body.problem && (
@@ -145,23 +194,6 @@ export default async function PatternPage({ params }: Props) {
             )}
           </section>
         )}
-
-        <section className="section" aria-labelledby="contrast">
-          <h2 id="contrast" className="section-head">
-            Without / with the pattern
-          </h2>
-          {p.interface && (
-            <p className="section-note">
-              A working demo of the control, not a screenshot. Nothing here flies anything.
-            </p>
-          )}
-          <Comparison
-            without={p.without}
-            withPattern={p.with}
-            antiPattern={p.antiPattern}
-            illustration={p.interface?.component}
-          />
-        </section>
 
         {(p.examples.length > 0 || body.inTheField) && (
           <section className="section" aria-labelledby="examples">
@@ -242,7 +274,7 @@ export default async function PatternPage({ params }: Props) {
           {next && (
             <Link href={`/patterns/${next.slug}`} className="pager-link pager-next">
               <span className="label">
-                Next in {momentName.toLowerCase()} · {pad(next.number)} →
+                Next pattern in series · {pad(next.number)} →
               </span>
               <span className="pager-name">{next.name}</span>
             </Link>
@@ -250,7 +282,7 @@ export default async function PatternPage({ params }: Props) {
           {!next && prev && (
             <Link href={`/patterns/${prev.slug}`} className="pager-link pager-next">
               <span className="label">
-                Back in {momentName.toLowerCase()} · {pad(prev.number)} ←
+                Previous pattern in series · {pad(prev.number)} ←
               </span>
               <span className="pager-name">{prev.name}</span>
             </Link>

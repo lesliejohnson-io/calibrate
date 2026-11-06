@@ -1,12 +1,12 @@
 import Link from "next/link";
 import type { PatternCardData } from "@/lib/browse";
-import { humanize, pad } from "@/lib/format";
+import { pad } from "@/lib/format";
 import { PatternThumb } from "./PatternThumb";
 
 /**
- * An index card: thumbnail, number, name, a one-sentence intent, and the
- * trust job pinned to the bottom edge so the labels line up across a row
- * however long the intents run (redesign-handoff.md §2).
+ * An index card: thumbnail, number, name and a one-sentence intent
+ * (redesign-handoff.md §2). The trust job used to sit pinned to the bottom
+ * edge; it went with the rest of the judgment ratings.
  *
  * The whole card is the link. The source count has moved to the pattern page
  * — a number that only matters once you are reading the entry.
@@ -20,7 +20,6 @@ export function PatternCard({ pattern }: { pattern: PatternCardData }) {
           <span className="label card-num">{pad(pattern.number)}</span>
           <span className="card-name">{pattern.name}</span>
           <span className="card-intent">{pattern.intent}</span>
-          <span className="mono-label card-job">{humanize(pattern.trustJobs[0])}</span>
         </span>
       </Link>
     </li>

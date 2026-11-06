@@ -21,13 +21,11 @@ steps:
     detail: "Responsibility is about to move"
   - title: "Machine states its own condition"
     detail: "Mode, work in progress, what is disabled"
-    note: "The disabled things are the dangerous ones. At Piper Alpha a pressure safety valve had been removed from condensate pump A and a blind flange fitted in its place, with the work unfinished at shift end."
   - title: "Structured, not freeform"
     detail: "The same fields every time"
   - title: "Receiver restates it"
     detail: "In their own words, back to the sender"
     key: true
-    note: "I-PASS ends with synthesis by the receiver. In a nine-hospital study of 10,740 admissions, medical errors fell 23% and preventable adverse events 30%, without handoffs taking longer."
   - title: "Responsibility moves"
     detail: "Recorded, with both parties named"
 
@@ -83,6 +81,8 @@ sources:
     note: "Secondary summary of the same study, carried in the research alongside the PSNet record."
 
 review:
+  - "Needs demo (see DEMOS.md)"
+  - "Needs a cautionary tale"
   - "Mechanism steps: drafted. Steps 2 and 4 carry sourced notes; the five-step shape, the titles and details are mine."
   - "Every Piper Alpha claim is secondary. The Cullen Report (1990) is the primary source and has not been pulled; one of the three citations is a trade-news article and another is an aviation magazine quoting the report."
   - "The I-PASS figures come from the AHRQ PSNet record and a hospital press release, not from the NEJM paper (Starmer et al., N Engl J Med 2014;371:1803-12). Pull the paper before these numbers leave draft."

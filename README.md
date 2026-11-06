@@ -1,4 +1,4 @@
-# Trust Layer Patterns
+# Calibrate
 
 A working library of named, reusable design patterns for the trust layer between humans and autonomous machines. Built with Next.js; every pattern is a single Markdown file.
 

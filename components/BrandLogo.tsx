@@ -1,8 +1,11 @@
 /**
- * The full Trust Layer Patterns lockup — the TLP monogram and the boxed
- * wordmark — drawn in `currentColor` so it follows the theme. Path data is
- * from public/icons/trust-layer-patterns-logo.svg; the viewBox widens that
+ * LEGACY, UNUSED. The drawn "Trust Layer Patterns" lockup from before the
+ * rename to Calibrate — the TLP monogram and the boxed wordmark — in
+ * `currentColor` so it follows the theme. Path data is from
+ * public/icons/trust-layer-patterns-logo.svg; the viewBox widens that
  * export's own box by half the frame's stroke so the frame is not clipped.
+ * The letterforms are outlined paths, so the name cannot be edited here:
+ * this needs redrawing before anything uses the mark at size again.
  *
  * Hidden from assistive tech: the home link that wraps it is labelled, so
  * announcing the mark too would just repeat the name.
@@ -21,9 +24,13 @@ export function BrandLogo({ className }: { className?: string }) {
 }
 
 /**
- * The header lockup: the TLP monogram in its box, then the name set in the
- * mono face on one line (redesign-handoff.md §1). The full drawn lockup
- * above is kept for the places that want the mark at size.
+ * The header lockup: the Calibrate mark, then the name, on one line
+ * (redesign-handoff.md §1).
+ *
+ * The mark is the same geometry as app/icon.svg, inlined rather than linked
+ * so it inherits `currentColor` and follows the theme with the rest of the
+ * header — the favicon file cannot, because it is fetched as its own
+ * document. Keep the two in step if either changes.
  *
  * Hidden from assistive tech: the home link that wraps it is labelled, so
  * announcing the name twice would only repeat it.
@@ -31,8 +38,11 @@ export function BrandLogo({ className }: { className?: string }) {
 export function BrandMark() {
   return (
     <span className="brand-lockup" aria-hidden="true">
-      <span className="brand-box">TLP</span>
-      <span className="brand-word">Trust Layer Patterns</span>
+      <svg className="brand-mark" viewBox="0 0 64 64" focusable="false">
+        <rect y="37" width="64" height="9" fill="currentColor" />
+        <circle cx="32" cy="25" r="12" fill="currentColor" />
+      </svg>
+      <span className="brand-word">Calibrate</span>
     </span>
   );
 }

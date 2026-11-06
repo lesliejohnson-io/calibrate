@@ -1,4 +1,4 @@
-# Trust Layer Patterns — redesign handoff
+# Calibrate — redesign handoff
 
 Implementation spec for the redesign of trust-layer-patterns.vercel.app. The visual reference is the Claude design canvas "Trust Layer Patterns redesign" (two artboards: **Index — rail navigation** and **Pattern page — The Handoff**). Read the canvas for layout; use this file for exact values and rules.
 
@@ -47,7 +47,7 @@ Load via `next/font/google`: Inter Tight (500, 600, 700), Inter (400, 500, 600),
 ### Layout
 
 - Content max-width 1360px, side padding 40px.
-- Header: TLP box mark + "TRUST LAYER PATTERNS" on **one line** (`white-space: nowrap`), nav: Patterns · About · Changelog · theme toggle (44×44 hit area).
+- Header: C box mark + "CALIBRATE" on **one line** (`white-space: nowrap`), nav: Patterns · About · Changelog · theme toggle (44×44 hit area).
 - Card grid: `repeat(auto-fill, minmax(260px, 1fr))`, gap 24px.
 - Radius 4px on cards and panels; pill radius on chips and tabs.
 
@@ -59,7 +59,7 @@ Two-column layout: **rail sidebar (240–290px)** + content. Wraps to one column
 
 ### Content column (top to bottom)
 
-1. H1 "Trust Layer Patterns", lede (existing copy), meta line in mono: `15 patterns · updated YYYY-MM-DD · all drafts`.
+1. H1 "Calibrate", lede (existing copy), meta line in mono: `15 patterns · updated YYYY-MM-DD · all drafts`.
 2. **Illustration key** (new), mono 12px, inline: ▢ Machine · ○ Human · ■● Solid = in control. Optional fourth item: ◆ State or signal.
 3. Controls band between two hairlines: search input · Group by (Moment / Trust job / A–Z) · Domain chips. Keep current behavior.
 4. One section per moment: H2 name + question in muted text, then the card grid. Section `id="moment-{before|during|transition|failure|after}"`.

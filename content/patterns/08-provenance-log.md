@@ -21,13 +21,11 @@ steps:
     detail: "Operator, remote party or machine"
   - title: "Record the actor"
     detail: "Who or what, and from where"
-    note: "The record has to name the party, not just the event. UN R157 requires each stored entry to carry its reason, the date, a timestamp accurate to within a second, and the software version that was running."
   - title: "Put it beyond reach"
     detail: "Append-only, outside the actor's control"
     key: true
   - title: "Retain it"
     detail: "Through the life of a dispute"
-    note: "At Tempe the data was still retrievable after the crash: ATG supplied a playback of sensor and vehicle-dynamics information, and investigators built the event timeline from its output."
   - title: "Open it to inspection"
     detail: "A record the operator can read"
 
@@ -94,6 +92,8 @@ sources:
     note: "A 2011 Ernst & Young report warned that Fujitsu staff had unrestricted access to subpostmasters' accounts. A third-party summary; neither the report nor any mention of it was found in the Inquiry's published volume."
 
 review:
+  - "Needs demo (see DEMOS.md)"
+  - "Needs a cautionary tale"
   - "Mechanism steps: drafted. The research has a definition and evidence but no mechanism; the step notes are sourced, the titles and details are not."
   - "EU AI Act Article 12: still the artificialintelligenceact.eu rendering. EUR-Lex refuses automated retrieval, so the wording and which article carries the six-month retention are both unconfirmed."
   - "Remote-access, Jenkins and Ernst & Young claims: all still on secondary news sources. Not found in the Inquiry's published volume; the relevant volumes are unpublished."

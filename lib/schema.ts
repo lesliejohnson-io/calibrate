@@ -274,8 +274,18 @@ const stepSchema = z.object({
   key: z.boolean().optional(),
 });
 
+/**
+ * The three beats of a flow. A fourth is allowed because some patterns do not
+ * end when the operator acts: Explainable Fault's with-side runs on to "Fault
+ * recorded", which is the half of that pattern the anti-pattern loses. Four
+ * is the ceiling — at five the line stops reading as a sequence and wants to
+ * be the mechanism list instead.
+ */
 const contrastSchema = z.object({
-  steps: z.array(z.string().min(1)).length(3, "needs exactly three beats"),
+  steps: z
+    .array(z.string().min(1))
+    .min(3, "needs at least three beats")
+    .max(4, "four beats is the most a flow line can carry"),
   caption: z.string().min(1),
 });
 
@@ -337,11 +347,34 @@ const exampleSchema = z
  * show real screens in the without / with section instead of the box diagram;
  * anything not on this list fails the build rather than rendering nothing.
  */
-export const INTERFACE_COMPONENTS = ["drone-release"] as const;
+export const INTERFACE_COMPONENTS = [
+  "drone-release",
+  "flight-computer",
+  "explainable-fault",
+] as const;
 export type InterfaceComponent = (typeof INTERFACE_COMPONENTS)[number];
 
 const interfaceSchema = z.object({
   component: z.enum(INTERFACE_COMPONENTS),
+});
+
+/**
+ * The incident a pattern opens with. Every field is required once the block
+ * exists, because a half-written tale is worse than none: a story with no
+ * date or no source reads as authoritative while resting on nothing.
+ *
+ * `sourceId` has to name a source on the same page, and is checked where the
+ * file is parsed rather than here, since the schema cannot see the sources
+ * list from inside this object. A tale is Observed by definition — it is a
+ * thing that happened — so a pattern with no real incident behind it carries
+ * "Needs a cautionary tale" in `review:` instead of an invented one.
+ */
+const cautionaryTaleSchema = z.object({
+  title: z.string().min(1),
+  date: z.string().min(1),
+  place: z.string().min(1),
+  story: z.string().min(1),
+  sourceId: z.string().min(1),
 });
 
 /**
@@ -382,7 +415,7 @@ const crossReferenceSchema = z.object({
 const autonomySchema = z
   .tuple([z.number().int().min(0).max(5), z.number().int().min(0).max(5)])
   .refine(([low, high]) => low <= high, "expected [low, high] with low <= high")
-  .default([0, 5]);
+  .optional();
 
 const domainsSchema = z
   .array(z.enum(DOMAINS))
@@ -395,9 +428,9 @@ const domainsSchema = z
   .default(["general"]);
 
 /**
- * A pattern's frontmatter. `moment` and `trustJobs` are the only new required
- * fields: they drive grouping, and a silent default would file a pattern under
- * the wrong heading instead of failing the build. Everything else has a default.
+ * A pattern's frontmatter. `moment` is the only new required field: it drives
+ * grouping, and a silent default would file a pattern under the wrong heading
+ * instead of failing the build. Everything else has a default.
  */
 export const frontmatterSchema = z
   .object({
@@ -419,13 +452,22 @@ export const frontmatterSchema = z
       .optional(),
 
     moment: z.enum(MOMENTS),
+    /*
+     * The four judgment ratings. They are no longer shown anywhere on the
+     * site, but they stay in the schema so the values already written in
+     * frontmatter keep validating and nothing has to be deleted to pass the
+     * build. They are optional rather than defaulted: a default would invent
+     * a rating for a pattern whose author never gave one. To bring them back,
+     * render them again — the data is still here and still type-checked.
+     */
     trustJobs: z
       .array(z.enum(TRUST_JOBS))
       .min(1)
       .max(2, "a pattern has one or two trust jobs")
-      .refine(hasNoDuplicates, "contains duplicates"),
-    risk: z.enum(RISKS).default("elevated"),
-    reversibility: z.enum(REVERSIBILITY).default("costly"),
+      .refine(hasNoDuplicates, "contains duplicates")
+      .optional(),
+    risk: z.enum(RISKS).optional(),
+    reversibility: z.enum(REVERSIBILITY).optional(),
     autonomy: autonomySchema,
     domains: domainsSchema,
 
@@ -455,6 +497,10 @@ export const frontmatterSchema = z
     whenToUse: z.string().min(1).optional(),
     considerations: z.array(considerationSchema).default([]),
     drafts: draftsSchema,
+
+    /* The incident the page opens with, and the one-sentence answer to it. */
+    cautionaryTale: cautionaryTaleSchema.optional(),
+    therefore: z.string().min(1).optional(),
 
     /**
      * Which mark from the thumbnail map this pattern shows. Defaults to the

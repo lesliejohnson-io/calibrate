@@ -24,10 +24,8 @@ steps:
   - title: "One control, always live"
     detail: "Unmistakable, and mode-independent"
     key: true
-    note: "ISO 13850 and IEC 60204-1 reserve red on yellow for emergency-stop actuators and for nothing else, so the control is identifiable by someone who has never used this machine before."
   - title: "The stop latches"
     detail: "It holds without being held"
-    note: "Once pressed the stop command is maintained until the device is reset — the machine cannot decide the emergency is over."
   - title: "A human releases it"
     detail: "Deliberately, at the point it was triggered"
 
@@ -82,6 +80,8 @@ sources:
     note: "Secondary. The reservation of the red-on-yellow combination, and why using it for anything else degrades the one control everyone is supposed to recognise."
 
 review:
+  - "Needs demo (see DEMOS.md)"
+  - "Needs a cautionary tale"
   - "Mechanism steps: drafted. Steps 3 and 4 carry sourced notes; the titles, details and the five-step shape are mine."
 
 openQuestions:

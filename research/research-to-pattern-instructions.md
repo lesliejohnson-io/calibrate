@@ -1,6 +1,6 @@
 # Instructions for Claude: turn research notes into pattern entries
 
-This file lives in `research/`. Run it from the root of the trust-layer-patterns repo with: "Read research/research-to-pattern-instructions.md and follow it. Convert <pattern name>."
+This file lives in `research/`. Run it from the root of the calibrate repo with: "Read research/research-to-pattern-instructions.md and follow it. Convert <pattern name>."
 
 ---
 
@@ -30,6 +30,27 @@ Turn one pattern from the research notes in `research/` into a finished pattern 
 - **Sources:** carry over the papers, incident reports and interface examples, grouped the way existing patterns group them (papers, incident reports, and so on). Prefer primary sources. Where the research says "Primary source to pull," flag it for me instead of citing the secondary article as if it were the primary.
 - **Domains:** only tag a domain if the entry contains a real example from that domain. No tag without an example.
 - **Related patterns / open questions:** if the existing format has fields for these, fill them from the research. Only link patterns that already exist in `content/`.
+- **Cautionary tale:** every pattern opens with one. It must be a real,
+  **Observed** incident from physical autonomy, taken from a source that is on
+  the page, with `sourceId` pointing at that source's id. Give the incident its
+  full name ("American Airlines Flight 965 at Cali"), never a bare place name,
+  and carry every figure and **unit** exactly as the source states it — a
+  secondary summary that says "nm" where the report says "miles" is wrong, and
+  that error travels. If the research has no incident behind the pattern, do
+  **not** invent or borrow one: leave `cautionaryTale` out and add "Needs a
+  cautionary tale" to `review:`.
+- **Therefore:** one sentence, the answer to the tale, written as an
+  instruction. It sits above the demo and is the pattern in a line.
+- **Demo:** every pattern needs an interactive without / with demo. Write the
+  concept into `DEMOS.md` first; the rules a demo has to meet are in that file.
+  Until one is built, add "Needs demo (see DEMOS.md)" to `review:`.
+- **Naming incidents:** anywhere else on the page, the first mention of an
+  incident is its full name too. "At Cali" alone is not enough.
+- **Mechanism step notes:** a step `note:` carries design advice, not
+  evidence. If the fact is already in the Sources section or in the body, do
+  not restate it under a step — the step note cannot be cited and has no room
+  to explain itself, so the duplicate is always the weaker of the two. Most
+  patterns end up with none.
 - **Status:** always **Draft**.
 - **Citations:** give every source a short `id` (`bainbridge-1983`), then cite it from the prose as `[cite:bainbridge-1983]` at the end of the sentence it supports. The footnote number is the source's position in the Sources list, so it is assigned for you. Be strict: cite only where that source supports the sentence's specific claim, never on topic match alone, and at most two per sentence. Design advice and argument take no citation. If a sentence makes a factual claim — a number, an incident, a study finding — and no source supports it, leave it uncited and add "Unsourced claim: <short quote>" to `review:`. If you are unsure, do the same rather than citing.
 

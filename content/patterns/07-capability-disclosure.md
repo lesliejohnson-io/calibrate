@@ -22,7 +22,6 @@ steps:
     note: "Name conditions the operator can recognize from the seat — this road, this load, this weather — not a sensor specification."
   - title: "Check the conditions"
     detail: "Is this one of them?"
-    note: "The Tesla had GPS, commercial road data and sign recognition, so it could tell what kind of road it was on. Nothing acted on the answer."
   - title: "Offer or withhold"
     detail: "Engagement available only inside"
     key: true
@@ -32,6 +31,10 @@ steps:
     detail: "Withdraw when the envelope ends"
 
 antiPattern: "Fine Print Limits"
+
+considerations:
+  - rule: "Name the missing condition when you refuse."
+    why: "Refusing outright is honest but unpopular, and a system that refuses without saying why just reads as broken. “Autosteer unavailable: this road has cross traffic” keeps the operator’s trust; a greyed-out icon loses it"
 
 without:
   steps: ["Limits in the manual", "Engages anywhere", "Misuse looks like use"]
@@ -50,7 +53,8 @@ related:
     note: "Disclosure is where the human's model of the machine starts. Keeping it current once the machine is running is the other pattern's job."
 
 review:
-  - "Unsourced detail: “a ten-page section carrying sixteen warnings and four cautions”. The road-type restriction itself is in NTSB/HAR-17/02 and in the research notes, but these counts are in neither, so the citation on that sentence does not cover them."
+  - "Needs demo (see DEMOS.md)"
+  - "Needs a cautionary tale"
 
 sources:
   - id: ntsb-har-17-02
@@ -59,7 +63,7 @@ sources:
     year: 2017
     url: "https://www.ntsb.gov/investigations/accidentreports/reports/har1702.pdf"
     type: incident-report
-    note: "Observed. NTSB/HAR-17/02 on the May 2016 crash that killed the Tesla's driver. The manual's road-type limits are described as soft constraints; the firmware had no hard constraint on road classification. Probable cause names the driver's overreliance, with the automation's operational design contributing by permitting prolonged disengagement and use inconsistent with the manufacturer's own guidance. Recommendation H-17-41 asks Level 2 manufacturers to build in safeguards limiting use to the conditions the system was designed for."
+    note: "Observed. NTSB/HAR-17/02 on the May 2016 crash that killed the Tesla's driver. The manual's road-type limits are described as soft constraints; the firmware had no hard constraint on road classification. Probable cause names the driver's overreliance, with the automation's operational design contributing by permitting prolonged disengagement and use inconsistent with the manufacturer's own guidance. Recommendation H-17-41 asks Level 2 manufacturers to build in safeguards limiting use to the conditions the system was designed for. Footnote 17 (p. 23) is the source for the manual’s ten-page driver-assistance section, its sixteen warnings and its four cautions; footnote 61 (p. 43) states that Autopilot used GPS, commercially available road data and camera recognition of speed signs to determine road type."
   - id: amershi-2019
     title: "Guidelines for Human-AI Interaction"
     author: "Saleema Amershi et al."
@@ -85,4 +89,6 @@ openQuestions:
   - "Where the line sits between refusing to engage and warning loudly. Super Cruise refuses; most systems warn. Refusing is safer and more paternalistic, and the right answer probably moves with the consequence."
 ---
 
-The gap this closes is not between what a machine can do and what it says — it is between what it says and what it allows. Tesla's manual was neither wrong nor hidden: it restricted Autosteer to highways and limited-access roads, in a ten-page section carrying sixteen warnings and four cautions.[cite:ntsb-har-17-02] The car knew what road it was on, from GPS, map data and sign recognition, and engaged anyway.[cite:ntsb-har-17-02] That is why the useful version of this pattern is a constraint rather than a disclosure: a limit the operator has to remember is a limit the operator will eventually forget, usually on a day when everything else is going well. The harder design question is what to do at the boundary, because refusing outright is honest and unpopular, and a system that refuses without naming the condition it is missing just reads as broken.
+The car’s limits weren’t hidden. The manual restricted Autosteer to highways and limited-access roads, in a ten-page section with sixteen warnings and four cautions.[cite:ntsb-har-17-02] And the car knew what road it was on, from GPS, map data and sign recognition.[cite:ntsb-har-17-02] It engaged anyway. The gap was between what the system said and what it allowed. A limit the operator has to remember is a limit the operator will eventually forget, usually on a day when everything else is going well.
+
+Therefore: make the system enforce its own limits, and when it refuses, name the condition it’s missing.

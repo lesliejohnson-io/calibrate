@@ -3,12 +3,9 @@ import {
   MOMENTS,
   MOMENT_LABELS,
   MOMENT_QUESTIONS,
-  TRUST_JOBS,
-  TRUST_JOB_PURPOSES,
   type Domain,
   type Moment,
   type Status,
-  type TrustJob,
 } from "./schema";
 
 /**
@@ -21,7 +18,6 @@ export type PatternCardData = {
   name: string;
   intent: string;
   moment: Moment;
-  trustJobs: TrustJob[];
   domains: Domain[];
   status: Status;
   aliases: string[];
@@ -31,16 +27,16 @@ export type PatternCardData = {
 
 export type { Domain, Moment, Status, TrustJob } from "./schema";
 
-/** "incident-report" -> "Incident report". Duplicated from lib/format to keep
- *  this module's import graph to schema alone. */
-const humanizeJob = (v: string) => v.charAt(0).toUpperCase() + v.slice(1).replace(/-/g, " ");
-
-export const GROUP_BY = ["moment", "trustJob", "none"] as const;
+/*
+ * Grouping by trust job is gone along with the rest of the judgment ratings.
+ * `isGroupBy` rejects the retired value, so an old `?group=trustJob` link
+ * falls back to the default view rather than rendering nothing.
+ */
+export const GROUP_BY = ["moment", "none"] as const;
 export type GroupBy = (typeof GROUP_BY)[number];
 
 export const GROUP_LABELS: Record<GroupBy, string> = {
   moment: "Moment",
-  trustJob: "Trust job",
   none: "A–Z",
 };
 
@@ -130,16 +126,6 @@ export function groupCards(cards: PatternCardData[], group: GroupBy): CardGroup[
   if (group === "none") {
     const sorted = [...cards].sort((a, b) => a.name.localeCompare(b.name));
     return sorted.length > 0 ? [{ key: "all", name: null, cards: sorted }] : [];
-  }
-
-  if (group === "trustJob") {
-    // A pattern has one or two trust jobs, so it can appear in two groups.
-    return TRUST_JOBS.map((job) => ({
-      key: job,
-      name: humanizeJob(job),
-      purpose: TRUST_JOB_PURPOSES[job],
-      cards: cards.filter((c) => c.trustJobs.includes(job)),
-    })).filter((g) => g.cards.length > 0);
   }
 
   return MOMENTS.map((moment) => ({

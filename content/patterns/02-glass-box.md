@@ -40,6 +40,8 @@ with:
   caption: "Operators check the reasoning against what they see, and override when the machine is missing something."
 
 review:
+  - "Needs demo (see DEMOS.md)"
+  - "Needs a cautionary tale"
   - "Unsourced claim: “produces the same rubber-stamping as showing nothing”. A claim about what too much explanation does to operator behaviour; none of the four sources establishes it."
   - "No citations placed. The Notes section here is design argument rather than sourced claim, so a strict pass found nothing to attach."
 

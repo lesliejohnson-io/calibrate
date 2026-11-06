@@ -1,4 +1,4 @@
-# Instructions for Claude: redesign the Trust Layer Patterns site
+# Instructions for Claude: redesign the Calibrate site
 
 Save this as `research/redesign-instructions.md`, then in Claude Code from the repo root say:
 "Follow research/redesign-instructions.md. Start with change 1."
