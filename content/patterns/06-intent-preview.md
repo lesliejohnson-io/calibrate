@@ -66,19 +66,9 @@ related:
     type: complements
     note: "Preview answers what the machine is about to do; friction answers how hard it should be to say go. Boeing's EXEC loop does both at once."
 
-# The "Needs your review" box is off this page: both items below are settled
-# or are a question for Leslie rather than a flag on the entry. Kept as notes
-# so the record survives — move either back under a `review:` key to make the
-# box reappear.
-#
-# - Distance unit corrected. The research notes and an earlier draft said
-#   Romeo was "132 nm" away. The Flight Safety Foundation, quoting the
-#   official report, says 212 km / 132 statute miles — about 114 nautical
-#   miles. The page, the tale and the demo now all say miles.
-# - OPEN, for Leslie: the tale's casualty figure. The FSF report gives 159
-#   killed at the scene (two flight crew, six cabin crew, 151 passengers)
-#   with five survivors, one of whom later died. The tale says 160 of 164,
-#   counting the later death. Confirm that is the figure you want.
+review:
+  - "Distance unit corrected. The research notes and an earlier draft said Romeo was “132 nm” away. The Flight Safety Foundation, quoting the official report, says 212 km / 132 statute miles — about 114 nautical miles. The page, the tale and the demo now all say miles."
+  - "Tale casualty figure: the FSF report gives 159 killed at the scene (two flight crew, six cabin crew, 151 passengers) with five survivors, one of whom later died. The tale says 160 of 164, counting the later death. Confirm that is the figure you want."
 
 sources:
   - id: walker-2018

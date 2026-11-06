@@ -19,7 +19,6 @@ import { ExternalLink } from "@/components/ExternalLink";
 import { RelatedPatterns } from "@/components/RelatedPatterns";
 import { PatternAside } from "@/components/PatternAside";
 import { DraftTag } from "@/components/DraftTag";
-import { ReviewFlags } from "@/components/ReviewFlags";
 import { TocDisclosure } from "@/components/TocDisclosure";
 import type { TocItem } from "@/components/PatternToc";
 import { CautionaryTale } from "@/components/CautionaryTale";
@@ -98,9 +97,6 @@ export default async function PatternPage({ params }: Props) {
           <p className="lede">{p.intent}</p>
         </header>
 
-        {/* Author-facing, never a reader's surface: development, or ?review. */}
-        <ReviewFlags items={p.review} />
-
         {tale && <CautionaryTale tale={tale} number={taleNumber} />}
 
         {/* The mistake and the answer to it, side by side: the pair is the
@@ -129,19 +125,23 @@ export default async function PatternPage({ params }: Props) {
           </section>
         </div>
 
-        <section className="section section-demo" aria-label={`${p.name}: without and with`}>
-          {demo && (
+        {/* Only the demo. The boxed "Without / With the pattern" step panels
+            that used to stand in for one are gone: the anti-pattern section
+            above already states the failure in a sentence, so on a pattern
+            with no demo yet the boxes were restating it inside a border. */}
+        {demo && (
+          <section className="section section-demo" aria-label={`${p.name}: without and with`}>
             <p className="section-note section-note-lead">
               A working demo of the control, not a screenshot.
             </p>
-          )}
-          <Comparison
-            without={p.without}
-            withPattern={p.with}
-            antiPattern={p.antiPattern}
-            illustration={demo}
-          />
-        </section>
+            <Comparison
+              without={p.without}
+              withPattern={p.with}
+              antiPattern={p.antiPattern}
+              illustration={demo}
+            />
+          </section>
+        )}
 
         <section className="section section-mechanism" aria-labelledby="mechanism">
           <MechanismFlow steps={p.steps} />

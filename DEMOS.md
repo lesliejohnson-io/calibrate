@@ -77,6 +77,24 @@ disagreed. The checklist label is named for the condition rather than quoting
 a real 737 checklist, which none of the pattern's sources give — see its
 `review:` list.
 
+### 05 Shared Mental Model — `autothrottle`
+
+Asiana Airlines Flight 214 as a thing you fly. The reader is given a job —
+hold the dot on the line with the arrow keys — and the airspeed is left to the
+autothrottle, as the crew left it. Four seconds in, the autothrottle stops
+managing speed and the airspeed falls 2 kt/s from 137.
+
+- **Without:** the mode label changes `SPD` → `HOLD` in the same color as every
+  other label. Nothing else, until a `⚠ LOW AIRSPEED` warning at 112 kt.
+- **With:** the label becomes `AUTOTHROTTLE HOLD: not managing speed`,
+  emphasized once rather than looping, and the speed turns amber with a ▼ and
+  the word "falling" the moment it drops below target.
+
+"Add power" ends the run with the speed it was caught at; at 110 kt it ends
+with "You noticed too late." Mode changes are announced via `aria-live` only
+on the With side — the Without side's silence is the anti-pattern — but the
+result is announced on both.
+
 ### 04 Appropriate Friction — `drone-release`
 
 The payload release behind a two-second hold, with the consequence written on

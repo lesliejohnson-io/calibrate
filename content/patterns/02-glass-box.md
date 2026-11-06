@@ -73,7 +73,7 @@ sources:
     year: 1990
     url: "https://ntrs.nasa.gov/api/citations/19900004678/downloads/19900004678.pdf"
     type: paper
-    note: "The problem is not automation itself but inadequate feedback to the people supervising it."
+    note: "The problem is not automation itself but inadequate feedback to the operators supervising it."
 ---
 
 An explanation only helps if the operator can check it against something they can see for themselves. Dumping the whole model into the interface produces the same rubber-stamping as showing nothing, so the reasons have to be few and specific to the decision in front of them. Recording what operators override matters as much as showing the reasons, because repeated disagreement in the same situation is the clearest sign the model is wrong.

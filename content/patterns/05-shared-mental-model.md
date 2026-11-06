@@ -1,17 +1,18 @@
 ---
 number: 5
 name: "Shared Mental Model"
-intent: "The interface keeps what the human believes about the system’s state in sync with what that state actually is, so human and machine can predict each other."
-# The index card's line (redesign-handoff.md §2). Drafted on the redesign
-# canvas, 2026-11-05 — not yet reviewed.
-cardIntent: "What the human believes about the system's state stays in sync with what that state actually is."
+intent: "The operator’s picture of what the machine is doing matches what it’s actually doing."
+# The index card's line (redesign-handoff.md §2). Same sentence as `intent`
+# above, by Leslie's call on 2026-11-06 — the card and the page lede say the
+# one thing rather than two near-identical versions of it.
+cardIntent: "The operator’s picture of what the machine is doing matches what it’s actually doing."
 
 moment: during
 trustJobs: [predict, know]
 risk: elevated
 reversibility: costly
 autonomy: [2, 5]
-domains: [industrial, warehouse, surgical]
+domains: [aviation, industrial, warehouse, surgical]
 
 status: draft
 updated: "2026-10-23"
@@ -31,20 +32,53 @@ steps:
   - title: "Resync"
     detail: "Correct, then confirm alignment"
 
+antiPattern: "Divergent Models"
+
+interface:
+  component: autothrottle
+
+cautionaryTale:
+  title: "Asiana Airlines Flight 214 at San Francisco"
+  date: "6 July 2013"
+  place: "San Francisco, California"
+  story: >-
+    On a clear-weather approach to San Francisco, the crew of a Boeing 777
+    believed the autothrottle was managing their airspeed. It wasn’t. An
+    earlier action had left it in a hold mode, where it would no longer add
+    power on its own. The change was annunciated at the top of both pilots’
+    primary flight displays, but none of the three crew members recalled
+    seeing it. The airspeed bled away while the crew watched their path, and
+    by the time they noticed, it was too late to recover. The airplane struck
+    the seawall short of the runway; three passengers died and 49 people were
+    seriously injured.
+  sourceId: ntsb-aar-14-01
+
+therefore: >-
+  Make the machine’s current mode, and what that mode will and won’t do,
+  unmistakable at the moment it matters.
+
 without:
   steps: ["Robot moves", "Human assumes", "Near miss"]
-  caption: "The human’s picture of the machine drifts from reality, and no one notices until something goes wrong."
+  caption: "The crew and the airplane each had a picture of who was controlling airspeed, and the pictures didn’t match. Nothing showed them the gap until the airspeed did."
 
 with:
   steps: ["Intent shown", "Human predicts", "Coordinated work"]
   caption: "Each side can anticipate the other, so they share a workspace safely."
 
 review:
-  - "Needs demo (see DEMOS.md)"
-  - "Needs a cautionary tale"
+  - "Tale, one sentence changed. The supplied copy said “nothing on the flight deck made that obvious”. NTSB/AAR-14/01 1.6.3.3 says the A/T mode is annunciated on the FMA at the top of each PFD, in green and boxed for ten seconds when it becomes active; 1.1 says none of the three crewmembers recalled seeing it. It was shown and not registered, which is the sharper version of this pattern. Rewritten to say so."
+  - "Anti-pattern name “Divergent Models” is drafted. This pattern has no research entry, so nothing named its failure. Note research/during.md reserves “Silent Mode Switch” for a separate, unwritten Mode Awareness pattern."
+  - "Asiana 214 is earmarked in research/during.md as the incident for that unwritten Mode Awareness pattern. Using it here spends it; decide whether Mode Awareness still gets written and what it opens with."
   - "Unsourced claim: “a machine with no model of what the operator expects it to do cannot tell when that expectation has gone wrong”. The two-way sync is argued, not sourced: Sarter and Woods cover the operator's model diverging from the system's mode, not the reverse."
 
 sources:
+  - id: ntsb-aar-14-01
+    title: "Descent Below Visual Glidepath and Impact With Seawall, Asiana Airlines Flight 214, Boeing 777-200ER, HL7742, San Francisco, California, July 6, 2013"
+    author: "National Transportation Safety Board"
+    year: 2014
+    url: "https://www.ntsb.gov/investigations/AccidentReports/Reports/AAR1401.pdf"
+    type: incident-report
+    note: "Observed. NTSB/AAR-14/01. Moving the thrust levers to idle put the autothrottle into HOLD, a mode in which it does not control airspeed, and none of the three flight crewmembers noted the change (1.1). Section 1.6.3.3 describes the flight mode annunciator at the top of each primary flight display, which shows the active A/T mode in green inside a box for ten seconds when it first becomes active — so the mode was displayed and not registered. The abstract gives the casualties: three of the 291 passengers fatally injured, and 40 passengers, 8 of the 12 flight attendants and 1 of the 4 flight crewmembers seriously injured, which is the 49 in the tale."
   - id: sarter-woods-1995
     title: "How in the World Did We Ever Get into That Mode? Mode Error and Awareness in Supervisory Control"
     author: "Nadine B. Sarter and David D. Woods"
@@ -74,4 +108,4 @@ sources:
     note: "The origin of the term in team research: compatible models are what let teammates coordinate without saying anything. A chapter in Castellan's Individual and Group Decision Making; no stable open link."
 ---
 
-Showing the current state is not enough on its own, because a person working alongside a machine is always predicting its next move.[cite:endsley-1995] Signal intent before the motion starts, so that prediction has something to work from.[cite:klein-2004] The sync runs both ways as well: a machine with no model of what the operator expects it to do cannot tell when that expectation has gone wrong.
+Showing the current state is not enough on its own, because an operator working alongside a machine is always predicting its next move.[cite:endsley-1995] Signal intent before the motion starts, so that prediction has something to work from.[cite:klein-2004] The sync runs both ways as well: a machine with no model of what the operator expects it to do cannot tell when that expectation has gone wrong.

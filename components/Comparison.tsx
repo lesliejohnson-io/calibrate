@@ -1,4 +1,5 @@
 import type { Contrast, InterfaceComponent } from "@/lib/patterns";
+import { Autothrottle } from "./illustrations/Autothrottle";
 import { DroneRelease } from "./illustrations/DroneRelease";
 import { ExplainableFault } from "./illustrations/ExplainableFault";
 import { FlightComputer } from "./illustrations/FlightComputer";
@@ -10,6 +11,7 @@ const ILLUSTRATIONS: Record<
   "drone-release": DroneRelease,
   "flight-computer": FlightComputer,
   "explainable-fault": ExplainableFault,
+  autothrottle: Autothrottle,
 };
 
 /**

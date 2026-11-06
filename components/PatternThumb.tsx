@@ -172,7 +172,7 @@ export const THUMBNAILS: Record<string, Mark> = {
   },
   "operator-to-operator-handover": {
     label:
-      "Two circles joined by a line through a solid square: machine state carried between two people",
+      "Two circles joined by a line through a solid square: machine state carried between two operators",
     marks: (
       <>
         <circle cx="62" cy="66" r="18" />

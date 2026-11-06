@@ -1,10 +1,10 @@
 ---
 number: 13
 name: "Operator-to-Operator Handover"
-intent: "When responsibility for a machine passes between people — shift change, remote operator to local — the system carries its true state across, including work in progress and anything disabled, rather than relying on memory and paper."
+intent: "When responsibility for a machine passes between operators — shift change, remote operator to local — the system carries its true state across, including work in progress and anything disabled, rather than relying on memory and paper."
 # The index card's line (redesign-handoff.md §2). Drafted on the redesign
 # canvas, 2026-11-05 — not yet reviewed.
-cardIntent: "When responsibility passes between people, the system carries its true state across."
+cardIntent: "When responsibility passes between operators, the system carries its true state across."
 
 moment: transition
 trustJobs: [know]
@@ -90,7 +90,7 @@ review:
 
 openQuestions:
   - "The warehouse case the research asks for: what an incoming fleet operator should see about robots that are paused, in maintenance, or running with a sensor disabled. The Piper Alpha lesson says the disabled things need to be the loudest item on the screen, but nobody seems to build the handover view that way."
-  - "Whether the receiver's restatement survives being software. I-PASS works partly because a person has to say it out loud to another person; a checkbox that says the same thing is the kind of control that gets cleared from habit."
+  - "Whether the receiver's restatement survives being software. I-PASS works partly because an operator has to say it out loud to another operator; a checkbox that says the same thing is the kind of control that gets cleared from habit."
 ---
 
 The structural detail in Piper Alpha is the one worth carrying: the permits for the pump work and the valve work existed, and were separate, and were not cross-referenced.[cite:icheme-lpb261] Nobody lost the information. The system simply had no way to put two facts next to each other — this pump is being worked on, this pump's safety valve is gone — and the handover depended on somebody holding both at once. Lord Cullen's finding was not that a step was skipped but that there was no clear procedure for shift handovers at all, and that the permit system was habitually departed from.[cite:btw-piper-alpha]

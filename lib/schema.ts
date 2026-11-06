@@ -351,6 +351,7 @@ export const INTERFACE_COMPONENTS = [
   "drone-release",
   "flight-computer",
   "explainable-fault",
+  "autothrottle",
 ] as const;
 export type InterfaceComponent = (typeof INTERFACE_COMPONENTS)[number];
 

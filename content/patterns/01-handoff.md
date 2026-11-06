@@ -41,13 +41,13 @@ with:
 
 # --- Drafted on the redesign canvas, 2026-11-05. Not yet reviewed: the DRAFT
 # tags next to these headings are cleared field by field in `drafts:` below.
-whenToUse: "Use this whenever a machine can reach the edge of what it can safely do and a person is expected to take over. It matters most at autonomy levels where the human isn't watching continuously, so they arrive cold."
+whenToUse: "Use this whenever a machine can reach the edge of what it can safely do and an operator is expected to take over. It matters most at autonomy levels where the human isn't watching continuously, so they arrive cold."
 
 considerations:
   - rule: "Trigger at a designed boundary."
     why: "Decide in advance which conditions start a handoff, and start it before the machine runs out of options. A handoff that begins at the moment of failure is already late."
   - rule: "Size the window to the human."
-    why: "Planned takeovers vary widely in how long they take. Base the orientation window on people who have been out of the loop, not on emergency takeover data."
+    why: "Planned takeovers vary widely in how long they take. Base the orientation window on operators who have been out of the loop, not on emergency takeover data."
   - rule: "Brief all three levels."
     why: "Tell the human what is happening, what it means, and what happens next. Raw state alone leaves them holding data instead of understanding."
   - rule: "Clear the channel."

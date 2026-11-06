@@ -84,7 +84,7 @@ sources:
     author: "Google PAIR"
     url: "https://pair.withgoogle.com/chapter/errors-failing/"
     type: article
-    note: "The chapter is built on three considerations: define what counts as an error, identify where errors come from, and provide paths forward from failure. The third is this pattern's second half stated for software — an error the user cannot act on is only half communicated. It also names returning control to the user as the usual path forward when a system fails."
+    note: "The chapter is built on three considerations: define what counts as an error, identify where errors come from, and provide paths forward from failure. The third is this pattern's second half stated for software — an error the operator cannot act on is only half communicated. It also names returning control to the user as the usual path forward when a system fails."
 
 review:
   - "Needs a cautionary tale"

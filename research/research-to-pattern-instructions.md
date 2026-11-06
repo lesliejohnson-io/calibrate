@@ -59,6 +59,15 @@ Turn one pattern from the research notes in `research/` into a finished pattern 
 - **Physical autonomy first:** the main Observed example must come from physical autonomy (vehicles, aviation, surgical or industrial robots, drones, warehouses, maritime). If the research has none, stop and tell me before writing, and suggest real candidates with sources.
 - **Don't invent facts.** Every claim about an incident, study or product must come from the research file. If something the format needs isn't in the research (for example, risk level, reversibility, autonomy levels or mechanism steps), draft it, but list it for me as "drafted, needs your review." Never present a drafted value as sourced.
 - **Paraphrase sources.** No quotations longer than a short phrase, and at most one per source.
+- **Call them operators.** The person working with the machine is "the
+  operator", in titles, intents, captions, mechanism steps, notes and UI copy
+  alike — never "the user" or "a person". Exceptions, which are about other
+  people and not a style choice: casualty and headcount figures ("151 people
+  on board"), bystanders who have no control, the engineers at the far end of
+  a Learning Loop, study participants, and terms quoted from a standard or a
+  source title (SAE J3016's "fallback-ready user", "People + AI Guidebook").
+  "Human" is a separate word with a separate job — it is the counterpart to
+  "machine" in human-machine trust — and is not covered by this rule.
 - **Write in my voice:** plain, concrete, no hype. Match the tone of the existing Notes sections.
 - **Don't change existing patterns** or any site code.
 - **Check your work:** run the project's build (and lint, if it has one) to confirm the new entry doesn't break anything. Report the result.

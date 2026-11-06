@@ -164,7 +164,7 @@ steps:
     key: true
 
 # antiPattern: the name of the mistake the "without" panel shows. A named
-# mistake people actually make, not just the absence of the pattern. Leave it
+# mistake operators actually make, not just the absence of the pattern. Leave it
 # out if the left side is only a gap.
 # antiPattern: "One-Tap Catastrophe"
 

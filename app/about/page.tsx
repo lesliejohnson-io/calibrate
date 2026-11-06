@@ -64,7 +64,7 @@ export default function AboutPage() {
           </p>
           <p className="page-byline">
             Written by <Link href="#who">Leslie Johnson</Link>, a designer for the trust layer
-            between people and autonomous systems.
+            between operators and autonomous systems.
           </p>
         </header>
 

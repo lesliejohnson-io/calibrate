@@ -1031,11 +1031,31 @@ a.station-body:hover .station-count {
 
 /* ---------- Controls band ---------- */
 /* Between two hairlines, so it reads as instrumentation rather than content. */
+/* The filter bar holds the top of the viewport while the results scroll under
+   it, so narrowing a long list never means scrolling back up to the control
+   that does it. It needs an opaque background for the first time here — the
+   bar used to be transparent, which is invisible until something passes
+   behind it. */
 .controls {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   margin-top: 28px;
   padding: 18px 0;
+  background: var(--ground);
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
+}
+
+/* The page gutter is on .wrap, outside this element, so a card scrolling past
+   would show in the few pixels either side of the bar. The box is widened by
+   the gutter and the padding put back, which keeps the content aligned while
+   the background spans the column. */
+@media (min-width: 1081px) {
+  .controls {
+    margin-inline: -16px;
+    padding-inline: 16px;
+  }
 }
 
 .controls-row {
@@ -1094,27 +1114,35 @@ a.station-body:hover .station-count {
   outline-offset: 1px;
 }
 
+/* Both filters are segmented bars, not scatters of separate pills: each is a
+   single either/or set, and butting the options together says so before the
+   labels are read. Adjacent borders are overlapped by -1px rather than
+   doubled, so the divider between two segments is one hairline.
+   (`Group by` is a tablist and `Domain` a toggle group, so they differ in
+   behaviour and in which ARIA state marks the active one — but they are the
+   same object on screen and are drawn the same way.) */
 .tabs,
-/* The domain filter is one segmented bar, not a scatter of separate pills:
-   the options are a single either/or set, and butting them together says so
-   before the labels are read. Adjacent borders are overlapped by -1px rather
-   than doubled, so the divider between two segments is one hairline. */
 .chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0;
 }
 
+.tabs .tab,
 .chips .filter-chip {
   border-radius: 0;
 }
 
+.tabs .tab + .tab,
 .chips .filter-chip + .filter-chip {
   margin-left: -1px;
 }
 
-/* A pressed or focused segment owns both of its edges, so it has to sit above
-   the neighbour whose border it is overlapping. */
+/* A selected or focused segment owns both of its edges, so it has to sit
+   above the neighbour whose border it is overlapping. */
+.tabs .tab:hover,
+.tabs .tab:focus-visible,
+.tabs .tab[aria-selected="true"],
 .chips .filter-chip:hover,
 .chips .filter-chip:focus-visible,
 .chips .filter-chip[aria-pressed="true"] {
@@ -3401,4 +3429,159 @@ a.station-body:hover .station-count {
 .console-crt :focus-visible {
   outline: 2px solid var(--crt-green);
   outline-offset: 2px;
+}
+
+
+/* ---------- Autothrottle (Shared Mental Model) ----------
+ *
+ * Lives inside .console-crt, so it inherits the green-on-black display. What
+ * is specific here is the pairing of a number the reader must choose to look
+ * at with a task that keeps pulling them away from it.
+ */
+.at-readouts {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px 20px;
+  margin-bottom: 14px;
+}
+
+.at-cell-label,
+.at-cell-sub {
+  margin: 0;
+  font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--crt-mid);
+}
+
+.at-cell-sub {
+  margin-top: 2px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.at-speed {
+  margin: 2px 0 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 26px;
+  line-height: 1.1;
+  color: var(--crt-green);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Amber is the aviation convention for a caution, but it is never the only
+   carrier: the word "falling" and the ▼ say the same thing. */
+.at-speed.is-low {
+  color: #ffc14d;
+}
+
+.at-trend {
+  margin-left: 10px;
+  font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.at-mode {
+  margin: 2px 0 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 14px;
+  color: var(--crt-mid);
+}
+
+/* The whole difference between the two sides, in one rule: the patterned
+   display spends its contrast budget on the mode that just took the speed
+   away from the machine. */
+.at-mode.is-meaning {
+  padding: 4px 8px;
+  background: #ffc14d;
+  color: #140d00;
+  font-weight: 700;
+}
+
+/* Once, not a loop: a cue that keeps moving becomes wallpaper, and a reader
+   who looks away during the loop has missed it either way. */
+.at-mode.is-new {
+  animation: at-flare 900ms ease-out 1;
+}
+
+@keyframes at-flare {
+  0% {
+    transform: scale(0.98);
+    box-shadow: 0 0 0 0 rgba(255, 193, 77, 0.9);
+  }
+  40% {
+    box-shadow: 0 0 0 7px rgba(255, 193, 77, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 193, 77, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .at-mode.is-new {
+    animation: none;
+  }
+}
+
+.at-warn {
+  margin: 0 0 12px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 14px;
+  color: #ffc14d;
+}
+
+.at-task {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.at-path {
+  position: relative;
+  flex: 1;
+  height: 92px;
+  border: 1px solid var(--crt-dim);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.at-path:focus-visible {
+  outline: 2px solid var(--crt-green);
+  outline-offset: 2px;
+}
+
+.at-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 1px dashed var(--crt-mid);
+}
+
+.at-dot {
+  position: absolute;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  border-radius: 50%;
+  background: var(--crt-green);
+}
+
+.at-nudges {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.at-debrief {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--crt-mid);
 }

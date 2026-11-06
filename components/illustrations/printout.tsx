@@ -82,7 +82,7 @@ export function usePrinter(initial: Line[]) {
 }
 
 /**
- * Moves focus to whatever replaced the control the user just operated. Each
+ * Moves focus to whatever replaced the control the operator just operated. Each
  * stage of these demos unmounts a field or a button, and without this focus
  * drops to <body> and a keyboard user loses their place mid-demo.
  */
