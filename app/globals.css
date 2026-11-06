@@ -399,6 +399,21 @@ code {
   text-decoration: none;
 }
 
+/* Changelog sits a step below the primary links, with a hairline pipe
+   marking the break. The pipe is decorative, so the gap around it is
+   tightened rather than carrying the full nav rhythm. */
+.site-nav-sep {
+  color: var(--loop);
+  font-size: 14px;
+  margin: 0 -14px;
+  user-select: none;
+}
+
+.site-nav-link-sm {
+  font-size: 13px;
+  color: var(--muted);
+}
+
 .site-nav-link:hover {
   color: var(--ink);
   text-decoration: underline;
@@ -1515,6 +1530,12 @@ a.station-body:hover .station-count {
   color: var(--ink);
 }
 
+/* Three steps away from documented fact: solid, dotted, dashed. */
+.tag-illustrative {
+  border-style: dotted;
+  color: var(--ink);
+}
+
 .tag-speculative {
   border-style: dashed;
 }
@@ -1815,6 +1836,10 @@ a.station-body:hover .station-count {
 
 .example-verdict.is-without {
   color: var(--fault);
+}
+
+.example-evidence {
+  margin: 8px 0 0;
 }
 
 .example-caption {
@@ -3745,27 +3770,4 @@ a.station-body:hover .station-count {
 .card-art .pattern-illustration {
   max-width: 190px;
   margin: 0 auto;
-}
-
-.pattern-head.has-art {
-  display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
-  align-items: center;
-  gap: 28px;
-}
-
-.pattern-head-art {
-  color: var(--ink);
-}
-
-/* Two columns need room for both. Below this the drawing goes above the
-   title, left-aligned with it rather than centred over it. */
-@media (max-width: 720px) {
-  .pattern-head.has-art {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 14px;
-  }
-  .pattern-head-art {
-    max-width: 150px;
-  }
 }

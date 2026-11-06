@@ -45,12 +45,12 @@ cautionaryTale:
     On a clear-weather approach to San Francisco, the crew of a Boeing 777
     believed the autothrottle was managing their airspeed. It wasn’t. An
     earlier action had left it in a hold mode, where it would no longer add
-    power on its own. The change was annunciated at the top of both pilots’
-    primary flight displays, but none of the three crew members recalled
-    seeing it. The airspeed bled away while the crew watched their path, and
-    by the time they noticed, it was too late to recover. The airplane struck
-    the seawall short of the runway; three passengers died and 49 people were
-    seriously injured.
+    power on its own. The change was displayed at the top of both pilots’
+    main flight displays, but none of the three pilots in the cockpit recalled
+    seeing it. The airspeed dropped steadily while the crew watched their path,
+    and by the time they noticed, it was too late to recover. The airplane
+    struck the seawall short of the runway; three passengers died and 49 people
+    were seriously injured.
   sourceId: ntsb-aar-14-01
 
 therefore: >-

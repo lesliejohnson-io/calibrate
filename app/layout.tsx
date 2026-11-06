@@ -93,7 +93,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Link href="/about" className="site-nav-link">
                 About
               </Link>
-              <Link href="/changelog" className="site-nav-link">
+              <span className="site-nav-sep" aria-hidden="true">
+                |
+              </span>
+              <Link href="/changelog" className="site-nav-link site-nav-link-sm">
                 Changelog
               </Link>
               <ThemeToggle />

@@ -1,4 +1,4 @@
-import { VERDICT_LABELS, VERDICT_SHAPES, type Example } from "@/lib/patterns";
+import { humanize, VERDICT_LABELS, VERDICT_SHAPES, type Example } from "@/lib/patterns";
 import { ExternalLink } from "./ExternalLink";
 
 /**
@@ -7,7 +7,9 @@ import { ExternalLink } from "./ExternalLink";
  *
  * The verdict is a shape and a word before it is a colour — "● Applies the
  * pattern", "■ Without it" — so the two never depend on telling ink from
- * rust. A figure whose image has not been cleared for reuse yet shows a
+ * rust. Where an example carries an evidence label it sits between the two,
+ * so the reader sees how much stands behind the example before the claim.
+ * A figure whose image has not been cleared for reuse yet shows a
  * placeholder with its own description rather than being dropped.
  */
 export function Examples({ examples }: { examples: Example[] }) {
@@ -35,6 +37,13 @@ export function Examples({ examples }: { examples: Example[] }) {
           <p className={`mono-label example-verdict is-${e.verdict}`}>
             <span aria-hidden="true">{VERDICT_SHAPES[e.verdict]}</span> {VERDICT_LABELS[e.verdict]}
           </p>
+          {/* How much evidence stands behind the example: observed,
+              illustrative or speculative, defined on the About page. */}
+          {e.evidence && (
+            <p className="example-evidence">
+              <span className={`tag tag-evidence tag-${e.evidence}`}>{humanize(e.evidence)}</span>
+            </p>
+          )}
           <p className="example-caption">{e.caption}</p>
         </li>
       ))}

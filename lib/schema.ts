@@ -54,10 +54,11 @@ export const REVERSIBILITY_STATUS: Record<(typeof REVERSIBILITY)[number], Status
 };
 
 /**
- * Whether an example is a real system or incident, or the author's concept.
- * Keeping the two apart is what keeps the library honest.
+ * How much evidence stands behind an example: a documented system or
+ * incident, an event known only from news reporting, or the author's own
+ * concept. Keeping the three apart is what keeps the library honest.
  */
-export const EVIDENCE = ["observed", "speculative"] as const;
+export const EVIDENCE = ["observed", "illustrative", "speculative"] as const;
 
 export type Moment = (typeof MOMENTS)[number];
 export type TrustJob = (typeof TRUST_JOBS)[number];
@@ -218,7 +219,7 @@ export const RELATION_DEFINITIONS: Record<Relation, string> = {
   complements: "They reinforce each other, but neither depends on the other.",
   "alternative-to": "Two ways of solving the same problem. Pick one.",
   "tension-with": "Applying one makes the other harder. The trade-off is the point.",
-  precedes: "One runs before the other in the control loop.",
+  precedes: "One comes before the other when control moves between person and machine.",
 };
 
 export const RISK_DEFINITIONS: Record<Risk, string> = {
@@ -237,14 +238,16 @@ export const REVERSIBILITY_DEFINITIONS: Record<Reversibility, string> = {
 
 export const STATUS_DEFINITIONS: Record<Status, string> = {
   seed: "A candidate: name and intent only. Kept in the repo but off the index until it is written up.",
-  draft: "Mechanism and problem written, with few sources so far.",
-  reviewed: "Every section filled, at least three sources and at least one observed example.",
+  draft: "The story, mechanism and pattern are written, with a few sources so far.",
+  reviewed: "Every section filled, at least three sources, and at least one observed example.",
   stable: "Reviewed, then revisited after real-world use or feedback.",
 };
 
 export const EVIDENCE_DEFINITIONS: Record<Evidence, string> = {
-  observed: "A real system or a documented incident, with a source you can follow.",
-  speculative: "The author's own concept — plausible, but not yet seen in the field.",
+  observed: "A real system, or an incident with an official investigation or record you can follow.",
+  illustrative:
+    "A real event known only from news reporting. Useful for the shape of the failure, not for its details.",
+  speculative: "The author's own concept: plausible, but not yet seen in the field.",
 };
 
 /** What each trust job buys the human, used as the one-line group purpose. */

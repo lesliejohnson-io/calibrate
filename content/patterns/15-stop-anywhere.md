@@ -174,6 +174,6 @@ openQuestions:
 
 **Observed · Automotive.** The Cruise car at Fifth and Market stopped itself, then started again with a pedestrian underneath it, and nobody on the street had any way to intervene.[cite:dmv-cruise-suspension]
 
-**Illustrative (news report) · Automotive.** A Waymo car confused by traffic cones asked its remote assistance team for help and got the wrong guidance. It later pulled out, parked partly in the road, then drove off as a roadside assistant walked up to it. Neither the remote team nor the person standing next to it could stop it.[cite:ai-business-waymo]
+**Illustrative · Automotive.** A Waymo car confused by traffic cones asked its remote assistance team for help and got the wrong guidance. It later pulled out, parked partly in the road, then drove off as a roadside assistant walked up to it. Neither the remote team nor the person standing next to it could stop it.[cite:ai-business-waymo]
 
 *Based on a news report, not an investigation. It's here for the shape of the failure, not the detail: a machine that asked for help, got the wrong help, and then moved while the person responsible for it was close enough to touch it.*
