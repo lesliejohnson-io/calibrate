@@ -51,6 +51,14 @@ Turn one pattern from the research notes in `research/` into a finished pattern 
   not restate it under a step — the step note cannot be cited and has no room
   to explain itself, so the duplicate is always the weaker of the two. Most
   patterns end up with none.
+- **Illustrations:** a pattern's drawing lives at
+  `public/illustrations/patterns/<slug>.svg` and is **drawn by hand, never
+  generated**. Do not create, trace or synthesise one, and do not substitute
+  another pattern's. A pattern without a file simply shows no illustration —
+  that is the normal state, not a missing asset, so nothing needs flagging in
+  `review:` for it. Export with the ink as `#F5F5F5`; the build strips the
+  backdrop rectangle, swaps that ink for `currentColor` so the drawing follows
+  light and dark mode, and namespaces the file's mask and clip ids by slug.
 - **Status:** always **Draft**.
 - **Citations:** give every source a short `id` (`bainbridge-1983`), then cite it from the prose as `[cite:bainbridge-1983]` at the end of the sentence it supports. The footnote number is the source's position in the Sources list, so it is assigned for you. Be strict: cite only where that source supports the sentence's specific claim, never on topic match alone, and at most two per sentence. Design advice and argument take no citation. If a sentence makes a factual claim — a number, an incident, a study finding — and no source supports it, leave it uncited and add "Unsourced claim: <short quote>" to `review:`. If you are unsure, do the same rather than citing.
 

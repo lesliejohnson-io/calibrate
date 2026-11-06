@@ -1,7 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
   <!--
-    The Calibrate mark: a circle over a full-width bar. Next.js serves this as
-    the site favicon through the App Router `app/icon.svg` convention.
+    The Calibrate mark: a circle resting on a full-width bar, with a triangle
+    beneath it — the fulcrum the bar balances on. Geometry is from
+    public/icons/icon.svg, which is the source drawing for every icon on the
+    site. Next.js serves this file as the favicon through the App Router
+    `app/icon.svg` convention.
 
     The background stays transparent so the mark sits directly on the browser's
     own tab strip, and the fill follows `prefers-color-scheme` so it stays
@@ -13,9 +16,11 @@
     emits one <link rel="icon"> per base name, so an `app/icon.png` beside it
     would win and the theme switch above would never run.
 
-    The opaque rasters (app/apple-icon.png and public/icons/*) use a black tile
-    with a white mark instead, because PNG cannot switch on theme and iOS
-    composites a transparent Apple touch icon onto black.
+    The opaque rasters (app/apple-icon.png and public/icons/icon-*.png) use a
+    black tile with a white mark instead, because PNG cannot switch on theme
+    and iOS composites a transparent Apple touch icon onto black. They are
+    generated from the same three shapes by scripts/render-icons.py; run that
+    after changing the mark, or they will quietly disagree with this file.
   -->
   <style>
     .mark { fill: #141414; }
@@ -23,6 +28,7 @@
       .mark { fill: #E6E9ED; }
     }
   </style>
-  <rect class="mark" y="37" width="64" height="9" fill="#141414"/>
-  <circle class="mark" cx="32" cy="25" r="12" fill="#141414"/>
+  <rect class="mark" y="37" width="64" height="10" fill="#141414"/>
+  <circle class="mark" cx="32" cy="24" r="13" fill="#141414"/>
+  <path class="mark" d="M32 47L38.9282 59H25.0718L32 47Z" fill="#141414"/>
 </svg>

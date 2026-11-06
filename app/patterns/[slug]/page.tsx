@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getIllustration } from "@/lib/illustrations";
 import {
   getAllPatterns,
   getMomentNeighbors,
@@ -18,6 +19,7 @@ import { Examples } from "@/components/Examples";
 import { ExternalLink } from "@/components/ExternalLink";
 import { RelatedPatterns } from "@/components/RelatedPatterns";
 import { PatternAside } from "@/components/PatternAside";
+import { PatternIllustration } from "@/components/PatternIllustration";
 import { DraftTag } from "@/components/DraftTag";
 import { TocDisclosure } from "@/components/TocDisclosure";
 import type { TocItem } from "@/components/PatternToc";
@@ -58,7 +60,7 @@ export default async function PatternPage({ params }: Props) {
     p.considerations.length > 0 || body.considerations
       ? { id: "considerations", label: "Design considerations" }
       : null,
-    p.examples.length > 0 || body.inTheField ? { id: "examples", label: "Examples" } : null,
+    p.examples.length > 0 || body.inTheField ? { id: "examples", label: "In the field" } : null,
     relations.length > 0 ? { id: "related", label: "Related patterns" } : null,
     p.crossReferences.length > 0 ? { id: "elsewhere", label: "Elsewhere" } : null,
     showSources ? { id: "sources", label: "Sources" } : null,
@@ -68,6 +70,9 @@ export default async function PatternPage({ params }: Props) {
   const tale = p.cautionaryTale;
   const taleNumber = tale ? p.citations[tale.sourceId] : undefined;
   const demo = p.interface?.component;
+  // null for a pattern nobody has drawn yet, which the component renders as
+  // nothing rather than as a gap or a broken image.
+  const illustration = getIllustration(p.slug);
 
   const toc: TocItem[] = [
     tale ? { id: "tale", label: tale.title } : null,
@@ -92,9 +97,14 @@ export default async function PatternPage({ params }: Props) {
           </ol>
         </nav>
 
-        <header className="pattern-head">
-          <h1 className="display">{p.name}</h1>
-          <p className="lede">{p.intent}</p>
+        <header className={`pattern-head${illustration ? " has-art" : ""}`}>
+          {/* Beside the title where there is room, above it when there is
+              not. Decorative, so it is not part of the heading itself. */}
+          <PatternIllustration illustration={illustration} className="pattern-head-art" />
+          <div className="pattern-head-text">
+            <h1 className="display">{p.name}</h1>
+            <p className="lede">{p.intent}</p>
+          </div>
         </header>
 
         {tale && <CautionaryTale tale={tale} number={taleNumber} />}
@@ -198,7 +208,7 @@ export default async function PatternPage({ params }: Props) {
         {(p.examples.length > 0 || body.inTheField) && (
           <section className="section" aria-labelledby="examples">
             <h2 id="examples" className="section-head">
-              Examples <DraftTag when={drafts.examples} />
+              In the field <DraftTag when={drafts.examples} />
             </h2>
             {body.inTheField && (
               <div className="prose" dangerouslySetInnerHTML={{ __html: body.inTheField }} />

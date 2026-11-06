@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { getIllustration } from "./illustrations";
 import { marked } from "marked";
 import { formatIssues, frontmatterSchema, type Frontmatter } from "./schema";
 import { applyCitations, sourceAnchor, sourceGroups } from "./citations";
@@ -63,6 +64,7 @@ export type { PatternCardData } from "./browse";
 import type { PatternCardData } from "./browse";
 
 export { autonomyRange, humanize, momentLabel, pad } from "./format";
+export { getIllustration, type Illustration } from "./illustrations";
 
 /** One step in a pattern's mechanism flow. */
 export type Step = Frontmatter["steps"][number];
@@ -281,6 +283,7 @@ export function toCardData(p: Pattern): PatternCardData {
     status: p.status,
     aliases: p.aliases,
     thumbnail: thumbnailId(p),
+    illustration: getIllustration(p.slug),
   };
 }
 

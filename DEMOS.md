@@ -30,7 +30,7 @@ the build fails. A pattern with no demo yet carries
 
 ## Built
 
-Two of these are **printed displays**: a fixed-width readout that prints one
+Three of these are **printed displays**: a fixed-width readout that prints one
 line per 120ms, all at once under `prefers-reduced-motion`, in green on black
 to read as a flight deck instrument rather than as part of the page. They
 share one engine, `components/illustrations/printout.tsx`.
@@ -94,6 +94,37 @@ managing speed and the airspeed falls 2 kt/s from 137.
 with "You noticed too late." Mode changes are announced via `aria-live` only
 on the With side — the Without side's silence is the anti-pattern — but the
 result is announced on both.
+
+### 15 Stop Anywhere — `stop-anywhere`
+
+A warehouse robot crossing an aisle, with two stop controls on the device:
+"Stop (operator)" and "Stop (someone nearby)". Both are drawn red on yellow,
+because that combination is the pattern's first design consideration and a
+demo of an emergency stop that invents its own colours would be arguing
+against itself. Press Start, then try either one.
+
+- **Without:** the operator's stop prints `STOPPING…` and the robot halts —
+  then, with nobody asking, `RESUMING: COMPLETING SAFE-PARK MANEUVER` prints
+  and it moves off again. Pressing the same control now prints
+  `⚠ STOP UNAVAILABLE DURING MANEUVER`. The bystander's control is wired to
+  nothing and prints `⚠ NO EXTERNAL STOP`.
+- **With:** either control halts the robot at once and prints
+  `STOPPED. HOLDING UNTIL RELEASED.` and `SAFE-PARK MANEUVER · SUSPENDED`.
+  Pressing a stop that is already in prints `ALREADY STOPPED · HOLDING`
+  rather than doing nothing. Moving again takes a two-second hold on
+  "Release", which is deliberately *not* red on yellow — releasing is not an
+  emergency control, and reserving those colours only works if nothing else
+  wears them. Letting go early cancels.
+
+Under `prefers-reduced-motion` the travelling block is replaced by the same
+position written out — `AISLE 4 · 42% ACROSS · MOVING` — so progress is
+reported in text and nothing on screen moves.
+
+No figure in this demo comes from the pattern's sources, because none of them
+describe a robot: the aisle, the robot and the timings are invented. What is
+taken from the sources is the behaviour — a machine that treats its own stop
+as a pause and completes a planned maneuver anyway, and a stop that latches
+until an intentional human action releases it.
 
 ### 04 Appropriate Friction — `drone-release`
 

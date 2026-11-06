@@ -3,6 +3,7 @@ import { Autothrottle } from "./illustrations/Autothrottle";
 import { DroneRelease } from "./illustrations/DroneRelease";
 import { ExplainableFault } from "./illustrations/ExplainableFault";
 import { FlightComputer } from "./illustrations/FlightComputer";
+import { StopAnywhere } from "./illustrations/StopAnywhere";
 
 const ILLUSTRATIONS: Record<
   InterfaceComponent,
@@ -12,6 +13,7 @@ const ILLUSTRATIONS: Record<
   "flight-computer": FlightComputer,
   "explainable-fault": ExplainableFault,
   autothrottle: Autothrottle,
+  "stop-anywhere": StopAnywhere,
 };
 
 /**

@@ -364,7 +364,7 @@ code {
   white-space: nowrap;
 }
 
-/* The mark from app/icon.svg, at cap height beside the word. */
+/* The mark from public/icons/icon.svg, at cap height beside the word. */
 .brand-mark {
   display: block;
   width: 22px;
@@ -3584,4 +3584,188 @@ a.station-body:hover .station-count {
   font-size: 13px;
   line-height: 1.45;
   color: var(--crt-mid);
+}
+
+/* ---------- Stop Anywhere ----------
+ *
+ * Also inside .console-crt, so the readout and the aisle are the same green
+ * glass as the other demos. The two stop controls are the exception: they are
+ * drawn red on yellow, because that combination is the pattern's first design
+ * consideration and a demo of an emergency stop that invents its own colours
+ * would be arguing against itself. They are physical controls shown on the
+ * device, not screen elements, which is why they do not take the phosphor.
+ *
+ * Red on yellow here is #B3241C on #F2C500 — about 4.9:1 — and the ■ glyph
+ * and the word "Stop" carry the meaning in any case.
+ */
+.sa-aisle {
+  position: relative;
+  height: 46px;
+  margin: 4px 0 14px;
+  border: 1px solid var(--crt-dim);
+  border-radius: 2px;
+}
+
+/* The aisle floor the robot runs along. */
+.sa-rail {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 50%;
+  border-top: 1px dashed var(--crt-mid);
+}
+
+.sa-bot {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  background: var(--crt-green);
+}
+
+/* A moving machine reads as moving even in a still frame. */
+.sa-bot.is-moving {
+  box-shadow: -10px 0 0 -5px rgba(60, 255, 94, 0.45), -18px 0 0 -6px rgba(60, 255, 94, 0.2);
+}
+
+.sa-end {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--crt-mid);
+}
+
+/* The same information with nothing on screen moving. */
+.sa-aisle-text {
+  margin: 4px 0 14px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 14px;
+  white-space: pre;
+  color: var(--crt-green);
+}
+
+.sa-stops {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.sa-stop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 12px;
+  background: #f2c500;
+  border: 2px solid #b3241c;
+  border-radius: 2px;
+  font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.2;
+  color: #b3241c;
+  cursor: pointer;
+}
+
+.sa-stop-shape {
+  font-size: 15px;
+}
+
+.sa-stop:hover:not(:disabled) {
+  background: #ffd829;
+}
+
+/* Not dimmed: fading red on yellow against black glass turns it olive, and a
+   muddy emergency control is the wrong first impression for this pattern. An
+   inactive control is drawn as the display draws everything else that is not
+   live yet, and takes its colours back the moment it can be pressed. */
+.sa-stop:disabled {
+  background: none;
+  border-color: var(--crt-dim);
+  color: var(--crt-dim);
+  cursor: default;
+}
+
+/* Deliberately not red on yellow: releasing is not an emergency control, and
+   the whole point of reserving those colours is that nothing else wears them. */
+.sa-release {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 9px 14px;
+  background: none;
+  border: 1px solid var(--crt-mid);
+  border-radius: 2px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--crt-green);
+  cursor: pointer;
+  touch-action: none; /* a hold must not become a scroll */
+  user-select: none;
+}
+
+.console-crt .sa-release .console-fill {
+  background: var(--crt-green);
+  opacity: 0.3;
+}
+
+
+/* ---------- Hand-drawn pattern illustrations ----------
+ *
+ * Inlined from public/illustrations/patterns/<slug>.svg, with the exported
+ * backdrop removed and the ink switched to currentColor, so the drawing is
+ * whatever the page's ink currently is rather than a fixed-colour picture.
+ */
+.pattern-illustration {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+
+  /* The export's second grey. Derived from the ink rather than named as its
+     own colour, so the quieter marks stay quieter by the same amount in both
+     themes without a token to keep in step. */
+  --illus-dim: color-mix(in srgb, currentColor 55%, transparent);
+}
+
+/* Stands in for .card-thumb's tile: the same slot, but open rather than a
+   filled rectangle, since the drawing now sits on the card itself. */
+.card-art {
+  display: block;
+  padding: 18px 20px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+
+.card-art .pattern-illustration {
+  max-width: 190px;
+  margin: 0 auto;
+}
+
+.pattern-head.has-art {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  align-items: center;
+  gap: 28px;
+}
+
+.pattern-head-art {
+  color: var(--ink);
+}
+
+/* Two columns need room for both. Below this the drawing goes above the
+   title, left-aligned with it rather than centred over it. */
+@media (max-width: 720px) {
+  .pattern-head.has-art {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+  .pattern-head-art {
+    max-width: 150px;
+  }
 }

@@ -27,10 +27,13 @@ export function BrandLogo({ className }: { className?: string }) {
  * The header lockup: the Calibrate mark, then the name, on one line
  * (redesign-handoff.md §1).
  *
- * The mark is the same geometry as app/icon.svg, inlined rather than linked
- * so it inherits `currentColor` and follows the theme with the rest of the
- * header — the favicon file cannot, because it is fetched as its own
- * document. Keep the two in step if either changes.
+ * The mark is the same geometry as public/icons/icon.svg, which is the source
+ * drawing every icon on the site is cut from. It is inlined rather than
+ * linked so it inherits `currentColor` and follows the theme with the rest of
+ * the header — the favicon file cannot, because it is fetched as its own
+ * document. Changing the mark means changing it in four places: that source
+ * file, app/icon.svg, here, and the rasters, which scripts/render-icons.py
+ * rebuilds.
  *
  * Hidden from assistive tech: the home link that wraps it is labelled, so
  * announcing the name twice would only repeat it.
@@ -39,8 +42,9 @@ export function BrandMark() {
   return (
     <span className="brand-lockup" aria-hidden="true">
       <svg className="brand-mark" viewBox="0 0 64 64" focusable="false">
-        <rect y="37" width="64" height="9" fill="currentColor" />
-        <circle cx="32" cy="25" r="12" fill="currentColor" />
+        <rect y="37" width="64" height="10" fill="currentColor" />
+        <circle cx="32" cy="24" r="13" fill="currentColor" />
+        <path d="M32 47L38.9282 59H25.0718L32 47Z" fill="currentColor" />
       </svg>
       <span className="brand-word">Calibrate</span>
     </span>
