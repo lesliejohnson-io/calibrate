@@ -50,9 +50,13 @@ export function usePrinter(initial: Line[]) {
   // component is the one way this demo can log an error on a real page.
   useEffect(() => stop, [stop]);
 
-  /** Appends `next`, then runs `done`. `after` delays the whole batch. */
+  /**
+   * Appends `next`, then runs `done`. `after` delays the whole batch, and
+   * `every` overrides the line interval — a flood prints faster than a
+   * readout a person is meant to follow line by line.
+   */
   const print = useCallback(
-    (next: Line[], done?: () => void, after = 0) => {
+    (next: Line[], done?: () => void, after = 0, every = LINE_MS) => {
       if (reduced.current) {
         setLines((cur) => [...cur, ...next]);
         if (done) timers.current.push(setTimeout(done, 0));
@@ -65,7 +69,7 @@ export function usePrinter(initial: Line[]) {
               setLines((cur) => [...cur, line]);
               if (i === next.length - 1 && done) done();
             },
-            after + (i + 1) * LINE_MS,
+            after + (i + 1) * every,
           ),
         );
       });

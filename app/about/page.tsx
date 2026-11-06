@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ExternalLink } from "@/components/ExternalLink";
 import { SocialLinks } from "@/components/SocialLinks";
-import { PatternToc, type TocItem } from "@/components/PatternToc";
+import { PatternAside } from "@/components/PatternAside";
+import { type TocItem } from "@/components/PatternToc";
 import { TocDisclosure } from "@/components/TocDisclosure";
 import {
   EVIDENCE,
@@ -310,7 +311,7 @@ export default function AboutPage() {
         </section>
       </article>
 
-      <PatternToc items={TOC} />
+      <PatternAside toc={TOC} />
     </div>
   );
 }

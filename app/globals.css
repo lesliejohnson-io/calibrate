@@ -309,6 +309,16 @@ code {
   color: var(--muted);
 }
 
+/* The pattern's number before its name in the page title, quieter than the
+   name and on the same line where there is room. */
+.pattern-title-num {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.62em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
 .display {
   margin: 8px 0 0;
   font-family: var(--font-display), system-ui, sans-serif;
@@ -819,6 +829,13 @@ a.station-body:hover .station-count {
 
 .hero {
   padding: 48px 0 0;
+}
+
+/* The subtitle carries the display face at the same size as the name above
+   it: it was one line of the h1 until it became a heading of its own, and
+   splitting the markup is not meant to change what the page looks like. */
+.hero-title-line {
+  margin-top: 0;
 }
 
 .hero-meta {
@@ -3230,6 +3247,184 @@ a.station-body:hover .station-count {
 .fc-discard:hover:not(:disabled),
 .fc-guess:hover:not(:disabled) {
   background: var(--panel);
+}
+
+/* ---------- Graceful Degradation demo ---------- */
+/*
+ * The ladder sits above the readout and stays there: the point of the
+ * pattern is that the fallback states exist before the fault, so they have
+ * to be on screen before the reader injects one. The current rung carries a
+ * marker and the word "now" as well as its weight, so the state is never
+ * held by brightness alone.
+ */
+.gd-ladder {
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.gd-rung {
+  white-space: pre;
+}
+
+.gd-rung.is-passed {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
+.gd-rung.is-here {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.gd-marker {
+  display: inline-block;
+  width: 1.2em;
+}
+
+.gd-faults {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.console-crt .gd-ladder {
+  color: var(--crt-mid);
+}
+
+.console-crt .gd-rung.is-here {
+  color: #b9ffc6;
+}
+
+/* ---------- Alert Triage demo ---------- */
+/*
+ * Two alarm panels. The flood is deliberately uniform: one typeface, one
+ * colour, one weight, so the only way through it is to read it. The ranked
+ * panel names every rank in words beside its colour, so the ranking survives
+ * greyscale and anyone who cannot separate red from amber.
+ */
+.tri-ask {
+  margin: 0 0 8px;
+  font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.tri-lines {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 234px;
+  overflow-y: auto;
+}
+
+/* Every line is a button: the panel has to be as operable from the keyboard
+   as it is unreadable. No rank, no emphasis — that is the anti-pattern. */
+.tri-line {
+  display: block;
+  width: 100%;
+  padding: 0 4px;
+  background: none;
+  border: 0;
+  border-radius: 2px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: left;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.tri-line:hover:not(:disabled) {
+  background: var(--panel);
+}
+
+.tri-line:disabled {
+  cursor: default;
+}
+
+.tri-ranked {
+  margin: 0 0 14px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.tri-rank {
+  margin: 0;
+}
+
+.tri-rank-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 8px;
+  margin: 0;
+}
+
+/* The rank as a word, so colour is never the only carrier. */
+.tri-rank-word {
+  font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 21px;
+  letter-spacing: 0.08em;
+}
+
+.tri-rank.is-warning {
+  margin-bottom: 8px;
+  color: var(--status-fault);
+}
+
+.tri-rank.is-caution {
+  color: var(--status-caution);
+}
+
+.tri-rank-action {
+  margin: 0 0 0 1px;
+  color: var(--status-fault);
+}
+
+.tri-rank-word.is-quiet {
+  color: var(--muted);
+}
+
+/* Grouped, not discarded: still on the panel, one keystroke away. */
+.tri-group {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.tri-group-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 8px;
+  margin: 0;
+}
+
+.tri-show {
+  padding: 0 2px;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.tri-group-list {
+  margin: 6px 0 0;
+  padding: 0 0 0 18px;
+  list-style: none;
+  color: var(--muted);
 }
 
 /* The choice the anti-pattern never offered. */

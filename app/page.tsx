@@ -20,7 +20,10 @@ export default function Home() {
     <div className="wrap">
       <PatternBrowser cards={cards}>
         <header className="hero">
-          <h1 className="display">Calibrate: Patterns for human-machine trust</h1>
+          {/* The name, then what it is: two headings rather than one
+              sentence, so the outline reads Calibrate > what it holds. */}
+          <h1 className="display">Calibrate</h1>
+          <h2 className="display hero-title-line">Patterns for human-machine trust</h2>
           <p className="lede">
             Patterns for autonomous machines that move, lift, cut, and fly, where a bad decision has
             physical consequences.

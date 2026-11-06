@@ -5,6 +5,7 @@ import { getIllustration } from "./illustrations";
 import { marked } from "marked";
 import { formatIssues, frontmatterSchema, type Frontmatter } from "./schema";
 import { applyCitations, sourceAnchor, sourceGroups } from "./citations";
+import { taleSourceIds } from "./schema";
 
 export { sourceAnchor, sourceGroups };
 export type { SourceGroup } from "./citations";
@@ -57,6 +58,7 @@ export {
   SOURCE_TYPE_LABELS,
   SOURCE_TYPE_ROW_LABELS,
   STATUSES,
+  taleSourceIds,
   TRUST_JOBS,
   TRUST_JOB_PURPOSES,
 } from "./schema";
@@ -190,11 +192,13 @@ function readPattern(file: string): Pattern {
   // that is not on the page fails the build rather than rendering a tale whose
   // citation links nowhere.
   const tale = parsed.data.cautionaryTale;
-  if (tale && !parsed.data.sources.some((source) => source.id === tale.sourceId)) {
-    throw new Error(
-      `${rel}: cautionaryTale.sourceId is "${tale.sourceId}", ` +
-        `which is not the id of any source in this file.`,
-    );
+  for (const id of tale ? taleSourceIds(tale) : []) {
+    if (!parsed.data.sources.some((source) => source.id === id)) {
+      throw new Error(
+        `${rel}: cautionaryTale.sourceId names "${id}", ` +
+          `which is not the id of any source in this file.`,
+      );
+    }
   }
 
   return {

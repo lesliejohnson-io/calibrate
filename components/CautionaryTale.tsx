@@ -1,4 +1,4 @@
-import type { Frontmatter } from "@/lib/schema";
+import { taleSourceIds, type Frontmatter } from "@/lib/schema";
 import { sourceAnchor } from "@/lib/citations";
 
 type Tale = NonNullable<Frontmatter["cautionaryTale"]>;
@@ -10,17 +10,21 @@ type Tale = NonNullable<Frontmatter["cautionaryTale"]>;
  * The dateline is a real heading rather than an eyebrow, so the page's
  * outline runs tale → anti-pattern → pattern and a screen reader can jump
  * between them. The citation is written here rather than carried in the story
- * text, because the whole tale rests on one source: a per-sentence `[cite:]`
- * would repeat the same number three times.
+ * text, because the tale rests on the same one or two sources throughout: a
+ * per-sentence `[cite:]` would repeat the same number three times.
  */
 export function CautionaryTale({
   tale,
-  number,
+  numbers,
 }: {
   tale: Tale;
-  /** The source's position in the Sources list, which is its footnote. */
-  number: number | undefined;
+  /** Each source's position in the Sources list, which is its footnote. */
+  numbers: Record<string, number | undefined>;
 }) {
+  const cited = taleSourceIds(tale)
+    .map((id) => ({ id, n: numbers[id] }))
+    .filter((c): c is { id: string; n: number } => c.n !== undefined);
+
   return (
     <section className="section tale" aria-labelledby="tale">
       <h2 id="tale" className="section-head tale-head">
@@ -31,15 +35,20 @@ export function CautionaryTale({
       </p>
       <p className="tale-story">
         {tale.story}
-        {number !== undefined && (
+        {cited.length > 0 && (
           <sup className="cite">
-            <a
-              href={`#${sourceAnchor(tale.sourceId)}`}
-              aria-label={`Source ${number}`}
-              title={`Source ${number}`}
-            >
-              {number}
-            </a>
+            {cited.map((c, i) => (
+              <span key={c.id}>
+                {i > 0 && ","}
+                <a
+                  href={`#${sourceAnchor(c.id)}`}
+                  aria-label={`Source ${c.n}`}
+                  title={`Source ${c.n}`}
+                >
+                  {c.n}
+                </a>
+              </span>
+            ))}
           </sup>
         )}
       </p>

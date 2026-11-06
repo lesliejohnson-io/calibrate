@@ -1,8 +1,10 @@
 import type { Contrast, InterfaceComponent } from "@/lib/patterns";
+import { AlertTriage } from "./illustrations/AlertTriage";
 import { Autothrottle } from "./illustrations/Autothrottle";
 import { DroneRelease } from "./illustrations/DroneRelease";
 import { ExplainableFault } from "./illustrations/ExplainableFault";
 import { FlightComputer } from "./illustrations/FlightComputer";
+import { GracefulDegradation } from "./illustrations/GracefulDegradation";
 import { StopAnywhere } from "./illustrations/StopAnywhere";
 
 const ILLUSTRATIONS: Record<
@@ -14,6 +16,8 @@ const ILLUSTRATIONS: Record<
   "explainable-fault": ExplainableFault,
   autothrottle: Autothrottle,
   "stop-anywhere": StopAnywhere,
+  "alert-triage": AlertTriage,
+  "graceful-degradation": GracefulDegradation,
 };
 
 /**

@@ -12,9 +12,12 @@ import { PatternToc, type TocItem } from "./PatternToc";
  * that does one job while the article scrolls past it.
  *
  * `pattern` is kept in the signature because the facts are a deliberate
- * removal rather than a deletion: putting a row back is adding it here.
+ * removal rather than a deletion: putting a row back is adding it here. It
+ * is optional because the About page has the same column and no pattern to
+ * describe: the sticky behaviour lives on this element, so a page that
+ * renders the nav without it gets a table of contents that scrolls away.
  */
-export function PatternAside({ toc }: { pattern: Pattern; toc: TocItem[] }) {
+export function PatternAside({ toc }: { pattern?: Pattern; toc: TocItem[] }) {
   return (
     <aside className="pattern-aside">
       <PatternToc items={toc} />

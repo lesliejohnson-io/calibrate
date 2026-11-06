@@ -356,6 +356,8 @@ export const INTERFACE_COMPONENTS = [
   "explainable-fault",
   "autothrottle",
   "stop-anywhere",
+  "alert-triage",
+  "graceful-degradation",
 ] as const;
 export type InterfaceComponent = (typeof INTERFACE_COMPONENTS)[number];
 
@@ -379,8 +381,18 @@ const cautionaryTaleSchema = z.object({
   date: z.string().min(1),
   place: z.string().min(1),
   story: z.string().min(1),
-  sourceId: z.string().min(1),
+  /**
+   * The source the tale rests on. A list where one source does not carry the
+   * whole story — the citation is written here rather than per sentence, so
+   * every source the tale leans on has to be named here or not at all.
+   */
+  sourceId: z.union([z.string().min(1), z.array(z.string().min(1)).min(1)]),
 });
+
+/** The tale's sources as a list, whether one was named or several. */
+export function taleSourceIds(tale: { sourceId: string | string[] }): string[] {
+  return Array.isArray(tale.sourceId) ? tale.sourceId : [tale.sourceId];
+}
 
 /**
  * One design consideration: the rule stated as an instruction, then the one

@@ -66,7 +66,6 @@ export default async function PatternPage({ params }: Props) {
   ].filter((item): item is TocItem => item !== null);
 
   const tale = p.cautionaryTale;
-  const taleNumber = tale ? p.citations[tale.sourceId] : undefined;
   const demo = p.interface?.component;
   // null for a pattern nobody has drawn yet, which the component renders as
   // nothing rather than as a gap or a broken image.
@@ -95,11 +94,15 @@ export default async function PatternPage({ params }: Props) {
         </nav>
 
         <header className="pattern-head">
-          <h1 className="display">{p.name}</h1>
+          {/* Number and name together, the way the index card and the
+              citation format write them. */}
+          <h1 className="display">
+            <span className="pattern-title-num">{pad(p.number)}/</span> {p.name}
+          </h1>
           <p className="lede">{p.intent}</p>
         </header>
 
-        {tale && <CautionaryTale tale={tale} number={taleNumber} />}
+        {tale && <CautionaryTale tale={tale} numbers={p.citations} />}
 
         {/* The mistake and the answer to it, side by side: the pair is the
             argument, and reading one directly after the other down a single

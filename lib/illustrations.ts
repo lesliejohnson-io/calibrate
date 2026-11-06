@@ -36,6 +36,13 @@ const DIR = path.join(process.cwd(), "public", "illustrations", "patterns");
 const EXPORT_TONES: readonly (readonly [RegExp, string])[] = [
   [/#F5F5F5\b/gi, "currentColor"],
   [/#D9D9D9\b/gi, "var(--illus-dim)"],
+  // A second quiet grey some exports use in place of #D9D9D9: same role in
+  // the drawing, so the same ink on the page.
+  [/#7F7F7F\b/gi, "var(--illus-dim)"],
+  // The one mark a drawing makes in red -- the alarm that needs a hand now --
+  // mapped to the page's own fault ink rather than Figma's red, so the card
+  // and the pattern it links to agree about what red means.
+  [/#F61717\b/gi, "var(--status-fault)"],
 ];
 
 /** Colours that are structural rather than ink, and so are never remapped. */
