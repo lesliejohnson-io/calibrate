@@ -309,16 +309,6 @@ code {
   color: var(--muted);
 }
 
-/* The pattern's number before its name in the page title, quieter than the
-   name and on the same line where there is room. */
-.pattern-title-num {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.62em;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: var(--muted);
-}
-
 .display {
   margin: 8px 0 0;
   font-family: var(--font-display), system-ui, sans-serif;
@@ -3284,6 +3274,18 @@ a.station-body:hover .station-count {
 .gd-marker {
   display: inline-block;
   width: 1.2em;
+}
+
+/*
+ * "Still works: ..." is a sentence, and the log's default `pre` would run it
+ * off the right-hand edge of the screen. Wrapped, with the continuation
+ * indented under the first word so a two-line entry still reads as one.
+ */
+.gd-screen .fc-line {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
 }
 
 .gd-faults {

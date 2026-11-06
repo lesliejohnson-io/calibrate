@@ -94,11 +94,9 @@ export default async function PatternPage({ params }: Props) {
         </nav>
 
         <header className="pattern-head">
-          {/* Number and name together, the way the index card and the
-              citation format write them. */}
-          <h1 className="display">
-            <span className="pattern-title-num">{pad(p.number)}/</span> {p.name}
-          </h1>
+          {/* The name alone. The number is in the breadcrumb directly above,
+              so a "03/" in front of the title is the same fact twice. */}
+          <h1 className="display">{p.name}</h1>
           <p className="lede">{p.intent}</p>
         </header>
 

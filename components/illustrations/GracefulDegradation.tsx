@@ -127,7 +127,11 @@ function WithoutScreen() {
           </div>
         </dl>
 
-        <Log lines={lines} minLines={6} />
+        {/* These lines are sentences rather than fixed-width readouts, so
+            they wrap inside the screen instead of running past its edge. */}
+        <div className="gd-screen">
+          <Log lines={lines} minLines={6} />
+        </div>
 
         {stage === "faults" && (
           <div className="gd-faults">
@@ -269,7 +273,11 @@ function WithScreen() {
           ))}
         </ol>
 
-        <Log lines={lines} minLines={6} />
+        {/* These lines are sentences rather than fixed-width readouts, so
+            they wrap inside the screen instead of running past its edge. */}
+        <div className="gd-screen">
+          <Log lines={lines} minLines={6} />
+        </div>
 
         {!atFloor && (
           <div className="gd-faults">
