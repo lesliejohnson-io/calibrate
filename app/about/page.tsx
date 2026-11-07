@@ -102,8 +102,8 @@ export default function AboutPage() {
           <p className="lede">
             Calibrate is a library of named, reusable design patterns for calibrated trust between
             people and autonomous machines: vehicles, medical devices, surgical and industrial
-            robots, drones and warehouse systems. It&apos;s for practitioners, and it&apos;s also a
-            learning tool written in public.
+            robots, drones, warehouse systems and defense systems. It&apos;s for practitioners, and
+            it&apos;s also a learning tool written in public.
           </p>
           <p className="page-byline">
             Written by <Link href="#who">Leslie Johnson</Link>, a designer for calibrated trust

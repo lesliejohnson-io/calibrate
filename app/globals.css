@@ -1485,12 +1485,6 @@ a.station-body:hover .station-count {
   margin-top: 40px;
 }
 
-/* First thing in its section, so there is no heading margin to collapse into
-   and the pull-up in .section-note has to be cancelled. */
-.section-note-lead {
-  margin-top: 0;
-}
-
 @media (max-width: 899px) {
   .pattern-duo {
     grid-template-columns: minmax(0, 1fr);
@@ -2207,22 +2201,19 @@ a.station-body:hover .station-count {
   margin-top: 14px;
 }
 
-/* A line under a section heading that qualifies what follows. */
-.section-note {
-  /* Collapses against the heading's 24px to sit 12px under its rule. */
-  margin: -12px 0 24px;
-  /* ...but after the "Therefore:" block there is no heading margin to
-     collapse into, so the pull-up has to be cancelled. */
-}
-
-.therefore + .section-note {
-  margin-top: 18px;
-}
-
+/* A line above the demo qualifying what it is — opt-in per pattern via
+   `demoNote`, so only a demo that needs a caveat carries one. */
 .section-note {
   max-width: 62ch;
+  margin: 0 0 20px;
   font-size: 14px;
   color: var(--muted);
+}
+
+/* First thing in its section, so there is no heading margin to collapse
+   into and no pull-up to cancel. */
+.section-note-lead {
+  margin-top: 0;
 }
 
 .elsewhere {

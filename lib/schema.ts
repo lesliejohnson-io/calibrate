@@ -22,6 +22,9 @@ export const DOMAINS = [
   "warehouse",
   "maritime",
   "aviation",
+  // Military systems, where the operator is a crew acting under rules of
+  // engagement rather than a user with a preference.
+  "defense",
   "home",
   "general",
 ] as const;
@@ -362,6 +365,9 @@ export const INTERFACE_COMPONENTS = [
   "stop-anywhere",
   "alert-triage",
   "graceful-degradation",
+  "glass-box",
+  "handoff",
+  "return-of-control",
 ] as const;
 export type InterfaceComponent = (typeof INTERFACE_COMPONENTS)[number];
 
@@ -565,6 +571,16 @@ export const frontmatterSchema = z
      * without it keep the diagram.
      */
     interface: interfaceSchema.optional(),
+
+    /**
+     * A line above the demo qualifying what it is. Per-pattern and opt-in:
+     * the generic "a working demo, not a screenshot" note that used to sit
+     * here on every pattern was removed, because a demo has to read as
+     * operable on sight. What is left is the case where the demo itself needs
+     * a caveat — Explainable Fault stages a real accident with invented
+     * readouts, and says so.
+     */
+    demoNote: z.string().min(1).optional(),
   })
   .transform((fm) => ({
     ...fm,

@@ -55,7 +55,7 @@ function WithoutScreen() {
 
   return (
     <div className="console">
-      <p className="console-title">Payload</p>
+      <p className="console-title">Drone payload release</p>
       <div className="console-screen console-crt af-screen">
         <Readout state={released ? "Released" : "Armed"} />
 
@@ -173,7 +173,7 @@ function WithScreen() {
 
   return (
     <div className="console">
-      <p className="console-title">Payload</p>
+      <p className="console-title">Drone payload release</p>
       <div className="console-screen console-crt af-screen">
         <Readout state={released ? "Released" : holding ? "Holding" : "Armed"} />
 

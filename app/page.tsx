@@ -25,8 +25,8 @@ export default function Home() {
           <h1 className="display">Calibrate</h1>
           <h2 className="display hero-title-line">Patterns for human-machine trust</h2>
           <p className="lede">
-            Patterns for autonomous machines that move, lift, cut, and fly, where a bad decision has
-            physical consequences.
+            For autonomous machines that move, lift, cut, and fly, where a bad decision has physical
+            consequences.
           </p>
           <p className="label hero-meta">
             {published.length} {published.length === 1 ? "pattern" : "patterns"}

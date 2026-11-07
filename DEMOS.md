@@ -11,12 +11,14 @@ the build fails. A pattern with no demo yet carries
 
 ## What a demo has to do
 
-- **Be the control, not a picture of one.** The reader operates it. The note
-  above it says so: "A working demo of the control, not a screenshot."
+- **Be the control, not a picture of one.** The reader operates it. There is
+  no caption saying so — the demo has to read as operable on sight, and a
+  line of text promising that it is would be covering for a demo that
+  doesn't.
 - **Show the anti-pattern honestly.** The Without side is a real interaction
-  that really goes wrong, not a disabled mock-up. Where there is genuinely
-  nothing to demonstrate — a button that just fires — say so and leave it
-  inert, as the drone release demo does.
+  that really goes wrong, not a disabled mock-up. Even a button that just
+  fires is worth wiring up: how little it asks of the reader is the
+  demonstration, and it only lands if their own tap is what does it.
 - **Never invent data.** No real map, telemetry, product or place. Numbers
   that appear must come from the pattern's own sources, in the units those
   sources use.
@@ -30,15 +32,46 @@ the build fails. A pattern with no demo yet carries
 
 ## Built
 
-Three of these are **printed displays**: a fixed-width readout that prints one
+Six of these are **printed displays**: a fixed-width readout that prints one
 line per 120ms, all at once under `prefers-reduced-motion`, in green on black
 to read as a flight deck instrument rather than as part of the page. They
 share one engine, `components/illustrations/printout.tsx`.
 
-Neither carries a "not real data" disclaimer. The demos stage real accidents,
-so the standing rule below — never invent data, and take every figure from
-the pattern's own sources in the units those sources use — is what keeps them
+Their lines never wrap. `.fc-line` is `white-space: pre` and the type is a
+fixed 14px mono with no responsive step, so a line wider than the column runs
+off the screen instead of folding. How wide the column is depends on the
+layout: 437px at a viewport narrow enough to drop the sidebar rail, 367px at
+a wider one with the rail showing. Write to the narrower figure, and leave
+room under it — a line at 90% of the column is a line that overflows on the
+next layout change.
+
+Sentences are therefore split by hand across several lines, with continuations
+indented two spaces, and the `role="status"` text puts each sentence back
+together so a screen reader hears it whole. To check a screen, print its
+longest line into a hidden `.fc-line` inside a `.console-crt` and measure it
+with a `Range`: a block element's own `scrollWidth` is floored at the column
+width, so it cannot tell you a line fits, only that it does not.
+
+Most carry no "not real data" disclaimer. The demos stage real accidents, so
+the standing rule above — never invent data, and take every figure from the
+pattern's own sources in the units those sources use — is what keeps them
 honest, rather than a line of small print underneath.
+
+The exception is a demo a reader could take for a record of what happened.
+Four carry a note. Explainable Fault and Return of Control both stage real
+accidents with readouts written for the page, so both say "Simplified
+illustration, not real flight data." The Glass Box and The Handoff invent
+their scenes outright — a forklift, a motorway lane closure — and say the
+shorter "Simplified illustration." A demo opts in with `demoNote` in its
+pattern's frontmatter; the field is deliberately per-pattern, because a
+disclaimer on every demo is small print nobody reads.
+
+Where exactly the line falls is not settled. Appropriate Friction invents its
+scene as plainly as The Glass Box does — a drone, a zone B, an altitude, none
+of them in the Therac-25 investigation — and carries no note, on the grounds
+that nobody could mistake it for the accident. The same argument covers a
+forklift standing in for a missile battery. Decide the rule once and apply it
+to both.
 
 ### 06 Intent Preview — `flight-computer`
 
@@ -76,6 +109,10 @@ Nothing is added to what the aircraft knew: the sensors had already
 disagreed. The checklist label is named for the condition rather than quoting
 a real 737 checklist, which none of the pattern's sources give — see its
 `review:` list.
+
+The symptom lines are written for the page rather than taken from the
+recorder, and the accident is real, so this demo carries
+`demoNote: "Simplified illustration, not real flight data."`
 
 ### 05 Shared Mental Model — `autothrottle`
 
@@ -162,6 +199,101 @@ pauses the operator had learned to clear.
 Nothing in this demo is red. A fault on these displays is brighter green with
 more weight and a glyph (`.fc-line.is-fault`); red on yellow is reserved for
 the emergency stops in Stop Anywhere.
+
+### 02 The Glass Box — `glass-box`
+
+A printed display. An autonomous forklift reports on aisle 7, and both sides
+are wrong about it in the same way: a worker is kneeling behind a pallet,
+where the camera cannot see. Both sides let the reader proceed. What differs
+is whether there was anything on the display to check the verdict against.
+
+- **Without:** prints `AISLE 7: CLEAR` and asks "Proceed?". Nothing stands
+  behind the line. Either choice then reveals the worker, and proceeding adds
+  "The system was sure. You had nothing to check it against." Holding is
+  allowed, but the hint says what it was worth — "You held, but nothing on the
+  display told you to. Next time you won't."
+- **With:** the same verdict, `AISLE 7: CLEAR, because:`, over the three
+  reasons that produced it, each carrying how sure the machine is: lidar
+  high, camera low because a pallet is partly blocking the view, and when a
+  person was last seen in the aisle. The low-confidence line is the one that
+  matters, and a blocked camera is something a person in the aisle can reason
+  about.
+
+Proceeding stays available on the With side, and the demo says so — "The
+difference is that this time it was a judgement." A glass box is not a veto,
+and a demo that punished the reader for proceeding would be arguing for a
+different pattern.
+
+Both sides announce the outcome through a `role="status"` line, which carries
+each hand-split sentence whole, and move focus to Reset once the aisle is
+revealed.
+
+No figure here comes from the pattern's sources, which describe a Patriot
+missile battery rather than a warehouse: the aisle, the two sensors and the
+40 seconds are written for this page. What is taken from the sources is the
+shape of the failure — a confident classification whose basis the operator
+cannot inspect. Because the readouts are invented, it carries
+`demoNote: "Simplified illustration."`
+
+### 01 The Handoff — `handoff`
+
+A printed display. The car is driving; on both sides it is about to stop.
+What differs is how much warning there is, and whether anything explains the
+situation before the reader owns it.
+
+- **Without:** prints `AUTOPILOT · 62 mph`, then `TAKE OVER NOW` with no
+  notice and a two-second countdown. Press "I have control" in time and it
+  prints "You have control. / You don't know why." Miss it and it prints
+  "Too late." Winning the race is the point: what the reader gets is the car
+  and no idea what it was about to meet.
+- **With:** the same transfer announced fifteen seconds out, with the three
+  things the reader needs — why (construction zone, lane closes in 400 m),
+  now (62 mph, lane clear) and next (you'll need to merge left). Control
+  moves only when they press "I have control". If nobody answers, the car
+  does not drop the wheel: it prints "No response. / Slowing to a stop on the
+  shoulder."
+
+The countdown runs in real time on both sides, including under
+`prefers-reduced-motion`. A number changing once a second is the content
+here, not decoration — the whole demo is about how much time there is — and
+nothing flashes or moves. It is not a live region either, because a tick a
+second is noise in a screen reader; the `role="status"` line announces the
+start and the outcome instead.
+
+No figure here comes from the pattern's source, which describes a 2018 crash
+in Tempe rather than a motorway lane closure: the speeds, the construction
+zone and both countdowns are written for this page. What is taken from the
+source is the shape of the failure — a design that depends on a person taking
+over, with nothing useful reaching them before the moment it needs them. It
+carries `demoNote: "Simplified illustration."`
+
+### 12 Return of Control — `return-of-control`
+
+A printed display with a live pitch gauge under it: a number and a marker on
+a fixed scale, rendered rather than printed, because it is the current state
+and not another entry in the log. Both sides have a Play button and a "Push
+nose down" button; the automation wants the nose up.
+
+- **Without:** every push moves the nose down, and the automation walks it
+  back to its target a beat later, printing nothing. The reader can win any
+  single round and still be losing. After fifteen seconds the screen says
+  what it has been doing: "The automation countered you [N] times. / Nothing
+  on the display told you."
+- **With:** the first push prints `AUTOPILOT OFF · you have pitch control` and
+  the automation stops acting. The nose stays where the reader puts it.
+  "Resume autopilot" is a separate, deliberate press, and prints "Autopilot
+  resumed at your request."
+
+The gauge is not a live region. The marker moves far more often than a screen
+reader could follow, so the announcements are made at the moments that matter
+through the `role="status"` line each screen owns.
+
+No figure here comes from the pattern's sources, which describe an approach
+to Nagoya in 1994 and two 737 MAX accidents: the scale, the degrees, the
+fifteen-second window and the counter are written for this page. What is
+taken from them is the shape of the failure — a correction reversed without
+anything saying so. It carries `demoNote: "Simplified illustration, not real
+flight data."`
 
 ## To build
 

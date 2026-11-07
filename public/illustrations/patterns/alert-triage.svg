@@ -6,5 +6,6 @@
 <path d="M68 60H104" stroke-linecap="round" stroke="#F5F5F5"/>
 <path d="M68 55H104" stroke-linecap="round" stroke="#F5F5F5"/>
 <path d="M68 50H104" stroke-linecap="round" stroke="#F5F5F5"/>
-<path d="M72 39L103.641 44.5791" stroke-width="3" stroke-linecap="round" stroke="#F61717"/>
+<path d="M103.885 43.2896C104.713 43.2896 105.385 42.618 105.385 41.7896C105.385 40.9611 104.713 40.2896 103.885 40.2896V41.7896V43.2896ZM71.756 41.7896V43.2896H103.885V41.7896V40.2896H71.756V41.7896Z" fill="#F61717"/>
+<path d="M70 42L67 44.5981V39.4019L70 42Z" fill="#F61717"/>
 </svg>

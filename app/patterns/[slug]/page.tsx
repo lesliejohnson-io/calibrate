@@ -112,7 +112,9 @@ export default async function PatternPage({ params }: Props) {
               <h2 id="anti-pattern" className="section-head">
                 Anti-pattern: {p.antiPattern}
               </h2>
-              <p className="prose-lead">{p.without.caption}</p>
+              {/* Escaped and cited upstream; paragraphs so an anti-pattern
+                  with a downstream cost to describe can take two. */}
+              <div dangerouslySetInnerHTML={{ __html: p.antiPatternHtml }} />
             </section>
           )}
 
@@ -134,9 +136,7 @@ export default async function PatternPage({ params }: Props) {
             with no demo yet the boxes were restating it inside a border. */}
         {demo && (
           <section className="section section-demo" aria-label={`${p.name}: without and with`}>
-            <p className="section-note section-note-lead">
-              A working demo of the control, not a screenshot.
-            </p>
+            {p.demoNote && <p className="section-note section-note-lead">{p.demoNote}</p>}
             <Comparison
               without={p.without}
               withPattern={p.with}

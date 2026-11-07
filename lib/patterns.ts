@@ -102,7 +102,33 @@ export type Pattern = Frontmatter & {
   file: string;
   /** Source id -> its footnote number, for sources this page actually cites. */
   citations: Record<string, number>;
+  /**
+   * `without.caption` ready to render: HTML-escaped, `[cite:]` resolved, and
+   * split into one paragraph per blank line. The anti-pattern's text is the
+   * one piece of frontmatter prose long enough to want both, since it is what
+   * the page shows under the "Anti-pattern:" heading.
+   */
+  antiPatternHtml: string;
 };
+
+const HTML_ESCAPES: Record<string, string> = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+};
+
+const escapeHtml = (s: string) => s.replace(/[&<>"]/g, (c) => HTML_ESCAPES[c]);
+
+/** One `<p class="prose-lead">` per blank-line-separated paragraph. */
+function paragraphs(html: string): string {
+  return html
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) => `<p class="prose-lead">${p.replace(/\n/g, " ")}</p>`)
+    .join("");
+}
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "patterns");
 
@@ -186,7 +212,12 @@ function readPattern(file: string): Pattern {
   const parsed = frontmatterSchema.safeParse(data);
   if (!parsed.success) throw new ContentError(rel, formatIssues(parsed.error));
 
-  const { body, citations } = applyCitations(splitBody(content), parsed.data.sources, rel);
+  const { body, extras, citations } = applyCitations(
+    splitBody(content),
+    parsed.data.sources,
+    rel,
+    { antiPattern: escapeHtml(parsed.data.without.caption) },
+  );
 
   // The tale's source is validated the same way a [cite:] is: naming a source
   // that is not on the page fails the build rather than rendering a tale whose
@@ -207,6 +238,7 @@ function readPattern(file: string): Pattern {
     body,
     file: rel,
     citations,
+    antiPatternHtml: paragraphs(extras.antiPattern),
   };
 }
 

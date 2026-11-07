@@ -76,21 +76,29 @@ export type CitedSection = (typeof CITED_SECTIONS)[number];
  * the build. A silent drop would leave a claim looking sourced when the link
  * behind it had quietly gone.
  */
-export function applyCitations<T extends Partial<Record<CitedSection, string>>>(
+export function applyCitations<
+  T extends Partial<Record<CitedSection, string>>,
+  E extends Record<string, string> = Record<string, never>,
+>(
   body: T,
   sources: Source[],
   file: string,
-): { body: T; citations: Record<string, number> } {
+  /**
+   * Prose that lives in frontmatter rather than in the markdown body and so
+   * is not one of the CITED_SECTIONS — currently the anti-pattern's text.
+   * Passed through the same pass so there is one numbering, one `cited` set
+   * and one build error for a citation naming a source that is not there.
+   * Values must already be HTML-escaped: what comes back is rendered as HTML.
+   */
+  extras?: E,
+): { body: T; extras: E; citations: Record<string, number> } {
   const numbers = sourceNumbers(sources);
   const cited = new Set<string>();
   const missing = new Set<string>();
   const out = { ...body };
 
-  for (const section of CITED_SECTIONS) {
-    const html = body[section];
-    if (typeof html !== "string" || !html.includes("[cite:")) continue;
-
-    out[section] = html.replace(CITE, (_match, id: string) => {
+  const cite = (html: string) =>
+    html.replace(CITE, (_match, id: string) => {
       const n = numbers[id];
       if (n === undefined) {
         missing.add(id);
@@ -102,7 +110,18 @@ export function applyCitations<T extends Partial<Record<CitedSection, string>>>(
         `<a href="#${sourceAnchor(id)}" aria-label="Source ${n}" title="Source ${n}">${n}</a>` +
         `</sup>`
       );
-    }) as T[CitedSection];
+    });
+
+  for (const section of CITED_SECTIONS) {
+    const html = body[section];
+    if (typeof html !== "string" || !html.includes("[cite:")) continue;
+    out[section] = cite(html) as T[CitedSection];
+  }
+
+  const outExtras = { ...(extras ?? ({} as E)) };
+  for (const key of Object.keys(outExtras) as (keyof E)[]) {
+    const text = outExtras[key];
+    if (typeof text === "string") outExtras[key] = cite(text) as E[keyof E];
   }
 
   if (missing.size > 0) {
@@ -114,6 +133,7 @@ export function applyCitations<T extends Partial<Record<CitedSection, string>>>(
 
   return {
     body: out,
+    extras: outExtras,
     citations: Object.fromEntries([...cited].map((id) => [id, numbers[id]])),
   };
 }
