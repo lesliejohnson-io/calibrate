@@ -8,6 +8,7 @@ import { GlassBox } from "./illustrations/GlassBox";
 import { GracefulDegradation } from "./illustrations/GracefulDegradation";
 import { Handoff } from "./illustrations/Handoff";
 import { ReturnOfControl } from "./illustrations/ReturnOfControl";
+import { ShiftHandover } from "./illustrations/ShiftHandover";
 import { StopAnywhere } from "./illustrations/StopAnywhere";
 
 const ILLUSTRATIONS: Record<
@@ -24,6 +25,7 @@ const ILLUSTRATIONS: Record<
   "glass-box": GlassBox,
   handoff: Handoff,
   "return-of-control": ReturnOfControl,
+  "shift-handover": ShiftHandover,
 };
 
 /**

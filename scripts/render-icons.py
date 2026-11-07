@@ -10,9 +10,9 @@ favicon does.
 import struct, zlib, sys, pathlib
 
 # Geometry, in the 64x64 user space of public/icons/icon.svg.
-BAR = (0.0, 37.0, 64.0, 47.0)          # x0, y0, x1, y1
-CIRCLE = (32.0, 24.0, 13.0)            # cx, cy, r
-TRI = ((32.0, 47.0), (38.9282, 59.0), (25.0718, 59.0))
+BAR = (0.0, 34.0, 64.0, 44.0)          # x0, y0, x1, y1
+CIRCLE = (32.0, 20.0, 14.0)            # cx, cy, r
+TRI = ((32.0, 44.0), (40.6603, 59.0), (23.3397, 59.0))
 BOX = 64.0
 
 def inside(x, y):

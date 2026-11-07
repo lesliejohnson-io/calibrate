@@ -32,7 +32,7 @@ the build fails. A pattern with no demo yet carries
 
 ## Built
 
-Six of these are **printed displays**: a fixed-width readout that prints one
+Seven of these are **printed displays**: a fixed-width readout that prints one
 line per 120ms, all at once under `prefers-reduced-motion`, in green on black
 to read as a flight deck instrument rather than as part of the page. They
 share one engine, `components/illustrations/printout.tsx`.
@@ -294,6 +294,45 @@ fifteen-second window and the counter are written for this page. What is
 taken from them is the shape of the failure — a correction reversed without
 anything saying so. It carries `demoNote: "Simplified illustration, not real
 flight data."`
+
+### 13 Operator-to-Operator Handover — `shift-handover`
+
+A printed display on both sides, showing a console with two condensate pumps
+at the moment a day shift hands over to a night shift. The reader plays the
+incoming night-shift operator. Both sides end with the other pump tripping
+and the obvious move being to start the first one.
+
+- **Without:** the handover is a free-text note. "Pump A: maintenance today. /
+  All good otherwise." Every word of it is true. Then `PUMP B TRIPPED. / Start
+  Pump A?` and a "Start Pump A" button. Pressing it prints "Pump A started. /
+  Its safety valve had been removed."
+- **With:** the same state arrives in fixed fields, with `DISABLED` first and
+  most prominent — "Pump A · safety valve removed / do not start" — then
+  `IN PROGRESS` and `NORMAL`. Nothing is handed over until the reader says
+  back what is switched off, by choosing Pump A from the equipment on the
+  console; Pump B prints "Not accepted. / Read the DISABLED section." and lets
+  them try again. Choosing Pump A prints "Handover accepted · / day shift →
+  night shift", then the trip, then "Pump A disabled: / safety valve removed."
+  The "Start Pump A" button appears and is unavailable.
+
+The say-back is a real gate rather than a checkbox: the demo will not proceed
+on the wrong answer. The refusal is a control rather than a sentence — the
+button is present and disabled — because being unable to press it is the
+whole difference from the other screen.
+
+`PANEL_LINES` is a floor, not a cap: the structured handover is four lines
+longer than the note, which is the point, so the With panel ends taller.
+
+The arrow in "day shift → night shift" is the only one inside a printed
+display on the site. `.fc-line` is a fixed monospace stack, so that one
+character can fall back if a font in the stack lacks U+2192.
+
+Nothing here comes from the pattern's sources, which describe a platform
+control room in 1988: the two-pump console, the field names, the wording and
+the equipment list are written for this page. What is taken from them is the
+shape of the failure — two true facts held apart, and a handover that
+depended on one person joining them up. It carries
+`demoNote: "Simplified illustration."`
 
 ## To build
 

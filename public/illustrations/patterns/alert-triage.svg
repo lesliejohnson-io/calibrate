@@ -1,11 +1,11 @@
 <svg width="173" height="98" viewBox="0 0 173 98" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="173" height="98" rx="8" fill="#1C1C1C"/>
-<path d="M68 75H104" stroke-linecap="round" stroke="#7F7F7F"/>
-<path d="M68 70H104" stroke-linecap="round" stroke="#7F7F7F"/>
-<path d="M68 65H104" stroke-linecap="round" stroke="#7F7F7F"/>
+<path d="M68 75H104" stroke-width="0.5" stroke-linecap="round" stroke="#F5F5F5"/>
+<path d="M68 70H104" stroke-width="0.5" stroke-linecap="round" stroke="#F5F5F5"/>
+<path d="M68 65H104" stroke-width="0.5" stroke-linecap="round" stroke="#F5F5F5"/>
 <path d="M68 60H104" stroke-linecap="round" stroke="#F5F5F5"/>
 <path d="M68 55H104" stroke-linecap="round" stroke="#F5F5F5"/>
-<path d="M68 50H104" stroke-linecap="round" stroke="#F5F5F5"/>
-<path d="M103.885 43.2896C104.713 43.2896 105.385 42.618 105.385 41.7896C105.385 40.9611 104.713 40.2896 103.885 40.2896V41.7896V43.2896ZM71.756 41.7896V43.2896H103.885V41.7896V40.2896H71.756V41.7896Z" fill="#F61717"/>
-<path d="M70 42L67 44.5981V39.4019L70 42Z" fill="#F61717"/>
+<path d="M68 50H104" stroke-width="1.5" stroke-linecap="round" stroke="#F5F5F5"/>
+<path d="M103.885 43.2896C104.713 43.2896 105.385 42.618 105.385 41.7896C105.385 40.9611 104.713 40.2896 103.885 40.2896V41.7896V43.2896ZM71.756 41.7896V43.2896H103.885V41.7896V40.2896H71.756V41.7896Z" fill="#F5F5F5"/>
+<path d="M70 42L67 44.5981V39.4019L70 42Z" fill="#F5F5F5"/>
 </svg>

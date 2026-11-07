@@ -42,9 +42,9 @@ export function BrandMark() {
   return (
     <span className="brand-lockup" aria-hidden="true">
       <svg className="brand-mark" viewBox="0 0 64 64" focusable="false">
-        <rect y="37" width="64" height="10" fill="currentColor" />
-        <circle cx="32" cy="24" r="13" fill="currentColor" />
-        <path d="M32 47L38.9282 59H25.0718L32 47Z" fill="currentColor" />
+        <rect y="34" width="64" height="10" fill="currentColor" />
+        <circle cx="32" cy="20" r="14" fill="currentColor" />
+        <path d="M32 44L40.6603 59H23.3397L32 44Z" fill="currentColor" />
       </svg>
       <span className="brand-word">Calibrate</span>
     </span>

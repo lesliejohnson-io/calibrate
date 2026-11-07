@@ -28,7 +28,7 @@
       .mark { fill: #E6E9ED; }
     }
   </style>
-  <rect class="mark" y="37" width="64" height="10" fill="#141414"/>
-  <circle class="mark" cx="32" cy="24" r="13" fill="#141414"/>
-  <path class="mark" d="M32 47L38.9282 59H25.0718L32 47Z" fill="#141414"/>
+  <rect class="mark" y="34" width="64" height="10" fill="#141414"/>
+  <circle class="mark" cx="32" cy="20" r="14" fill="#141414"/>
+  <path class="mark" d="M32 44L40.6603 59H23.3397L32 44Z" fill="#141414"/>
 </svg>

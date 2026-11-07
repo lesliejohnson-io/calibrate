@@ -368,6 +368,7 @@ export const INTERFACE_COMPONENTS = [
   "glass-box",
   "handoff",
   "return-of-control",
+  "shift-handover",
 ] as const;
 export type InterfaceComponent = (typeof INTERFACE_COMPONENTS)[number];
 
