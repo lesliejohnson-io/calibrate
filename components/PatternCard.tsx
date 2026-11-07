@@ -18,9 +18,9 @@ export function PatternCard({ pattern }: { pattern: PatternCardData }) {
       <Link href={`/patterns/${pattern.slug}`} className="card">
         {/* The hand-drawn illustration wins where one exists. It draws the
             same marks the generated thumbnail does, so showing both would put
-            two pictures of one idea on a card; and unlike the thumbnail it is
-            ink on the page rather than a dark tile, which is what lets it
-            follow the theme. Patterns nobody has drawn keep the tile. */}
+            two pictures of one idea on a card. Both are dark tiles in the
+            same slot, so a row of cards reads the same either way. Patterns
+            nobody has drawn keep the generated tile. */}
         {pattern.illustration ? (
           <span className="card-art">
             <PatternIllustration illustration={pattern.illustration} />

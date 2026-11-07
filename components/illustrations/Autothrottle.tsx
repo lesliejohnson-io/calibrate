@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * Asiana Airlines Flight 214, as a thing you fly rather than a thing you read.
@@ -103,7 +103,6 @@ function GlidePath({
 
 function Screen({ variant }: { variant: "without" | "with" }) {
   const showsMeaning = variant === "with";
-  const taskId = useId();
 
   const reduced = useReducedMotion();
   const raf = useRef<number | null>(null);

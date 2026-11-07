@@ -1,19 +1,18 @@
 import type { Illustration } from "@/lib/illustrations";
 
 /**
- * A pattern's hand-drawn illustration, inlined so it can take the page's ink
- * colour in either theme.
+ * A pattern's hand-drawn illustration, as the file itself.
+ *
+ * An `<img>` and not inline markup: the drawing is already a finished
+ * picture, complete with its own dark card, and loading it as a separate
+ * document is what guarantees nothing on the page can reach inside and change
+ * it -- no recolouring, no `currentColor`, no theme adjustment. It is meant to
+ * look identical in light and dark mode.
  *
  * Decorative by decision, not by omission: the pattern's name and intent are
  * next to it and say the same thing in words, so announcing the drawing would
  * only add a second, vaguer version of what a screen reader has just read.
- * `aria-hidden` and `focusable="false"` together keep it out of both the
- * accessibility tree and the tab order, the latter mattering because IE-era
- * SVG focus behaviour still surfaces in some engines.
- *
- * `dangerouslySetInnerHTML` is the only way to inline a file's markup. The
- * content is a repository file written by hand, not user input, and it is
- * normalised by `getIllustration` before it reaches here.
+ * An empty `alt` with `aria-hidden` keeps it out of the accessibility tree.
  */
 export function PatternIllustration({
   illustration,
@@ -25,13 +24,17 @@ export function PatternIllustration({
   if (!illustration) return null;
 
   return (
-    <svg
+    /* The drawing has to reach the browser byte for byte: next/image would
+       re-encode it, and it refuses SVG outright without dangerouslyAllowSVG. */
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
       className={className ? `pattern-illustration ${className}` : "pattern-illustration"}
-      viewBox={illustration.viewBox}
+      src={illustration.src}
+      width={illustration.width}
+      height={illustration.height}
+      alt=""
       aria-hidden="true"
-      focusable="false"
-      role="presentation"
-      dangerouslySetInnerHTML={{ __html: illustration.inner }}
+      draggable={false}
     />
   );
 }

@@ -66,7 +66,7 @@ const mono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Calibrate", template: "%s · Calibrate" },
+  title: { default: "Calibrate: Patterns for human–machine trust", template: "%s · Calibrate" },
   description:
     "Named, reusable design patterns for the trust layer between humans and autonomous machines.",
   /* REMOVE AT DOMAIN LAUNCH. Keeps the whole site out of search indexes while

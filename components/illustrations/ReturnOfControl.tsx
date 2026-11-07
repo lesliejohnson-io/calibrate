@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { Log, usePrinter, useStepFocus, type Line } from "./printout";
+import { Log, usePrinter, useStepFocus } from "./printout";
 
 /**
  * The same disagreement twice. On both screens the automation wants the nose
@@ -75,7 +75,7 @@ function WithoutScreen() {
   const resetRef = useRef<HTMLButtonElement>(null);
   const [stage, setStage] = useState<"idle" | "flying" | "done">("idle");
   const [pitch, setPitch] = useState(0);
-  const [countered, setCountered] = useState(0);
+  const [, setCountered] = useState(0);
   const [status, setStatus] = useState("");
 
   const tick = useRef<ReturnType<typeof setInterval> | null>(null);

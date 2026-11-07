@@ -787,13 +787,18 @@ a.station-body:hover .station-count {
 
 /* ---------- Index layout ---------- */
 /*
- * The rail is navigation, not a sidebar of extras, so it gets its own column
- * at the page's left edge and the library starts beside it. Under 720px the
- * rail stops being sticky and sits above the content as a short list.
+ * Library first, rail second: the same shape as a pattern page, which is
+ * article then `.pattern-aside`. The column width, the gap and the sticky
+ * offset are deliberately the same numbers as `.pattern-layout` so the two
+ * pages line their right-hand columns up with each other.
+ *
+ * Under 720px the grid collapses to one column. The rail is last in the DOM,
+ * so it would land under the whole card list, where a jump list is no use to
+ * anyone; it is hidden there instead, exactly as `.pattern-aside` is.
  */
 .index-layout {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 260px;
   gap: 56px;
   align-items: start;
   padding-bottom: 96px;
@@ -801,13 +806,6 @@ a.station-body:hover .station-count {
 
 .index-main {
   min-width: 0;
-}
-
-@media (max-width: 1080px) {
-  .index-layout {
-    grid-template-columns: 220px minmax(0, 1fr);
-    gap: 36px;
-  }
 }
 
 @media (max-width: 720px) {
@@ -821,41 +819,118 @@ a.station-body:hover .station-count {
   padding: 48px 0 0;
 }
 
-/* The subtitle carries the display face at the same size as the name above
-   it: it was one line of the h1 until it became a heading of its own, and
-   splitting the markup is not meant to change what the page looks like. */
-.hero-title-line {
-  margin-top: 0;
+/* One word, so it cannot wrap; the floor is set low enough that it still
+   clears the 375px gutters with room to spare. */
+.hero-name {
+  font-size: clamp(44px, 9vw, 72px);
+}
+
+/* Body size, not lede size: the h1 carries the scale here, and this is the
+   sentence that explains what the library holds. */
+.hero-sub {
+  margin: 16px 0 0;
+  max-width: 60ch;
+  color: var(--text-2);
 }
 
 .hero-meta {
   margin-top: 20px;
 }
 
-/* ---------- The rail ---------- */
+/* ---------- The rail ----------
+ *
+ * An Are.na-style stepper: one thin line down the left edge of the list,
+ * small dots on it, and only the active station showing its question and
+ * count. No loop graphics -- no return path, no caps, no triangle.
+ *
+ * Geometry, all of it derived from these three numbers:
+ *
+ *  - the line is 2px at x=3, so its centre is x=4;
+ *  - dots are 8px at x=0, so they are centred on that line;
+ *  - names start at x=28, which is 24px clear of the line.
+ *
+ * Every item is `--rail-item-h` tall whatever its state, which is what stops
+ * the dots moving when a station expands. The height holds a name, the
+ * longest question wrapped to two lines at this column width, the count, and
+ * about 25px of air; `.rail-slot` is that reserved space and clips rather
+ * than grows if a question ever runs longer.
+ */
 .rail {
+  --rail-item-h: 128px;
+  /* 26px name + 6px gap, then 46px of question, 8px, 17px of count. */
+  --rail-slot-h: 71px;
+  /* How far the line runs past the last station before its closing dot. */
+  --rail-tail: 28px;
+
   position: sticky;
   top: 24px;
   align-self: flex-start;
   padding-top: 56px;
+  /* The tail and its closing dot are drawn outside the list's own box, so
+     the column has to reserve the room. */
+  padding-bottom: calc(var(--rail-tail) + 4px);
+}
+
+/*
+ * Short screens, handled by tightening rather than by a scrollbar: the rail
+ * never scrolls inside itself, because a nav that needs scrolling to reach
+ * its last station is worse than one that is simply shorter.
+ *
+ * At full height the rail wants 728px and a 700px window offers 676px, so
+ * the air between stations drops from 25px to 9px and the lead-in halves,
+ * which brings it to 616px. Every station stays the same height as the
+ * others, so nothing jumps. Under 640px of window even that will not fit;
+ * there the rail stops being sticky and scrolls away with the page, which
+ * keeps the last station reachable instead of clipping it.
+ */
+@media (max-height: 820px) {
+  .rail {
+    --rail-item-h: 112px;
+    padding-top: 24px;
+  }
+}
+
+@media (max-height: 639px) {
+  .rail {
+    position: static;
+  }
 }
 
 @media (max-width: 720px) {
   .rail {
-    position: static;
-    padding-top: 32px;
-    padding-bottom: 8px;
+    display: none;
   }
 }
 
-.rail-eyebrow {
-  margin-bottom: 38px;
-}
-
-/* The box the dots and names are measured from: dot centres at x=23, text
-   at x=48, return path at x=3. */
+/* The box the line, the dots and the closing dot are all measured from. */
 .rail-body {
   position: relative;
+}
+
+/* The track: loop grey the whole way down, including the tail. */
+.rail-body::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 0;
+  width: 2px;
+  height: calc(100% + var(--rail-tail));
+  background: var(--loop);
+}
+
+/*
+ * The ink half, painted over the track from the top of the rail to the
+ * bottom of the active station -- its expanded question and count included,
+ * because those sit inside the station's own fixed height.
+ */
+.rail-body::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 0;
+  width: 2px;
+  height: calc((var(--rail-active, 0) + 1) * var(--rail-item-h));
+  background: var(--ink);
 }
 
 .rail-list {
@@ -865,94 +940,40 @@ a.station-body:hover .station-count {
   padding: 0;
 }
 
-/*
- * The return path and both caps in one element: 20px wide between x=3 and
- * x=23 with 10px corners, left/top/bottom borders only. The top and bottom
- * borders become half circles at that width, and the open right side is
- * where the dot column takes over. Height is set from the component, which
- * measures the last item so the bottom cap hugs the After dot rather than
- * the bottom of an expanded After item.
- */
-.rail-return {
-  position: absolute;
-  left: 3px;
-  top: -21px;
-  width: 20px;
-  height: calc(100% + 31px);
-  border: 2px solid var(--loop);
-  border-right: 0;
-  border-radius: 10px;
-  pointer-events: none;
-}
-
+/* Fixed height, every item, every state. This is the no-jump rule. */
 .rail-item {
   position: relative;
-  padding-bottom: 14px;
+  height: var(--rail-item-h);
 }
 
-.rail-item:last-child {
-  padding-bottom: 0;
-}
-
-/* The lead-in above Before: a short line down from the top cap, then the
-   triangle landing on the dot. */
-.rail-lead::before,
-.rail-lead::after {
-  content: "";
+/* Sits at the end of the tail, below the last station. */
+.rail-end {
   position: absolute;
-  pointer-events: none;
-}
-
-.rail-lead::before {
-  left: 22px;
-  top: -11px;
-  width: 2px;
-  height: 18px;
+  left: 0;
+  top: 100%;
+  margin-top: calc(var(--rail-tail) - 4px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
   background: var(--loop);
-}
-
-.rail-lead::after {
-  left: 18px;
-  top: 7px;
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 8px solid var(--loop);
 }
 
 .rail-link {
   display: block;
   position: relative;
-  padding-left: 48px;
+  padding-left: 28px;
   text-decoration: none;
   color: inherit;
 }
 
-/* 12px dot, centred on x=23, 23px from the top of its item. */
+/* 8px dot on the line, centred on the name's first line of text. */
 .rail-dot {
   position: absolute;
-  left: 17px;
-  top: 17px;
-  width: 12px;
-  height: 12px;
+  left: 0;
+  top: 9px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--loop);
-}
-
-/*
- * The inner line: 2px at x=23, from under this item's dot to the top of the
- * next one. It hangs off the item rather than the link so that it spans the
- * whole item, including the question and count an active item expands to
- * show — the link is only as tall as its own text.
- */
-.rail-item:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  left: 22px;
-  top: 31px;
-  bottom: -17px;
-  width: 2px;
   background: var(--loop);
 }
 
@@ -966,9 +987,20 @@ a.station-body:hover .station-count {
   color: var(--rail-upcoming);
 }
 
+/*
+ * Reserved on every station, filled on the active one. The height is fixed
+ * and the overflow hidden, so what is inside can never change the geometry
+ * of the rail.
+ */
+.rail-slot {
+  display: block;
+  height: var(--rail-slot-h);
+  margin-top: 6px;
+  overflow: hidden;
+}
+
 .rail-question {
   display: block;
-  margin-top: 6px;
   font-size: 16px;
   line-height: 23px;
   color: var(--ink);
@@ -979,8 +1011,28 @@ a.station-body:hover .station-count {
   margin-top: 8px;
 }
 
-/* States. Passed and active are ink below the waterline; upcoming is the
-   loop grey, which is also what the return path is drawn in. */
+/* The expanded text appears rather than slides: height is never animated,
+   because animating it is the jump this rail is built to avoid. */
+@keyframes rail-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.rail-item.is-active .rail-slot {
+  animation: rail-reveal 180ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail-item.is-active .rail-slot {
+    animation: none;
+  }
+}
+
+/* States. Ink down to the waterline, loop grey below it. */
 .rail-item.is-passed .rail-name {
   color: var(--text-3);
 }
@@ -994,11 +1046,6 @@ a.station-body:hover .station-count {
   background: var(--ink);
 }
 
-.rail-item.is-passed::after,
-.rail-item.is-active::after {
-  background: var(--ink);
-}
-
 .rail-link:hover .rail-name {
   color: var(--ink);
 }
@@ -1007,14 +1054,6 @@ a.station-body:hover .station-count {
   outline: 2px solid var(--focus);
   outline-offset: 3px;
   border-radius: 2px;
-}
-
-.rail-caption {
-  margin: 16px 0 0;
-  padding-left: 48px;
-  font-size: 13px;
-  line-height: 1.4;
-  color: var(--muted);
 }
 
 /* ---------- Illustration key ---------- */
@@ -4019,32 +4058,21 @@ a.station-body:hover .station-count {
 
 /* ---------- Hand-drawn pattern illustrations ----------
  *
- * Inlined from public/illustrations/patterns/<slug>.svg, with the exported
- * backdrop removed and the ink switched to currentColor, so the drawing is
- * whatever the page's ink currently is rather than a fixed-colour picture.
+ * Served straight from public/illustrations/patterns/<slug>.svg through an
+ * <img>, so the file renders exactly as it was drawn. Each one carries its
+ * own dark rounded card and is drawn in light greys to sit on it, which is
+ * why there is no colour, filter or theme rule here: the drawing is meant to
+ * look identical in light and dark mode. Do not recolour it.
  */
 .pattern-illustration {
   display: block;
   width: 100%;
   height: auto;
-  color: var(--ink);
-
-  /* The export's second grey. Derived from the ink rather than named as its
-     own colour, so the quieter marks stay quieter by the same amount in both
-     themes without a token to keep in step. */
-  --illus-dim: color-mix(in srgb, currentColor 55%, transparent);
+  aspect-ratio: 173 / 98;
 }
 
-/* Stands in for .card-thumb's tile: the same slot, but open rather than a
-   filled rectangle, since the drawing now sits on the card itself. */
+/* The same slot .card-thumb fills: a dark tile across the top of the card,
+   edge to edge, with the drawing's own backdrop standing in for the tile. */
 .card-art {
   display: block;
-  padding: 18px 20px;
-  background: var(--panel);
-  border-bottom: 1px solid var(--line);
-}
-
-.card-art .pattern-illustration {
-  max-width: 190px;
-  margin: 0 auto;
 }

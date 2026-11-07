@@ -20,13 +20,13 @@ export default function Home() {
     <div className="wrap">
       <PatternBrowser cards={cards}>
         <header className="hero">
-          {/* The name, then what it is: two headings rather than one
-              sentence, so the outline reads Calibrate > what it holds. */}
-          <h1 className="display">Calibrate</h1>
-          <h2 className="display hero-title-line">Patterns for human-machine trust</h2>
-          <p className="lede">
-            For autonomous machines that move, lift, cut, and fly, where a bad decision has physical
-            consequences.
+          {/* The name alone. What the library is belongs in the paragraph
+              below and in the page title, not in a second heading. */}
+          <h1 className="display hero-name">Calibrate</h1>
+          <p className="hero-sub">
+            Design patterns for human–machine trust, for vehicles, robots and drones that move,
+            lift, cut and fly. Each pattern starts with a real incident and ends with a design you
+            can try.
           </p>
           <p className="label hero-meta">
             {published.length} {published.length === 1 ? "pattern" : "patterns"}

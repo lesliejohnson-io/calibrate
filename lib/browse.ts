@@ -24,12 +24,12 @@ export type PatternCardData = {
   /** Key into the thumbnail map — the pattern's slug unless it names one. */
   thumbnail: string;
   /**
-   * The hand-drawn illustration, already inlined. It crosses to the client
-   * because the index is a client component: the few KB of markup is the
-   * price of a drawing that follows the theme. `null` for the patterns
-   * nobody has drawn yet, which is most of them.
+   * Where the hand-drawn illustration lives, if one has been drawn. Only the
+   * path and the export frame cross to the client -- the index is a client
+   * component, and the drawing itself is fetched as a file like any other
+   * image. `null` for the patterns nobody has drawn yet.
    */
-  illustration: { viewBox: string; inner: string } | null;
+  illustration: { src: string; width: number; height: number } | null;
 };
 
 export type { Domain, Moment, Status, TrustJob } from "./schema";

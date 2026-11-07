@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { Log, usePrinter, type Line } from "./printout";
+import { Log, usePrinter } from "./printout";
 
 /**
  * A warehouse robot crossing an aisle, with two stop controls: the operator's,

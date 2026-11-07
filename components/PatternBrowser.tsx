@@ -21,7 +21,8 @@ import { MomentRail, type RailNode } from "./MomentRail";
 import { PatternCard } from "./PatternCard";
 
 /**
- * The index: the control-loop rail on the left, the library on the right.
+ * The index: the library, with the moment rail in a sticky column on the
+ * right -- the same column a pattern page puts its contents list in.
  *
  * State lives in the URL so a view can be linked and shared, but the
  * component renders server-side in its default state first, so the whole
@@ -95,8 +96,6 @@ export function PatternBrowser({
 
   return (
     <div className="index-layout">
-      <MomentRail nodes={railNodes} hrefFor={railHref} />
-
       <div className="index-main">
         {children}
 
@@ -209,6 +208,10 @@ export function PatternBrowser({
           </p>
         )}
       </div>
+
+      {/* After the library in the DOM as well as on the page: it is a jump
+          list for what is beside it, so it reads after it. */}
+      <MomentRail nodes={railNodes} hrefFor={railHref} />
     </div>
   );
 }
