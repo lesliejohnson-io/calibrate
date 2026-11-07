@@ -2,7 +2,16 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useStepFocus } from "./printout";
+
 const HOLD_MS = 2000;
+
+/**
+ * The one sentence both sides end on. The two demos differ in what it costs
+ * to get here, not in what happens: the payload is over zone B either way,
+ * and that is the point of running them side by side.
+ */
+const OUTCOME = "Payload released over zone B.";
 
 /** The readout above the control, the same on both screens. */
 function Readout({ state }: { state: string }) {
@@ -25,21 +34,59 @@ function Readout({ state }: { state: string }) {
 }
 
 /**
- * The anti-pattern: the irreversible action behind a single tap, named no more
- * specifically than its menu item. Deliberately inert — there is nothing to
- * demonstrate about a button that just fires.
+ * The anti-pattern: the irreversible action behind a single tap, named no
+ * more specifically than its menu item.
+ *
+ * It is a real button rather than a mock-up, because the demonstration is
+ * how little it asks of you — there is no hold to time and no confirmation
+ * to read, so a plain `<button>` is the whole interaction, Enter and Space
+ * included.
  */
 function WithoutScreen() {
+  const [released, setReleased] = useState(false);
+  const sendFocus = useStepFocus();
+  const resetRef = useRef<HTMLButtonElement>(null);
+
+  const release = () => {
+    if (released) return;
+    setReleased(true);
+    sendFocus(resetRef);
+  };
+
   return (
     <div className="console">
       <p className="console-title">Payload</p>
-      <div className="console-screen">
-        <Readout state="Armed" />
-        <p className="console-button is-fault is-static" aria-hidden="true">
-          <span className="console-shape">■</span>
-          Release payload
+      <div className="console-screen console-crt af-screen">
+        <Readout state={released ? "Released" : "Armed"} />
+
+        {released && <p className="af-outcome">{OUTCOME}</p>}
+
+        <button
+          type="button"
+          className="af-release af-tap"
+          onClick={release}
+          disabled={released}
+          aria-describedby="tap-hint"
+        >
+          <span className="console-shape" aria-hidden="true">
+            ■
+          </span>
+          <span className="console-button-text">Release payload</span>
+        </button>
+
+        <p className="console-hint" id="tap-hint">
+          {released ? "One tap. No way to undo." : "Tap to release the payload."}
         </p>
-        <p className="console-hint">One tap. No second chance.</p>
+
+        <p className="sr-only" role="status">
+          {released ? `${OUTCOME} One tap. No way to undo.` : ""}
+        </p>
+
+        {released && (
+          <button type="button" ref={resetRef} className="console-reset" onClick={() => setReleased(false)}>
+            Reset the demo
+          </button>
+        )}
       </div>
     </div>
   );
@@ -63,6 +110,9 @@ function WithScreen() {
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const keyHeld = useRef(false);
   const reduced = useRef(false);
+  const sendFocus = useStepFocus();
+  const resetRef = useRef<HTMLButtonElement>(null);
+  const holdRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     reduced.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -82,7 +132,8 @@ function WithScreen() {
     setProgress(1);
     setHolding(false);
     setReleased(true);
-  }, [stop]);
+    sendFocus(resetRef);
+  }, [sendFocus, stop]);
 
   const start = useCallback(() => {
     if (released || holding) return;
@@ -117,68 +168,64 @@ function WithScreen() {
     setReleased(false);
     setHolding(false);
     setProgress(0);
+    sendFocus(holdRef);
   };
 
   return (
     <div className="console">
       <p className="console-title">Payload</p>
-      <div className="console-screen">
+      <div className="console-screen console-crt af-screen">
         <Readout state={released ? "Released" : holding ? "Holding" : "Armed"} />
 
-        {released ? (
-          <p className="console-button is-fault is-done">
-            <span className="console-shape" aria-hidden="true">
-              ■
-            </span>
-            Released over zone B
-          </p>
-        ) : (
-          <button
-            type="button"
-            className="console-button is-fault is-hold"
-            aria-describedby="hold-hint"
-            onPointerDown={(e) => {
-              // Capture keeps the hold alive if the finger slides off the
-              // button; not every pointer can be captured, and a hold that
-              // cannot be captured still works.
-              try {
-                e.currentTarget.setPointerCapture(e.pointerId);
-              } catch {
-                /* no capture: pointerup on the button still ends the hold */
-              }
-              start();
-            }}
-            onPointerUp={cancel}
-            onPointerCancel={cancel}
-            onLostPointerCapture={cancel}
-            onKeyDown={(e) => {
-              if (e.key !== " " && e.key !== "Enter") return;
-              e.preventDefault(); // Enter would otherwise fire a click.
-              if (keyHeld.current) return; // ignore auto-repeat
-              keyHeld.current = true;
-              start();
-            }}
-            onKeyUp={(e) => {
-              if (e.key !== " " && e.key !== "Enter") return;
-              keyHeld.current = false;
-              cancel();
-            }}
-            onBlur={() => {
-              keyHeld.current = false;
-              cancel();
-            }}
-          >
-            <span
-              className="console-fill"
-              style={{ transform: `scaleX(${progress})` }}
-              aria-hidden="true"
-            />
-            <span className="console-shape" aria-hidden="true">
-              ■
-            </span>
-            <span className="console-button-text">Release payload over zone B</span>
-          </button>
-        )}
+        {released && <p className="af-outcome">{OUTCOME}</p>}
+
+        <button
+          type="button"
+          ref={holdRef}
+          className={`af-release af-hold${holding ? " is-holding" : ""}`}
+          disabled={released}
+          aria-describedby="hold-hint"
+          onPointerDown={(e) => {
+            // Capture keeps the hold alive if the finger slides off the
+            // button; not every pointer can be captured, and a hold that
+            // cannot be captured still works.
+            try {
+              e.currentTarget.setPointerCapture(e.pointerId);
+            } catch {
+              /* no capture: pointerup on the button still ends the hold */
+            }
+            start();
+          }}
+          onPointerUp={cancel}
+          onPointerCancel={cancel}
+          onLostPointerCapture={cancel}
+          onKeyDown={(e) => {
+            if (e.key !== " " && e.key !== "Enter") return;
+            e.preventDefault(); // Enter would otherwise fire a click.
+            if (keyHeld.current) return; // ignore auto-repeat
+            keyHeld.current = true;
+            start();
+          }}
+          onKeyUp={(e) => {
+            if (e.key !== " " && e.key !== "Enter") return;
+            keyHeld.current = false;
+            cancel();
+          }}
+          onBlur={() => {
+            keyHeld.current = false;
+            cancel();
+          }}
+        >
+          <span
+            className="console-fill"
+            style={{ transform: `scaleX(${released ? 1 : progress})` }}
+            aria-hidden="true"
+          />
+          <span className="console-shape" aria-hidden="true">
+            ■
+          </span>
+          <span className="console-button-text">Release payload over zone B</span>
+        </button>
 
         <p className="console-hint" id="hold-hint">
           {released
@@ -188,11 +235,11 @@ function WithScreen() {
 
         {/* The demo's own state, announced rather than only drawn. */}
         <p className="sr-only" role="status">
-          {released ? "Released over zone B" : holding ? "Holding" : ""}
+          {released ? OUTCOME : holding ? "Holding" : ""}
         </p>
 
         {released && (
-          <button type="button" className="console-reset" onClick={reset}>
+          <button type="button" ref={resetRef} className="console-reset" onClick={reset}>
             Reset the demo
           </button>
         )}

@@ -2702,11 +2702,10 @@ a.station-body:hover .station-count {
 
 /* ---------- Interface illustrations ---------- */
 /*
- * Two drone consoles in the without / with panels: a bezel in --panel around a
- * screen in --surface, ruled the way the readout is. The release control is
- * the one thing on the page that is fault-coloured by its own nature — the
- * action it fires cannot be taken back — and it carries the ■ as well, so the
- * colour is never doing the work alone.
+ * A bezel in --panel around a screen, ruled the way the readout is. The bezel
+ * follows the theme; what sits inside it may not — a screen that carries
+ * .console-crt is black glass in both themes, which is what keeps these
+ * reading as devices on the page rather than holes cut in it.
  */
 .compare-interface .panel {
   padding: 0;
@@ -2769,34 +2768,6 @@ a.station-body:hover .station-count {
   color: var(--ink);
 }
 
-/* The control. A button when it is one; a paragraph on the inert screen. */
-.console-button {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  margin: 0;
-  padding: 13px 14px;
-  overflow: hidden;
-  background: var(--status-fault);
-  border: 1px solid var(--status-fault);
-  border-radius: 2px;
-  font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 1.2;
-  text-align: center;
-  color: var(--on-fault);
-}
-
-.console-button.is-hold {
-  cursor: pointer;
-  touch-action: none; /* a hold must not become a scroll */
-  user-select: none;
-}
-
 /* Elapsed hold time, drawn behind the label. */
 .console-fill {
   position: absolute;
@@ -2809,12 +2780,6 @@ a.station-body:hover .station-count {
 .console-button-text,
 .console-shape {
   position: relative; /* above the fill */
-}
-
-.console-button.is-done {
-  background: var(--tint-fault);
-  border-color: var(--status-fault);
-  color: var(--status-fault);
 }
 
 .console-hint {
@@ -3934,6 +3899,130 @@ a.station-body:hover .station-count {
 .console-crt .sa-release .console-fill {
   background: var(--crt-green);
   opacity: 0.3;
+}
+
+
+/* ---------- Appropriate Friction (the payload console) ----------
+ *
+ * The same black glass and phosphor green as the printed displays, so the
+ * two Before patterns read as one family of instruments rather than two
+ * unrelated widgets. Everything here takes the --crt-* tokens defined on
+ * .console-crt; no new green is introduced.
+ *
+ * Nothing here is red. On these displays a fault is brighter green with more
+ * weight and a glyph beside it (.fc-line.is-fault), and red on yellow belongs
+ * to the emergency stops in Stop Anywhere, which only works as a reservation
+ * while nothing else wears it.
+ *
+ * Scoped to .af-screen rather than to .console-crt because Graceful
+ * Degradation shares .console-readout and is not being restyled here.
+ */
+
+/* The readout, re-drawn for black glass: gridlines in the dim green instead
+   of the page's --edge, and unfilled cells, since there is no panel behind
+   the glass for them to be a lighter shade of. */
+.af-screen .console-readout {
+  background: var(--crt-dim);
+  border-color: var(--crt-dim);
+}
+
+.af-screen .console-cell {
+  background: var(--crt-black);
+}
+
+.af-screen .console-cell dt {
+  color: var(--crt-mid);
+}
+
+.af-screen .console-cell dd {
+  color: var(--crt-green);
+}
+
+/* The outcome, in the display's own voice: the monospace, size and leading of
+   a line on the flight computer, at the brightness this family gives a state
+   that matters. */
+.af-outcome {
+  margin: 0 0 12px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #b9ffc6;
+}
+
+/*
+ * The release control, built on .sa-release's shape: outlined at rest, green
+ * under the hand. The same control on both screens — what differs is how long
+ * the hand has to stay on it.
+ */
+.af-release {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 11px 14px;
+  overflow: hidden;
+  background: none;
+  border: 1px solid var(--crt-mid);
+  border-radius: 2px;
+  font: inherit;
+  font-size: 13px;
+  text-align: center;
+  color: var(--crt-green);
+  cursor: pointer;
+}
+
+.af-release:hover:not(:disabled) {
+  background: #0f2415;
+  border-color: var(--crt-green);
+}
+
+/*
+ * Pressed, on the tap side: filled solid, because there is no elapsed time to
+ * report and the press is the entire interaction. The hold side cannot fill
+ * solid on contact without destroying the one thing it has to show, so it
+ * brightens its outline and lets the sweep below do the filling.
+ */
+.af-tap:active:not(:disabled) {
+  background: var(--crt-green);
+  border-color: var(--crt-green);
+  color: var(--crt-black);
+}
+
+.af-hold {
+  touch-action: none; /* a hold must not become a scroll */
+  user-select: none;
+}
+
+.af-hold.is-holding {
+  border-color: var(--crt-green);
+}
+
+/* Elapsed hold time, swept behind the label. Kept at the opacity Stop
+   Anywhere uses, which is as solid as the fill can be while green text stays
+   legible over the part of the label it has already passed. */
+.af-screen .af-release .console-fill {
+  background: var(--crt-green);
+  opacity: 0.3;
+}
+
+/*
+ * Spent. Drawn the way these displays draw anything that is not live, rather
+ * than dimmed to a muddier green — and the fill goes with it, since a full
+ * bar on a dead control reads as still running.
+ */
+.af-release:disabled {
+  background: none;
+  border-color: var(--crt-dim);
+  color: var(--crt-dim);
+  cursor: default;
+}
+
+.af-release:disabled .console-fill {
+  display: none;
 }
 
 

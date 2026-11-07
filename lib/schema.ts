@@ -12,6 +12,10 @@ export const REVERSIBILITY = ["reversible", "costly", "irreversible"] as const;
 export const STATUSES = ["seed", "draft", "reviewed", "stable"] as const;
 export const DOMAINS = [
   "automotive",
+  // Medical devices generally — a therapy machine, an infusion pump, a
+  // monitor. "surgical" stays for robots that operate on a patient, which is
+  // a narrower thing with its own literature.
+  "medical",
   "surgical",
   "industrial",
   "drone",
