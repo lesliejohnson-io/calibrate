@@ -1,22 +1,20 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import {
   availableDomains,
   DEFAULT_STATE,
+  domainCounts,
   filterCards,
-  GROUP_BY,
-  GROUP_LABELS,
   groupCards,
   isFiltered,
-  parseState,
-  stateToQuery,
-  type BrowseState,
   type Domain,
   type PatternCardData,
 } from "@/lib/browse";
 import { humanize } from "@/lib/format";
 import { MOMENTS, type Moment } from "@/lib/schema";
+import { useBrowse } from "./BrowseProvider";
+import { DomainFilter } from "./DomainFilter";
 import { MomentRail, type RailNode } from "./MomentRail";
 import { PatternCard } from "./PatternCard";
 
@@ -27,6 +25,10 @@ import { PatternCard } from "./PatternCard";
  * State lives in the URL so a view can be linked and shared, but the
  * component renders server-side in its default state first, so the whole
  * library is in the HTML without JavaScript.
+ *
+ * The grouping is fixed: the five moments, in the order the loop runs. The
+ * controls are one row -- search, then the domain filter -- because filtering
+ * is not the point of the page and should not be the first thing on it.
  */
 export function PatternBrowser({
   cards,
@@ -36,38 +38,34 @@ export function PatternBrowser({
   /** The page's own masthead, which sits above the controls in the column. */
   children?: React.ReactNode;
 }) {
-  const [state, setState] = useState<BrowseState>(DEFAULT_STATE);
-  const tabsRef = useRef<HTMLDivElement>(null);
-
-  // Adopt whatever the URL says once mounted, and follow back/forward.
-  useEffect(() => {
-    const sync = () => setState(parseState(window.location.search));
-    sync();
-    window.addEventListener("popstate", sync);
-    return () => window.removeEventListener("popstate", sync);
-  }, []);
-
-  const update = useCallback((next: BrowseState) => {
-    setState(next);
-    const url = `${window.location.pathname}${stateToQuery(next)}${window.location.hash}`;
-    window.history.replaceState(null, "", url);
-  }, []);
+  /* The filter lives in the layout, because the navigation drawer carries the
+     same one on pages this component never renders on. */
+  const { state, update } = useBrowse();
+  const searchRef = useRef<HTMLInputElement>(null);
 
   const domains = useMemo(() => availableDomains(cards), [cards]);
+  // Counted over the library the reader can actually reach, so revealing
+  // seeds changes the numbers in the popover along with the results.
+  const counts = useMemo(
+    () => domainCounts(state.showSeeds ? cards : cards.filter((c) => c.status !== "seed")),
+    [cards, state.showSeeds],
+  );
   const visible = useMemo(() => filterCards(cards, state), [cards, state]);
-  const groups = useMemo(() => groupCards(visible, state.group), [visible, state.group]);
+  const groups = useMemo(() => groupCards(visible), [visible]);
 
+  // All five moments, always, so the rail keeps its shape while a filter
+  // narrows the page. A moment with nothing in it reads as unavailable
+  // rather than disappearing.
   const railNodes = useMemo<RailNode[]>(
-    () => MOMENTS.map((moment) => ({ moment, count: visible.filter((c) => c.moment === moment).length })),
+    () =>
+      MOMENTS.map((moment) => ({
+        moment,
+        count: visible.filter((c) => c.moment === moment).length,
+      })),
     [visible],
   );
 
-  // Section anchors only exist while grouping by Moment; otherwise the rail
-  // sends people to the Moment's own page rather than a link that goes nowhere.
-  const railHref = useCallback(
-    (moment: Moment) => (state.group === "moment" ? `#moment-${moment}` : `/moments/${moment}`),
-    [state.group],
-  );
+  const railHref = useCallback((moment: Moment) => `#moment-${moment}`, []);
 
   const toggleDomain = (domain: Domain) => {
     const has = state.domains.includes(domain);
@@ -77,22 +75,12 @@ export function PatternBrowser({
     });
   };
 
-  // Roving focus across the group-by tabs.
-  const onTabKeyDown = (event: React.KeyboardEvent, index: number) => {
-    const keys: Record<string, number> = {
-      ArrowLeft: index - 1,
-      ArrowRight: index + 1,
-      Home: 0,
-      End: GROUP_BY.length - 1,
-    };
-    const target = keys[event.key];
-    if (target === undefined) return;
-    event.preventDefault();
-    const next = (target + GROUP_BY.length) % GROUP_BY.length;
-    update({ ...state, group: GROUP_BY[next] });
-    const buttons = tabsRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
-    buttons?.[next]?.focus();
+  const clearQuery = () => {
+    update({ ...state, query: "" });
+    searchRef.current?.focus();
   };
+
+  const clearDomains = () => update({ ...state, domains: [] });
 
   return (
     <div className="index-layout">
@@ -101,94 +89,119 @@ export function PatternBrowser({
 
         <div className="controls">
           <div className="controls-row">
-            <label className="search">
-              <span className="sr-only">Search patterns</span>
+            <div className="search">
+              <label className="sr-only" htmlFor="pattern-search">
+                Search patterns
+              </label>
               <svg className="search-icon" viewBox="0 0 16 16" aria-hidden="true">
                 <circle cx="7" cy="7" r="4.75" fill="none" stroke="currentColor" strokeWidth="1.5" />
                 <path d="M10.5 10.5 14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
               <input
+                id="pattern-search"
+                ref={searchRef}
                 type="search"
                 placeholder="Search patterns"
                 value={state.query}
                 onChange={(e) => update({ ...state, query: e.target.value })}
+                /* Escape empties the box, the way it does in a find bar. The
+                   native search-input clear is hidden in CSS, so there is one
+                   cross rather than two. */
+                onKeyDown={(e) => {
+                  if (e.key !== "Escape" || !state.query) return;
+                  e.preventDefault();
+                  clearQuery();
+                }}
               />
-            </label>
-
-            <div className="control">
-              <span className="mono-label" id="group-by-label">
-                Group by
-              </span>
-              <div className="tabs" role="tablist" aria-labelledby="group-by-label" ref={tabsRef}>
-                {GROUP_BY.map((group, i) => {
-                  const selected = state.group === group;
-                  return (
-                    <button
-                      key={group}
-                      type="button"
-                      role="tab"
-                      id={`tab-${group}`}
-                      aria-selected={selected}
-                      aria-controls="pattern-results"
-                      tabIndex={selected ? 0 : -1}
-                      className="tab"
-                      onClick={() => update({ ...state, group })}
-                      onKeyDown={(e) => onTabKeyDown(e, i)}
-                    >
-                      {GROUP_LABELS[group]}
-                    </button>
-                  );
-                })}
-              </div>
+              {state.query && (
+                <button
+                  type="button"
+                  className="search-clear"
+                  aria-label="Clear search"
+                  onClick={clearQuery}
+                >
+                  <svg viewBox="0 0 12 12" aria-hidden="true">
+                    <path
+                      d="M2.5 2.5 9.5 9.5M9.5 2.5 2.5 9.5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </button>
+              )}
             </div>
-          </div>
 
-          <div className="controls-row">
-            <span className="mono-label" id="domain-label">
-              Domain
-            </span>
             {/* Seeds have no control of their own: ?status=all still reveals
                 them, which is all the About page promises. */}
-            <div className="chips" role="group" aria-labelledby="domain-label">
-              {domains.map((domain) => (
-                <button
-                  key={domain}
-                  type="button"
-                  className="filter-chip"
-                  aria-pressed={state.domains.includes(domain)}
-                  onClick={() => toggleDomain(domain)}
-                >
-                  {humanize(domain)}
-                </button>
-              ))}
-            </div>
+            <DomainFilter
+              domains={domains}
+              counts={counts}
+              selected={state.domains}
+              onToggle={toggleDomain}
+              onClear={clearDomains}
+            />
           </div>
-        </div>
 
-        <div id="pattern-results" role="tabpanel" aria-labelledby={`tab-${state.group}`} tabIndex={-1}>
-          {groups.length === 0 ? (
-            <div className="empty empty-results">
-              <p>No patterns match these filters.</p>
-              <button type="button" className="clear-filters" onClick={() => update(DEFAULT_STATE)}>
-                Clear filters
+          {/* What is on, spelled out and removable one at a time. The button
+              says how many; these say which. */}
+          {state.domains.length > 0 && (
+            <div className="active-filters" role="group" aria-label="Active domain filters">
+              {state.domains.map((domain) => (
+                <span key={domain} className="active-chip">
+                  {humanize(domain)}
+                  <button
+                    type="button"
+                    className="active-chip-x"
+                    aria-label={`Remove ${humanize(domain)} filter`}
+                    onClick={() => toggleDomain(domain)}
+                  >
+                    <svg viewBox="0 0 10 10" aria-hidden="true">
+                      <path
+                        d="M2 2 8 8M8 2 2 8"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </button>
+                </span>
+              ))}
+              <button type="button" className="clear-filters-inline" onClick={clearDomains}>
+                Clear all
               </button>
             </div>
+          )}
+        </div>
+
+        <div id="pattern-results" className="index-results">
+          {groups.length === 0 ? (
+            <p className="no-results">
+              No patterns match.{" "}
+              <button
+                type="button"
+                className="clear-filters-inline"
+                onClick={() => update(DEFAULT_STATE)}
+              >
+                Clear filters
+              </button>
+            </p>
           ) : (
             groups.map((group) => (
               <section
                 key={group.key}
                 id={group.anchor}
                 className="group"
-                aria-labelledby={group.name ? `group-${group.key}` : undefined}
+                aria-labelledby={`group-${group.key}`}
               >
-                {group.name && (
-                  <header className="group-head">
-                    <h2 id={`group-${group.key}`} className="group-name">
-                      {group.name}
-                    </h2>
-                    {group.purpose && <p className="group-question">{group.purpose}</p>}
-                  </header>
-                )}
+                <header className="group-head">
+                  <h2 id={`group-${group.key}`} className="group-name">
+                    {group.name}
+                  </h2>
+                  <p className="group-question">{group.purpose}</p>
+                </header>
                 <ul className="cards">
                   {group.cards.map((card) => (
                     <PatternCard key={card.slug} pattern={card} />
@@ -202,7 +215,11 @@ export function PatternBrowser({
         {isFiltered(state) && groups.length > 0 && (
           <p className="result-count label">
             {visible.length} of {cards.length} patterns shown ·{" "}
-            <button type="button" className="clear-filters-inline" onClick={() => update(DEFAULT_STATE)}>
+            <button
+              type="button"
+              className="clear-filters-inline"
+              onClick={() => update(DEFAULT_STATE)}
+            >
               Clear filters
             </button>
           </p>

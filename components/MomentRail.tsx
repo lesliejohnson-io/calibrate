@@ -33,6 +33,17 @@ export function MomentRail({
   const [active, setActive] = useState<Moment>(nodes[0]?.moment ?? "before");
 
   /*
+   * A moment nothing matched has no section to scroll to, so its station is
+   * dead: greyed, unclickable, and carrying the zero so the reader can see
+   * why. The rail still lists all five -- the shape of the library is the
+   * argument it is making, and hiding stations while a filter is on would
+   * redraw the argument every keystroke.
+   */
+  const firstLive = nodes.find((n) => n.count > 0)?.moment;
+  const liveActive = nodes.some((n) => n.moment === active && n.count > 0);
+  const current = liveActive ? active : (firstLive ?? active);
+
+  /*
    * The station a click is currently scrolling to. While this is set the
    * observer is ignored: a click on After scrolls the page past During,
    * Transition and Failure, and without this the rail would mark each of
@@ -43,7 +54,15 @@ export function MomentRail({
   const releaseTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const order = nodes.map((n) => n.moment);
-  const activeIndex = Math.max(0, order.indexOf(active));
+  const activeIndex = Math.max(0, order.indexOf(current));
+
+  /*
+   * How far the ink half of the line runs. It is the active station, except
+   * when a filter has emptied every one of them: nothing has been reached,
+   * so the waterline is above the first dot rather than level with it.
+   * -1 is the height calc's zero.
+   */
+  const inkIndex = firstLive === undefined ? -1 : activeIndex;
 
   /* The topmost section crossing ~30% down the viewport is the active one. */
   useEffect(() => {
@@ -107,34 +126,55 @@ export function MomentRail({
           needs: its height is that many item heights. */}
       <div
         className="rail-body"
-        style={{ "--rail-active": activeIndex } as React.CSSProperties}
+        style={{ "--rail-active": inkIndex } as React.CSSProperties}
       >
         <ol className="rail-list">
           {nodes.map((node, i) => {
-            const isActive = node.moment === active;
-            const state = isActive ? "active" : i < activeIndex ? "passed" : "upcoming";
+            const off = node.count === 0;
+            const isActive = !off && node.moment === current;
+            const state = off
+              ? "disabled"
+              : isActive
+                ? "active"
+                : i < activeIndex
+                  ? "passed"
+                  : "upcoming";
+
+            const inside = (
+              <>
+                <span className="rail-dot" aria-hidden="true" />
+                <span className="rail-name">{MOMENT_LABELS[node.moment]}</span>
+                {/* Reserved on every item, filled on one -- and on a dead
+                    station, where the count is the whole explanation. */}
+                <span className="rail-slot">
+                  {isActive && (
+                    <span className="rail-question">{MOMENT_QUESTIONS[node.moment]}</span>
+                  )}
+                  {(isActive || off) && (
+                    <span className="label rail-count">
+                      {node.count} {node.count === 1 ? "pattern" : "patterns"}
+                    </span>
+                  )}
+                </span>
+              </>
+            );
+
             return (
               <li key={node.moment} className={`rail-item is-${state}`}>
-                <a
-                  href={hrefFor(node.moment)}
-                  className="rail-link"
-                  aria-current={isActive ? "true" : undefined}
-                  onClick={() => goTo(node.moment)}
-                >
-                  <span className="rail-dot" aria-hidden="true" />
-                  <span className="rail-name">{MOMENT_LABELS[node.moment]}</span>
-                  {/* Reserved on every item, filled on one. */}
-                  <span className="rail-slot">
-                    {isActive && (
-                      <>
-                        <span className="rail-question">{MOMENT_QUESTIONS[node.moment]}</span>
-                        <span className="label rail-count">
-                          {node.count} {node.count === 1 ? "pattern" : "patterns"}
-                        </span>
-                      </>
-                    )}
+                {off ? (
+                  <span className="rail-link is-off" aria-disabled="true">
+                    {inside}
                   </span>
-                </a>
+                ) : (
+                  <a
+                    href={hrefFor(node.moment)}
+                    className="rail-link"
+                    aria-current={isActive ? "true" : undefined}
+                    onClick={() => goTo(node.moment)}
+                  >
+                    {inside}
+                  </a>
+                )}
               </li>
             );
           })}

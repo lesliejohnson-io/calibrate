@@ -369,6 +369,9 @@ export const INTERFACE_COMPONENTS = [
   "handoff",
   "return-of-control",
   "shift-handover",
+  "capability-disclosure",
+  "readiness-check",
+  "provenance-log",
 ] as const;
 export type InterfaceComponent = (typeof INTERFACE_COMPONENTS)[number];
 

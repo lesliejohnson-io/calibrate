@@ -9,21 +9,34 @@
  * an explicit one, which the inline script in the layout re-applies on the
  * next visit before first paint.
  */
-export function ThemeToggle() {
-  const toggle = () => {
-    const root = document.documentElement;
-    const current =
-      root.dataset.theme ??
-      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    const next = current === "dark" ? "light" : "dark";
+export type Theme = "light" | "dark";
 
-    root.dataset.theme = next;
-    try {
-      localStorage.setItem("theme", next);
-    } catch {
-      // Private browsing or blocked storage: the choice just won't persist.
-    }
-  };
+/**
+ * The theme actually in force: an explicit choice if one has been made,
+ * otherwise whatever the system is asking for. Call it from an effect — it
+ * reads the DOM and the media query, so it has no answer on the server.
+ */
+export function resolvedTheme(): Theme {
+  const root = document.documentElement;
+  const chosen = root.dataset.theme;
+  if (chosen === "dark" || chosen === "light") return chosen;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+/** Flips the theme and remembers it. Returns the one now in force. */
+export function toggleTheme(): Theme {
+  const next: Theme = resolvedTheme() === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  try {
+    localStorage.setItem("theme", next);
+  } catch {
+    // Private browsing or blocked storage: the choice just won't persist.
+  }
+  return next;
+}
+
+export function ThemeToggle() {
+  const toggle = () => void toggleTheme();
 
   return (
     <button

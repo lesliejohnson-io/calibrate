@@ -8,7 +8,6 @@ import { TocDisclosure } from "@/components/TocDisclosure";
 import {
   EVIDENCE,
   EVIDENCE_DEFINITIONS,
-  getAllPatterns,
   humanize,
   RELATION_DEFINITIONS,
   RELATIONS,
@@ -19,7 +18,7 @@ import {
 export const metadata: Metadata = {
   title: "About",
   description:
-    "What calibrated trust means, what a pattern means in this library, how its pages are put together, how much to trust each example, and how to cite it.",
+    "What calibrated trust means, what a pattern means in this library, how much to trust each example, and how to cite it.",
 };
 
 /** The site's production origin, used in the citation format. */
@@ -35,55 +34,10 @@ const LEE_SEE_URL = "https://journals.sagepub.com/doi/10.1518/hfes.46.1.50_30392
  */
 const PUBLISHED_STATUSES = ["draft", "reviewed", "stable"] as const;
 
-/** The sections of a pattern page, and the question each one answers. */
-const ANATOMY: { name: string; note: React.ReactNode }[] = [
-  {
-    name: "Title and intent",
-    note: "The pattern's number and name, then one sentence on what it does.",
-  },
-  {
-    name: "The story",
-    note: "A real incident where this pattern was missing, from a documented source.",
-  },
-  {
-    name: "What went wrong",
-    note: "The anti-pattern: the general shape of the failure, named so you can spot it in your own systems.",
-  },
-  {
-    name: "The pattern",
-    note: (
-      <>
-        One sentence, starting with <em>Therefore</em>, that states the solution.
-      </>
-    ),
-  },
-  {
-    name: "Try it",
-    note: "A working demo of the same moment, without the pattern and with it.",
-  },
-  { name: "How it works", note: "The mechanism, step by step, with the key moment marked." },
-  { name: "When to use it", note: "The conditions that justify it, and the ones that rule it out." },
-  {
-    name: "Design considerations",
-    note: "Rules for applying it well, each with the reasoning behind it.",
-  },
-  {
-    name: "In the field",
-    note: "Real examples, each labelled by how much evidence stands behind it.",
-  },
-  {
-    name: "Related patterns",
-    note: "What this pattern requires, precedes, complements or works against.",
-  },
-  { name: "Sources", note: "What the pattern is built on." },
-  { name: "Still figuring out", note: "Open questions: the learning, shown in public." },
-];
-
 /** This page's H2 sections, in the order they appear. */
 const TOC: TocItem[] = [
   { id: "calibrated-trust", label: "What is calibrated trust?" },
   { id: "what", label: "What a pattern means here" },
-  { id: "anatomy", label: "Anatomy of a pattern page" },
   { id: "evidence", label: "How much to trust each example" },
   { id: "status", label: "Status" },
   { id: "relations", label: "How patterns relate" },
@@ -92,8 +46,6 @@ const TOC: TocItem[] = [
 ];
 
 export default function AboutPage() {
-  const example = getAllPatterns()[0];
-
   return (
     <div className="wrap pattern-layout">
       <article className="pattern about">
@@ -130,7 +82,7 @@ export default function AboutPage() {
               patterns are reusable ways to design for the right amount.
             </p>
           </div>
-          <p className="anatomy-caption">
+          <p className="section-caption">
             <em>
               The idea of calibrated trust comes from human factors research, notably Lee &amp;
               See,{" "}
@@ -163,29 +115,6 @@ export default function AboutPage() {
               feature.
             </p>
           </div>
-        </section>
-
-        <section className="section" aria-labelledby="anatomy">
-          <h2 id="anatomy" className="section-head">
-            Anatomy of a pattern page
-          </h2>
-          <p className="prose">
-            Each page tells the same story in the same order: something went wrong, here&apos;s the
-            name for it, and here&apos;s the design that prevents it.
-          </p>
-          <ol className="anatomy">
-            {ANATOMY.map((row, i) => (
-              <li key={row.name} className="anatomy-row">
-                <span className="anatomy-num">{String(i + 1).padStart(2, "0")}</span>
-                <span className="anatomy-name">{row.name}</span>
-                <span className="anatomy-note">{row.note}</span>
-              </li>
-            ))}
-          </ol>
-          <p className="anatomy-caption">
-            Sections appear only when there&apos;s something to put in them, so a young pattern is
-            short rather than padded with empty headings.
-          </p>
         </section>
 
         <section className="section" aria-labelledby="evidence">
@@ -223,7 +152,7 @@ export default function AboutPage() {
               </div>
             ))}
           </dl>
-          <p className="anatomy-caption">
+          <p className="section-caption">
             Candidate patterns that are only a name and an idea aren&apos;t shown until
             they&apos;re written up.
           </p>
@@ -258,16 +187,6 @@ export default function AboutPage() {
               Johnson, L. (2026). {"{Pattern name}"}.{" "}
               <em>Calibrate: Patterns for human&ndash;machine trust</em>. {SITE}
             </p>
-            {example && (
-              <>
-                <p>For example:</p>
-                <p className="cite-format">
-                  Johnson, L. (2026). {example.name}.{" "}
-                  <em>Calibrate: Patterns for human&ndash;machine trust</em>. {SITE}/patterns/
-                  {example.slug}
-                </p>
-              </>
-            )}
             <p>
               The patterns are shareable under CC BY 4.0: you&apos;re free to quote and adapt them
               with credit. The <Link href="/changelog">changelog</Link> records what changed and
@@ -287,14 +206,6 @@ export default function AboutPage() {
               autonomous ones.
             </p>
             <p>
-              In a university research lab, I designed software you could talk to. For a
-              longitudinal health study, I designed a voice-enabled tablet from scratch that read
-              each question aloud, so participants with low reading fluency could answer on their
-              own. Then I watched field teams in rural Appalachia run the study, and redesigned
-              their onboarding. At a payments company, I saw how students struggled to pay in
-              distracting environments, and redesigned the flow to be as simple as autopay.
-            </p>
-            <p>
               Now the machines move. A car hands the wheel back at highway speed; a drone holds
               position until someone says go. The design of those moments is what this library is
               about.
@@ -304,7 +215,11 @@ export default function AboutPage() {
               sort the patterns I&apos;ve uncovered. Patterns stay drafts until I find clear
               evidence, and the open questions on each page are ones I haven&apos;t answered yet.
               If you work in autonomy, robotics or human factors and something here is wrong or
-              missing, <a href="mailto:leslie@lesliejohnson.io">please tell me</a>.
+              missing,{" "}
+              <a href="mailto:leslie@lesliejohnson.io?subject=From%20Calibrate%20site">
+                please let me know
+              </a>
+              ! I read every email.
             </p>
           </div>
           <SocialLinks />

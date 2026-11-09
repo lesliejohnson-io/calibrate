@@ -1,7 +1,7 @@
 ---
 number: 11
 name: "Readiness Check"
-intent: "The system confirms the human is actually able to supervise — looking, present, hands available — and escalates when they are not, instead of treating a body in the seat as a human in the loop."
+intent: "The system confirms the person can actually supervise (looking, present, hands ready) and escalates when they can't, instead of treating a body in the seat as a person in the loop."
 # The index card's line (redesign-handoff.md §2). Drafted on the redesign
 # canvas, 2026-11-05 — not yet reviewed.
 cardIntent: "The system confirms the human can actually supervise, and escalates when they cannot."
@@ -14,7 +14,7 @@ autonomy: [2, 3]
 domains: [automotive]
 
 status: draft
-updated: "2026-10-30"
+updated: "2026-11-09"
 
 steps:
   - title: "Supervision assumed"
@@ -31,9 +31,35 @@ steps:
 
 antiPattern: "Body in the Seat"
 
+interface:
+  component: "readiness-check"
+
+demoNote: "Simplified illustration."
+
+cautionaryTale:
+  title: "A hands-on-wheel check misses a driver who isn't watching"
+  date: "March 23, 2018"
+  place: "Mountain View, California"
+  story: >-
+    During the morning commute on US-101, a Tesla Model X on Autopilot
+    steered left out of its lane into the gore area where an exit ramp
+    splits off. In the last five seconds it accelerated from about 63 to
+    nearly 71 mph and struck the end of a concrete median barrier, where a
+    crash cushion had been damaged in an earlier collision and not repaired.
+    The driver, likely distracted by a game on his phone, had an
+    unobstructed view of the hazard ahead and did nothing — no braking, no
+    steering. The car's way of checking that he was engaged was sensing his
+    hands on the wheel, and it hadn't detected them for the last six
+    seconds. He died of his injuries.
+  sourceId: ntsb-har-20-01
+
+therefore: >-
+  Check that the person can actually supervise (looking, present, hands
+  ready), escalate when they can't, and stop safely if nobody answers.
+
 without:
   steps: ["Human in the seat", "Attention elsewhere", "Nobody supervising"]
-  caption: "Body in the Seat: presence is treated as attention. At Tempe the NTSB found the probable cause was the operator's failure to monitor the road and the automation because she was visually distracted by her phone; Uber had cameras watching operators but did not spot-check that they were paying attention."
+  caption: "The car had a check, but it measured the wrong thing. Hands on a wheel show that a hand is there, not that eyes are on the road, and the NTSB named the car's ineffective monitoring of driver engagement as a cause of the crash.[cite:ntsb-har-20-01] In the final fifteen minutes it raised no hands-on warning at all, though his hands came off the wheel repeatedly for more than ten seconds at a time.[cite:ntsb-har-20-01] Presence was treated as attention."
 
 with:
   steps: ["Attention checked", "Escalating prompts", "Stop if unanswered"]
@@ -47,7 +73,26 @@ related:
     type: precedes
     note: "A takeover request assumes someone is ready to receive it. This is the check that assumption rests on, and the reason the escalation ends in a stop rather than a handover."
 
+review:
+  - "Mechanism steps: drafted. The escalation ladder in steps 3 and 4 is sourced from Super Cruise; the step titles, details and the fifth step are not."
+  - "Tale verified against NTSB/HAR-20/01 this pass: 9:27 a.m. on March 23, 2018, a 2017 Tesla Model X P100D travelling south on US-101 in Mountain View; “the vehicle moved to the left and entered the gore” dividing the main lanes from the left exit ramp to SR-85; “During the 5 seconds leading up to the crash, the Tesla SUV accelerated from about 63 mph to nearly 71 mph at impact”; “The crash attenuator was positioned at the end of a concrete median barrier”, “in a damaged and nonoperational condition … due to the California Highway Patrol's failure to report the damage following a previous crash and systemic problems with the California Department of Transportation's maintenance division”; the probable cause's “distraction likely from a cell phone game application”; “About 6 seconds before the crash, no driver-applied steering wheel torque was detected by Autosteer”, continuing “until the impact”; and “he died from blunt-force trauma injuries”. Finding 15: “Because monitoring of driver-applied steering wheel torque is an ineffective surrogate measure of driver engagement, performance standards should be developed…”."
+  - "Tale corrected: the five seconds are the distraction, not the view. The draft read “had about five seconds of clear view of the barrier and did nothing.” The report has two separate figures — “The Tesla driver was likely distracted for at least 5 seconds, as shown by his lack of evasive action”, and “During the final 4 seconds of travel prior to impact, the Tesla accelerated toward the crash attenuator and the driver took no evasive braking or steering action” — and locates the unobstructed view at 375 feet out: “the vehicle was centered between the two lines delineating the gore with no vehicles ahead to impede the driver's view of the approaching hazard.” No duration is given for the clear view. Rewritten as the five-second acceleration plus the unobstructed view, without putting a number on the view."
+  - "Anti-pattern corrected: the warnings were not late, they were absent. The draft read “Its warnings came too late to prompt a response.” The report: “during the final 15 minutes before the crash, the system did not provide any visual or audible alerts warning the driver to put his hands on the steering wheel even though his hands came off the steering wheel on multiple occasions for time periods exceeding 10 seconds”, and “During the last 60 seconds before the crash, the system did not detect driver-applied steering wheel torque 43 percent of the time and provided no warnings to the driver.” It also allowed hands off “for up to 3 minutes under certain highway driving conditions”. Silence is a stronger version of the point, and the anti-pattern now says that instead."
+  - "The “very poor at monitoring automated systems” claim is now sourced, and no longer attributed to Williston. HAR-20/01 §2.3.1: “drivers are poor at monitoring automation and do not perform well on tasks requiring passive vigilance”, citing Parasuraman and Riley 1997, Moray and Inagaki 2000 and others. The report says drivers, not people, and is relaying the human-factors literature rather than making a finding, so the Notes say “drivers” and credit the report with repeating it."
+  - "Demo invents its panel. Nothing in it is a reading from the report: the toggles, the ten seconds to the hazard, the four rungs and their wording are written for this page. What is taken from the report is the failure — engagement assessed from the steering wheel, no hands detected for the final six seconds, and nothing raised. The ladder's shape is Super Cruise's, ending in a slowdown to a stop."
+
+openQuestions:
+  - "Which moment does this belong to? It's filed under Before because the check decides whether the system can engage, but re-checking is squarely During."
+  - "Is attention monitoring worth it at partial automation, or does it mostly make an unsupervisable task look supervised? Tempe suggests the real problem wasn't missing monitoring but expecting a person to watch an automated system for hours."
+
 sources:
+  - id: ntsb-har-20-01
+    title: "Collision Between a Sport Utility Vehicle Operating With Partial Driving Automation and a Crash Attenuator, Mountain View, California"
+    author: "National Transportation Safety Board"
+    year: 2020
+    url: "https://www.ntsb.gov/investigations/AccidentReports/Reports/HAR2001.pdf"
+    type: incident-report
+    note: "Observed. NTSB/HAR-20/01, adopted February 25, 2020. The probable cause names the Autopilot system steering into the gore area, the driver's lack of response due to distraction likely from a cell phone game application and overreliance on the system, and contributing to it “the Tesla vehicle's ineffective monitoring of driver engagement, which facilitated the driver's complacency and inattentiveness.” Finding 15 is the one this pattern rests on: monitoring driver-applied steering wheel torque is “an ineffective surrogate measure of driver engagement.” Section 2.2.4.5 sets out how the system assessed engagement and what it did not do with the result: no hands-on alert in the final fifteen minutes, hands off permitted for up to three minutes, and no alert when the system lost lane line prediction and steered left. Section 2.3.1 is the vigilance argument, that “drivers are poor at monitoring automation and do not perform well on tasks requiring passive vigilance”, relayed from the human-factors literature."
   - id: ntsb-har-19-03
     title: "Collision Between Vehicle Controlled by Developmental Automated Driving System and Pedestrian, Tempe, Arizona"
     author: "National Transportation Safety Board"
@@ -74,18 +119,24 @@ sources:
     url: "https://journals.sagepub.com/doi/10.1518/hfes.46.1.50_30392"
     type: paper
     note: "The calibration argument behind the pattern: reliance has to match capability, and a supervisor who has stopped supervising is the clearest case of it not doing so."
-
-review:
-  - "Needs demo (see DEMOS.md)"
-  - "Needs a cautionary tale"
-  - "Mechanism steps: drafted. The escalation ladder in steps 3 and 4 is sourced from Super Cruise; the step titles, details and the fifth step are not."
-  - "Unsourced claim: “The NTSB's framing after Williston was that humans are very poor at monitoring automated systems”. It comes from the research notes, but the Williston report (NTSB/HAR-17/02) is not among this entry's sources — it is cited on capability-disclosure. Either add it here or drop the sentence's attribution."
-
-openQuestions:
-  - "The research leaves this pattern's moment unsettled: it is written as Before but continues During, and the notes ask whether it belongs in Before, During, or a new Setup bucket. It sits in Before here because the check gates engagement, but the re-check step is squarely During."
-  - "Whether attention monitoring earns its keep at level 2, or whether it mostly makes a fundamentally unsupervisable task look supervised. Tempe suggests the monitoring was not the missing piece so much as the expectation that a person could watch an automated system for hours."
 ---
 
-The NTSB's framing after Williston was that humans are very poor at monitoring automated systems, and this pattern is the uncomfortable consequence of taking that seriously. If supervision is the safety case, then supervision is a system component, and an unverified component is a guess. Uber had cameras pointed at its operators and did not check what they showed.[cite:ntsb-har-19-03] The cameras were not the control; looking at them would have been.
+## Design considerations
 
-What makes the Super Cruise version work is that the ladder ends somewhere.[cite:gmc-super-cruise] Flashing, chiming and speaking are all ways of asking, and a system that only asks has no answer for the case where nobody replies — which is precisely the case the check exists for. Slowing to a stop is the part that makes the rest honest. The harder question is the one the research leaves open: if an operator cannot reliably watch an automated system for an hour, a check that catches them not watching has established something true without making the arrangement sound.
+- **Measure attention, not presence.** Hands on the wheel or a body in the seat doesn't mean someone is watching.[cite:ntsb-har-20-01]
+- **Treat supervision as part of the system.** If a person watching is the safety plan, it has to be verified like any other component. Uber had cameras pointed at its operators and didn't check what they showed.[cite:ntsb-har-19-03]
+- **Escalate in steps.** Start quietly, then insist.[cite:gmc-super-cruise]
+- **End the ladder somewhere.** Flashing, chiming and speaking are all ways of asking. A system that only asks has no answer for when nobody replies, which is the very case the check exists for. Slowing to a stop is what makes the rest honest.[cite:gmc-super-cruise]
+- **Keep checking while running.** Attention lapses during the task, not just before it.
+
+## In the field
+
+**Observed · Automotive.** [Tesla, Mountain View](#tale): engagement was assessed from steering wheel torque, no hands were detected for the final six seconds, and the NTSB found that torque is an ineffective surrogate for engagement.[cite:ntsb-har-20-01]
+
+**Observed · Automotive.** Uber, Tempe. The NTSB found the operator was visually distracted by her phone, and that Uber had cameras watching operators but didn't check that they were paying attention.[cite:ntsb-har-19-03] Tempe is the opening story on [The Handoff](/patterns/handoff).
+
+**Observed · Automotive.** Super Cruise checks attention with an infrared camera on the steering column that tracks head position and eye movement,[cite:seeing-machines] and escalates through a flashing light bar, chimes and seat vibration, then a voice prompt, to a slowdown to a stop if the driver still doesn't respond.[cite:gmc-super-cruise]
+
+## Notes
+
+The NTSB has relayed the human-factors finding that drivers are poor at monitoring automation and do not perform well on tasks requiring passive vigilance,[cite:ntsb-har-20-01] and this pattern is the uncomfortable consequence of taking that seriously. The cameras weren't the safeguard; looking at what they showed would have been.[cite:ntsb-har-19-03] And even a check that reliably catches someone not watching only proves something true; it doesn't make the arrangement sound.

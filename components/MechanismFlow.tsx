@@ -10,6 +10,13 @@ import { pad } from "@/lib/format";
  * Pulling the notes out from under their step is what lets the cards keep
  * equal heights and lets the row reflow at any width: the note says "At 02"
  * instead of relying on sitting in the second column.
+ *
+ * The row has two states and nothing in between: every step side by side, or
+ * every step stacked. A partial wrap -- three cards and then two -- reads as
+ * two groups, which is a claim about the mechanism that the mechanism is not
+ * making. Patterns carry anywhere from three steps to six, so the width where
+ * the switch has to happen is different on every page; `--steps` is what lets
+ * the stylesheet work it out instead of guessing at a breakpoint.
  */
 export function MechanismFlow({ steps }: { steps: Step[] }) {
   const notes = steps
@@ -32,7 +39,11 @@ export function MechanismFlow({ steps }: { steps: Step[] }) {
         )}
       </div>
 
-      <ol className="flow" aria-label="Mechanism, step by step">
+      <ol
+        className="flow"
+        aria-label="Mechanism, step by step"
+        style={{ "--steps": steps.length } as React.CSSProperties}
+      >
         {steps.map((step, i) => (
           <li key={step.title} className={`flow-card${step.key ? " is-key" : ""}`}>
             <span className="label flow-num">

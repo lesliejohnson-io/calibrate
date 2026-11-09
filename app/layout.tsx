@@ -5,6 +5,10 @@ import { ExternalLink } from "@/components/ExternalLink";
 import { ByIcon, CcIcon } from "@/components/LicenseIcons";
 import { BrandMark } from "@/components/BrandLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { BrowseProvider } from "@/components/BrowseProvider";
+import { NavDrawer } from "@/components/NavDrawer";
+import { getAllPatterns, toCardData } from "@/lib/patterns";
+import { toFacets } from "@/lib/browse";
 import "./globals.css";
 
 /**
@@ -75,35 +79,44 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  /* The drawer carries the domain filter on every page, not just the index,
+     so the counts behind it are read here rather than passed down a route. */
+  const facets = toFacets(getAllPatterns().map(toCardData));
+
   return (
     <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
       <body>
-        <header className="site-header">
-          <div className="wrap site-header-inner">
-            <Link href="/" className="brand" aria-label="Calibrate — home">
-              <BrandMark />
-            </Link>
-            <nav className="site-nav" aria-label="Main">
-              <Link href="/" className="site-nav-link">
-                Patterns
+        <BrowseProvider facets={facets}>
+          <header className="site-header">
+            <div className="wrap site-header-inner">
+              <Link href="/" className="brand" aria-label="Calibrate — home">
+                <BrandMark />
               </Link>
-              <Link href="/about" className="site-nav-link">
-                About
-              </Link>
-              <span className="site-nav-sep" aria-hidden="true">
-                |
-              </span>
-              <Link href="/changelog" className="site-nav-link site-nav-link-sm">
-                Changelog
-              </Link>
-              <ThemeToggle />
-            </nav>
-          </div>
-        </header>
-        <main>{children}</main>
+              <nav className="site-nav" aria-label="Main">
+                <Link href="/" className="site-nav-link">
+                  Patterns
+                </Link>
+                <Link href="/about" className="site-nav-link">
+                  About
+                </Link>
+                <span className="site-nav-sep" aria-hidden="true">
+                  |
+                </span>
+                <Link href="/changelog" className="site-nav-link site-nav-link-sm">
+                  Changelog
+                </Link>
+                <ThemeToggle />
+              </nav>
+              {/* Below the breakpoint the nav above is hidden and this is the
+                  only control in the header. */}
+              <NavDrawer />
+            </div>
+          </header>
+          <main>{children}</main>
+        </BrowseProvider>
         <footer className="site-footer">
           <div className="wrap">
             <p className="footer-line">

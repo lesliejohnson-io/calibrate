@@ -1,5 +1,6 @@
 import type { Contrast, InterfaceComponent } from "@/lib/patterns";
 import { AlertTriage } from "./illustrations/AlertTriage";
+import { CapabilityDisclosure } from "./illustrations/CapabilityDisclosure";
 import { Autothrottle } from "./illustrations/Autothrottle";
 import { DroneRelease } from "./illustrations/DroneRelease";
 import { ExplainableFault } from "./illustrations/ExplainableFault";
@@ -7,6 +8,8 @@ import { FlightComputer } from "./illustrations/FlightComputer";
 import { GlassBox } from "./illustrations/GlassBox";
 import { GracefulDegradation } from "./illustrations/GracefulDegradation";
 import { Handoff } from "./illustrations/Handoff";
+import { ProvenanceLog } from "./illustrations/ProvenanceLog";
+import { ReadinessCheck } from "./illustrations/ReadinessCheck";
 import { ReturnOfControl } from "./illustrations/ReturnOfControl";
 import { ShiftHandover } from "./illustrations/ShiftHandover";
 import { StopAnywhere } from "./illustrations/StopAnywhere";
@@ -26,6 +29,9 @@ const ILLUSTRATIONS: Record<
   handoff: Handoff,
   "return-of-control": ReturnOfControl,
   "shift-handover": ShiftHandover,
+  "capability-disclosure": CapabilityDisclosure,
+  "readiness-check": ReadinessCheck,
+  "provenance-log": ProvenanceLog,
 };
 
 /**

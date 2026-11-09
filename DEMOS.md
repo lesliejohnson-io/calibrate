@@ -334,6 +334,89 @@ shape of the failure — two true facts held apart, and a handover that
 depended on one person joining them up. It carries
 `demoNote: "Simplified illustration."`
 
+### 07 Capability Disclosure — `capability-disclosure`
+
+A printed display. A road picker with two options and an "Engage Autosteer"
+button.
+
+- **Without:** on either road, Engage prints `AUTOSTEER ON` and, under it,
+  "See owner's manual for limitations." The road class makes no difference to
+  anything, which is the anti-pattern: the limit is written down in the one
+  place that cannot stop it.
+- **With:** on US-27A the Engage button is present and unavailable, and the
+  panel prints "Autosteer unavailable: this road has cross traffic. Available
+  on limited-access highways." On I-75 it engages and says which road class it
+  is on. Switching back to US-27A *while engaged* prints "Leaving supported
+  roads. Autosteer ending in 10 seconds, take the wheel", and ten seconds
+  later `AUTOSTEER OFF · you have the wheel` — the re-check while running,
+  which a start-up gate alone would miss.
+
+US-27A is the road in NTSB/HAR-17/02. I-75 is not named anywhere in that
+report; it is a real limited-access highway written in for the contrast, and
+the pattern's `review:` list says so. The handback line after the countdown is
+also written here, so a countdown the reader starts actually resolves. No
+speed, time or sensor reading is invented: the demo turns on road class, which
+is what the report says the firmware could determine and placed no restriction
+on. It carries `demoNote: "Simplified illustration."`
+
+### 11 Readiness Check — `readiness-check`
+
+A printed display with two things the reader sets — "Hand on wheel" and "Eyes
+on: road / phone" — and a Play button. Ten seconds of driving, then a hazard.
+
+- **Without:** the check senses the hand. With a hand on the wheel and eyes on
+  the phone it prints `Driver engaged ✓` and keeps saying so, because that is
+  all it measured. At ten seconds the hazard arrives — `⚠ Barrier ahead.` —
+  and if the eyes are still on the phone it adds "The system thought you were
+  engaged. You were looking at your phone."
+- **With:** the check watches the eyes, and the four-rung ladder is on screen
+  before the lapse, the way the fallback states are in Graceful Degradation.
+  Moving the eyes to the phone climbs it one rung every four seconds: "Eyes on
+  road, please", then a chime line, then a spoken-prompt line, then
+  `⚠ No response. Slowing to a stop.` Looking back at the road at any rung
+  abandons the ladder and prints "Thanks. Assistance continuing." — the point
+  is to get the driver back, not to win.
+
+The rungs and the ten seconds are paced in real time on both sides, including
+under `prefers-reduced-motion`: how long a system waits before insisting is
+the content here, and nothing flashes or moves — only the line-by-line
+printing is dropped. Nothing in the demo is a reading from NTSB/HAR-20/01: the
+toggles, the timings and the rung wording are written for this page. What is
+taken from the report is the failure — engagement assessed from steering wheel
+torque, no hands detected for the final six seconds, and no alert raised in
+the last fifteen minutes. The ladder's shape, ending in a slowdown to a stop,
+is Super Cruise's. It carries `demoNote: "Simplified illustration."`
+
+### 08 Provenance Log — `provenance-log`
+
+A warehouse robot's speed setting, changed by three parties. The reader makes
+each change: "You change it", "Remote fleet team changes it", "Robot
+auto-adjusts". Each party has its own value, so after all three the panel can
+ask "Who set the speed to 12 km/h?" and the question has one answer whatever
+order they were pressed in.
+
+- **Without:** two cells, Max speed and "Last changed: 2 min ago". Both true,
+  neither an answer. Any answer to the question prints "⚠ No record of who.
+  It's your word against the system."
+- **With:** the same three changes are an append-only log — time, actor, old →
+  new value, software version — printed as the reader makes them. Every entry
+  carries an "Edit" control that is wired up and refuses: "Entries can't be
+  changed. Add a correction instead." The answer is already on screen, so
+  answering reads it back off the log rather than revealing it.
+
+Nothing here comes from the pattern's sources, which describe a Tesla, a Tempe
+crash and a UK accounting system rather than a warehouse: the robot, the
+speeds, the 09:14–09:21 clock and the `sw 4.21.3` version string are written
+for this page. What is taken from the sources is the shape of the entry —
+actor, timestamp and software version, which is what UN R157 paragraph 8.3
+requires — and the property that makes it worth keeping, that the party to a
+dispute cannot revise it. It carries `demoNote: "Simplified illustration."`
+
+The `→` in a log entry is the second arrow inside a printed display on the
+site, after the one in Operator-to-Operator Handover, and carries the same
+caveat: `.fc-line` is a fixed monospace stack, so the character can fall back
+if a font in the stack lacks U+2192.
+
 ## To build
 
 Concepts go here as they are decided. Until a pattern has one, its `review:`

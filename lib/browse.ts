@@ -35,20 +35,13 @@ export type PatternCardData = {
 export type { Domain, Moment, Status, TrustJob } from "./schema";
 
 /*
- * Grouping by trust job is gone along with the rest of the judgment ratings.
- * `isGroupBy` rejects the retired value, so an old `?group=trustJob` link
- * falls back to the default view rather than rendering nothing.
+ * There is no grouping choice. The index is always the five moments in order,
+ * because the order is the argument the library is making — the control loop,
+ * start to finish — and an A–Z list of the same fifteen cards said nothing
+ * the names did not. `?group=` is simply unrecognized now, so an old link
+ * still opens the index rather than breaking.
  */
-export const GROUP_BY = ["moment", "none"] as const;
-export type GroupBy = (typeof GROUP_BY)[number];
-
-export const GROUP_LABELS: Record<GroupBy, string> = {
-  moment: "Moment",
-  none: "A–Z",
-};
-
 export type BrowseState = {
-  group: GroupBy;
   domains: Domain[];
   /** Seeds are hidden by default; this reveals them. */
   showSeeds: boolean;
@@ -56,24 +49,18 @@ export type BrowseState = {
 };
 
 export const DEFAULT_STATE: BrowseState = {
-  group: "moment",
   domains: [],
   showSeeds: false,
   query: "",
 };
-
-const isGroupBy = (v: string | null): v is GroupBy =>
-  v !== null && (GROUP_BY as readonly string[]).includes(v);
 
 const isDomain = (v: string): v is Domain => (DOMAINS as readonly string[]).includes(v);
 
 /** Reads state out of a query string, ignoring anything unrecognized. */
 export function parseState(search: string): BrowseState {
   const params = new URLSearchParams(search);
-  const group = params.get("group");
 
   return {
-    group: isGroupBy(group) ? group : DEFAULT_STATE.group,
     domains: (params.get("domain") ?? "")
       .split(",")
       .map((d) => d.trim())
@@ -86,7 +73,6 @@ export function parseState(search: string): BrowseState {
 /** The inverse. Defaults are left out so a clean view has a clean URL. */
 export function stateToQuery(state: BrowseState): string {
   const params = new URLSearchParams();
-  if (state.group !== DEFAULT_STATE.group) params.set("group", state.group);
   if (state.domains.length > 0) params.set("domain", state.domains.join(","));
   if (state.showSeeds) params.set("status", "all");
   if (state.query) params.set("q", state.query);
@@ -122,19 +108,20 @@ export function filterCards(cards: PatternCardData[], state: BrowseState): Patte
 
 export type CardGroup = {
   key: string;
-  /** The heading as it is written, or null for the ungrouped A–Z view. */
-  name: string | null;
-  purpose?: string;
-  anchor?: string;
+  /** The heading as it is written. */
+  name: string;
+  purpose: string;
+  anchor: string;
   cards: PatternCardData[];
 };
 
-export function groupCards(cards: PatternCardData[], group: GroupBy): CardGroup[] {
-  if (group === "none") {
-    const sorted = [...cards].sort((a, b) => a.name.localeCompare(b.name));
-    return sorted.length > 0 ? [{ key: "all", name: null, cards: sorted }] : [];
-  }
-
+/**
+ * The five moments in order, with the moments nothing matched left out — a
+ * heading over no cards is a dead end, and filtering is the only way a moment
+ * ends up empty. The rail still lists all five, greyed out, so the shape of
+ * the library stays visible while a filter is narrowing it.
+ */
+export function groupCards(cards: PatternCardData[]): CardGroup[] {
   return MOMENTS.map((moment) => ({
     key: moment,
     name: MOMENT_LABELS[moment],
@@ -148,4 +135,53 @@ export function groupCards(cards: PatternCardData[], group: GroupBy): CardGroup[
 export function availableDomains(cards: PatternCardData[]): Domain[] {
   const used = new Set(cards.flatMap((c) => c.domains));
   return DOMAINS.filter((d) => used.has(d));
+}
+
+/**
+ * How many patterns each domain has, for the numbers in the domain popover.
+ * Counted over whatever list is passed rather than over the current results
+ * on purpose: a count that moved while you typed would be unreadable, and the
+ * question the number answers is how much of the library a domain covers.
+ */
+export function domainCounts(cards: PatternCardData[]): Record<Domain, number> {
+  const counts = Object.fromEntries(DOMAINS.map((d) => [d, 0])) as Record<Domain, number>;
+  for (const card of cards) {
+    for (const domain of card.domains) counts[domain] += 1;
+  }
+  return counts;
+}
+
+/**
+ * The least the drawer needs to do its job on any page. The index already
+ * holds the full card list, but the drawer lives in the layout and opens over
+ * a pattern page, a moment page or the changelog, where no card list exists.
+ * Rather than ship fifteen cards to every route, the layout ships this: the
+ * domains on offer, how many patterns each one covers, and one array of
+ * domains per pattern, which is all a match count needs.
+ *
+ * Seeds are left out. Nothing in the library is a seed today, so the drawer's
+ * numbers and the index's agree; if a seed is ever added, `?status=all` will
+ * reveal it on the index and the drawer will keep counting without it.
+ */
+export type Facets = {
+  total: number;
+  domains: Domain[];
+  counts: Record<Domain, number>;
+  patterns: Domain[][];
+};
+
+export function toFacets(cards: PatternCardData[]): Facets {
+  const published = cards.filter((c) => c.status !== "seed");
+  return {
+    total: published.length,
+    domains: availableDomains(published),
+    counts: domainCounts(published),
+    patterns: published.map((c) => c.domains),
+  };
+}
+
+/** How many patterns a domain selection would leave. Empty means all of them. */
+export function countMatches(facets: Facets, domains: Domain[]): number {
+  if (domains.length === 0) return facets.total;
+  return facets.patterns.filter((ds) => ds.some((d) => domains.includes(d))).length;
 }
