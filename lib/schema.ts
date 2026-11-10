@@ -339,6 +339,18 @@ const exampleSchema = z
     /** A path in /public. Left out while the figure is still a placeholder. */
     image: z.string().min(1).optional(),
     alt: z.string().min(1),
+    /**
+     * Whether an example with no image stands a box in its place. True by
+     * default, because a stated gap is usually the honest thing: the slot
+     * says what it will show and the section carries its DRAFT tag.
+     *
+     * False where the example was never going to be a picture, or where the
+     * drawing is far enough off that an empty box reads as a fault rather
+     * than a promise. The example then renders as its credit line, verdict
+     * and caption — `alt` is kept, so restoring `image` is the only thing
+     * needed to bring the figure back.
+     */
+    placeholder: z.boolean().default(true),
     /** e.g. "BEA, AF447 Final Report, 2012, Figure 70". */
     credit: z.string().min(1).optional(),
     verdict: z.enum(VERDICTS),
@@ -396,6 +408,30 @@ const cautionaryTaleSchema = z.object({
   date: z.string().min(1),
   place: z.string().min(1),
   story: z.string().min(1),
+  /**
+   * The incident as a countdown: each marker's position on the clock, what
+   * happened there, and the reading behind it. Optional, and rare on
+   * purpose — a tale earns one only where the sequence is the point and the
+   * times are in the source, which is what keeps it a readout rather than a
+   * dramatization. Two markers is the floor: one moment is a fact, not a
+   * sequence.
+   */
+  timeline: z
+    .array(
+      z.object({
+        at: z.string().min(1),
+        label: z.string().min(1),
+        detail: z.string().min(1).optional(),
+      }),
+    )
+    .min(2, "a timeline needs at least two markers")
+    .optional(),
+  /**
+   * One line after the timeline, set as a pull quote: the sentence the story
+   * was told for. Optional — a tale that ends on its own last sentence does
+   * not need one, and a kicker that restates the story is worse than none.
+   */
+  kicker: z.string().min(1).optional(),
   /**
    * The source the tale rests on. A list where one source does not carry the
    * whole story — the citation is written here rather than per sentence, so
@@ -541,6 +577,18 @@ export const frontmatterSchema = z
     /* The incident the page opens with, and the one-sentence answer to it. */
     cautionaryTale: cautionaryTaleSchema.optional(),
     therefore: z.string().min(1).optional(),
+
+    /**
+     * The paragraph under Therefore: what the pattern statement leaves out.
+     * Therefore is the instruction; this is the condition that decides
+     * whether following it does any good, so it is set quieter than the
+     * statement it qualifies rather than louder.
+     *
+     * Optional, and plain prose: the callout sets its first sentence as the
+     * lead, so it carries no markdown and no `[cite:]`. A claim that needs a
+     * source wants a design consideration or a body section instead.
+     */
+    insight: z.string().min(1).optional(),
 
     /**
      * Which mark from the thumbnail map this pattern shows. Defaults to the

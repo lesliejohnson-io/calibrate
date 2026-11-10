@@ -31,7 +31,7 @@ export default function Home() {
           {/* The name alone. What the library is belongs in the paragraph
               below and in the page title, not in a second heading. */}
           <h1 className="display hero-name">Calibrate</h1>
-          <p className="hero-sub">
+          <p className="lede">
             Design patterns for human–machine trust, for vehicles, robots and drones that move,
             lift, cut and fly. Each pattern starts with a real incident and ends with a design you
             can try.

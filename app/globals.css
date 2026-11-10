@@ -86,9 +86,84 @@
   --gap: 40px;
   --wrap: 1360px;
   --pad: 40px;
-  /* Ruled boxes, not soft cards. */
+  /*
+   * Ruled boxes, not soft cards — but the corner now matches the 8px the
+   * Figma illustrations are drawn with, so a panel in a drawing and the
+   * same panel on the page round the same amount.
+   *
+   * Three steps, nested: --radius-lg is the outer corner (cards, panels,
+   * the mechanism strip, example figures, demo frames), --radius is what
+   * sits inside one, and --radius-sm is the smallest things inside that.
+   * An inner corner is always tighter than the one around it, which is
+   * what stops a nested box reading as a sticker on top of its container.
+   */
+  --radius-sm: 2px;
   --radius: 4px;
-  --radius-lg: 4px;
+  --radius-lg: 8px;
+
+  /* ---------- Type scale ----------
+   *
+   * One token per size the stylesheet actually uses, named by step rather
+   * than by where it is spent, so changing a step changes it everywhere.
+   * The names run in size order: --fs-xl is 18px and not 19px because
+   * 18px is in use, and a scale whose names do not sort by size is worse
+   * than an ugly one.
+   *
+   * The prefix is --fs- rather than --text- because --text-2 and --text-3
+   * are already colours. One family for every font size, the fluid ones
+   * included, so a size is recognisable as a size at the call site.
+   *
+   * Nothing is rounded or merged here. Where two steps are one typographic
+   * decision apart they are still two tokens, because collapsing them is a
+   * design change and this block is not one.
+   */
+  --fs-2xs: 11px;           /* mono eyebrows, citations, draft tags */
+  --fs-xs: 12px;            /* data values in running text */
+  --fs-sm: 13px;            /* ui labels, chips, console hints */
+  --fs-base-sm: 14px;       /* captions, notes, demo readouts */
+  --fs-base: 15px;          /* nav, secondary body, card detail */
+  --fs-md: 16px;            /* questions, considerations, inputs */
+  --fs-lg: 17px;            /* the document default */
+  --fs-xl: 18px;
+  --fs-2xl: 19px;
+  --fs-3xl: 20px;
+  --fs-4xl: 21px;
+  --fs-5xl: 22px;
+  --fs-6xl: 23px;
+  --fs-7xl: 26px;
+
+  /*
+   * Long-form reading text: the opening tale, the markdown body sections,
+   * "When to use" and the Therefore. Separate from --fs-lg because the
+   * reading size and the interface default are two decisions, and since
+   * Newsreader took the reading text they are no longer the same number.
+   *
+   * 18px against the interface's 17px. Newsreader's x-height is shorter
+   * than Inter's, so the same pixel size reads a step smaller; 18px puts
+   * the two back on a level. The leading goes up with it — a serif at a
+   * reading measure wants more room between lines than a UI sans does.
+   */
+  --fs-prose: 18px;
+  --lh-prose: 1.6;
+
+  /*
+   * Every H2 on the site, whatever it sits above: the section heads, the
+   * tale's title, the markdown bodies' own H2s and the moment group names
+   * were four sizes between 22px and 32px, which read as a hierarchy that
+   * does not exist — they are all the same level. One token, so they are
+   * one size and stay one size.
+   *
+   * Named for the level rather than the step, like --fs-prose: it is a
+   * decision about a role, and the four rules are meant to move together.
+   */
+  --fs-h2: clamp(24px, 2.6vw, 28px);
+
+  /* Fluid sizes, smallest first. Copied exactly from the rules they came
+     from; the viewport terms are part of the value. */
+  --fs-display-2xs: clamp(20px, 2.1vw, 24px);
+  --fs-display-sm: clamp(24px, 5vw, 34px);
+  --fs-display-lg: clamp(38px, 6vw, 64px);
+  --fs-display-xl: clamp(44px, 9vw, 72px);
 
   color-scheme: light;
 }
@@ -197,7 +272,7 @@ body {
   background: var(--ground);
   color: var(--ink);
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 17px;
+  font-size: var(--fs-lg);
   line-height: 1.58;
   font-feature-settings: "cv05" 1;
 }
@@ -211,7 +286,7 @@ code {
   font-size: 0.88em;
   background: var(--panel);
   padding: 1px 5px;
-  border-radius: 4px;
+  border-radius: var(--radius);
 }
 
 .wrap {
@@ -244,7 +319,7 @@ code {
 .mono-label {
   margin: 0;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   line-height: 1.4;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -257,7 +332,7 @@ code {
 .label {
   margin: 0;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   line-height: 17px;
   font-weight: 400;
   letter-spacing: 0.01em;
@@ -270,7 +345,7 @@ code {
   margin: 0;
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 700;
-  font-size: clamp(26px, 3vw, 32px);
+  font-size: var(--fs-h2);
   line-height: 1.15;
   letter-spacing: -0.015em;
   color: var(--ink);
@@ -280,7 +355,7 @@ code {
   margin: 0;
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 700;
-  font-size: 19px;
+  font-size: var(--fs-2xl);
   line-height: 1.25;
   letter-spacing: -0.01em;
   color: var(--ink);
@@ -289,7 +364,7 @@ code {
 /* Group labels inside a section: "Papers", "Requires", "On this page". */
 .subgroup-head {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   font-weight: 600;
   line-height: 1.3;
   color: var(--muted);
@@ -298,14 +373,14 @@ code {
 /* Interface labels that are not headings: "Group by", "Jump to". */
 .ui-label {
   margin: 0;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   color: var(--muted);
 }
 
 .pattern-number {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   color: var(--muted);
 }
 
@@ -313,7 +388,7 @@ code {
   margin: 8px 0 0;
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 700;
-  font-size: clamp(38px, 6vw, 64px);
+  font-size: var(--fs-display-lg);
   line-height: 1.03;
   letter-spacing: -0.025em;
   color: var(--ink);
@@ -321,9 +396,9 @@ code {
 
 .lede {
   margin: 16px 0 0;
-  max-width: 58ch;
-  font-size: 21px;
-  line-height: 31px;
+  max-width: 52ch;
+  font-size: var(--fs-4xl);
+  line-height: 1.45;
   color: var(--text-2);
 }
 
@@ -375,14 +450,14 @@ code {
 
 .brand-word {
   font-family: var(--font-display), system-ui, sans-serif;
-  font-size: 15px;
+  font-size: var(--fs-base);
   font-weight: 700;
   letter-spacing: 0.02em;
 }
 
 @media (max-width: 560px) {
   .brand-word {
-    font-size: 11px;
+    font-size: var(--fs-2xs);
     letter-spacing: 0.06em;
   }
 }
@@ -394,7 +469,7 @@ code {
 }
 
 .site-nav-link {
-  font-size: 15px;
+  font-size: var(--fs-base);
   color: var(--ink);
   text-decoration: none;
 }
@@ -404,13 +479,13 @@ code {
    tightened rather than carrying the full nav rhythm. */
 .site-nav-sep {
   color: var(--loop);
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   margin: 0 -14px;
   user-select: none;
 }
 
 .site-nav-link-sm {
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--muted);
 }
 
@@ -680,7 +755,7 @@ code {
   align-items: center;
   gap: 12px;
   height: 40px;
-  font-size: 15px;
+  font-size: var(--fs-base);
   color: #ffffff;
   cursor: pointer;
 }
@@ -701,7 +776,7 @@ code {
 .drawer-option-count {
   flex: none;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.01em;
   color: rgba(255, 255, 255, 0.7);
   font-variant-numeric: tabular-nums;
@@ -714,7 +789,7 @@ code {
   gap: 12px;
   margin: 12px 0 0;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   line-height: 17px;
   letter-spacing: 0.01em;
   color: rgba(255, 255, 255, 0.7);
@@ -741,12 +816,12 @@ code {
   margin-top: 12px;
   padding: 0 12px;
   font: inherit;
-  font-size: 15px;
+  font-size: var(--fs-base);
   font-weight: 500;
   color: #0a0a0a;
   background: #ffffff;
   border: 0;
-  border-radius: 4px;
+  border-radius: var(--radius);
   cursor: pointer;
 }
 
@@ -765,7 +840,7 @@ code {
 
 .drawer-link {
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 20px;
+  font-size: var(--fs-3xl);
   font-weight: 500;
   line-height: 1.2;
   color: #ffffff;
@@ -791,7 +866,7 @@ code {
 
 .drawer-moment {
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 16px;
+  font-size: var(--fs-md);
   line-height: 1.2;
   color: rgba(255, 255, 255, 0.88);
   text-decoration: none;
@@ -827,7 +902,7 @@ code {
 .drawer-name {
   margin: 0;
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 16px;
+  font-size: var(--fs-md);
   font-weight: 600;
   color: #ffffff;
 }
@@ -866,7 +941,7 @@ code {
   align-items: center;
   gap: 4px 10px;
   margin: 0;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   color: var(--muted);
 }
 
@@ -954,14 +1029,14 @@ code {
 
 .station-name {
   font-family: var(--font-display), system-ui, sans-serif;
-  font-size: 23px;
+  font-size: var(--fs-6xl);
   line-height: 1.1;
   letter-spacing: -0.01em;
   color: var(--ink);
 }
 
 .station-prompt {
-  font-size: 13px;
+  font-size: var(--fs-sm);
   line-height: 1.35;
   color: var(--muted);
 }
@@ -970,7 +1045,7 @@ code {
   margin-top: auto;
   padding-top: 8px;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   color: var(--muted);
 }
 
@@ -1006,7 +1081,7 @@ a.station-body:hover .station-count {
 }
 
 .is-compact .station-name {
-  font-size: 18px;
+  font-size: var(--fs-xl);
 }
 
 .is-compact .station-arrow {
@@ -1074,7 +1149,7 @@ a.station-body:hover .station-count {
 .return-label span {
   padding: 0 12px;
   background: var(--bg);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--muted);
   white-space: nowrap;
 }
@@ -1193,16 +1268,14 @@ a.station-body:hover .station-count {
 /* One word, so it cannot wrap; the floor is set low enough that it still
    clears the 375px gutters with room to spare. */
 .hero-name {
-  font-size: clamp(44px, 9vw, 72px);
+  font-size: var(--fs-display-xl);
 }
 
-/* Body size, not lede size: the h1 carries the scale here, and this is the
-   sentence that explains what the library holds. */
-.hero-sub {
-  margin: 16px 0 0;
-  max-width: 60ch;
-  color: var(--text-2);
-}
+/* The sentence under the name is a .lede, like the opening paragraph of
+   every other page: same serif, same 21px, same 52ch measure. It had its own
+   rule at body size on the argument that the h1 carries the scale here, which
+   left the one page that introduces the library as the one page whose opening
+   is not set as an opening. */
 
 .hero-meta {
   margin-top: 20px;
@@ -1352,7 +1425,7 @@ a.station-body:hover .station-count {
   display: block;
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 500;
-  font-size: 20px;
+  font-size: var(--fs-3xl);
   line-height: 26px;
   letter-spacing: -0.01em;
   color: var(--rail-upcoming);
@@ -1372,7 +1445,7 @@ a.station-body:hover .station-count {
 
 .rail-question {
   display: block;
-  font-size: 16px;
+  font-size: var(--fs-md);
   line-height: 23px;
   color: var(--ink);
 }
@@ -1438,7 +1511,7 @@ a.station-body:hover .station-count {
 .rail-link:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 3px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
 }
 
 /* ---------- Illustration key ---------- */
@@ -1466,7 +1539,7 @@ a.station-body:hover .station-count {
 .key-item dd {
   margin: 0;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   line-height: 1;
   color: var(--muted);
 }
@@ -1543,11 +1616,11 @@ a.station-body:hover .station-count {
   height: 44px;
   padding: 0 14px 0 40px;
   font: inherit;
-  font-size: 16px;
+  font-size: var(--fs-md);
   color: var(--ink);
   background: var(--surface);
   border: 1px solid var(--border-strong);
-  border-radius: 4px;
+  border-radius: var(--radius);
   appearance: none;
 }
 
@@ -1584,7 +1657,7 @@ a.station-body:hover .station-count {
   color: var(--muted);
   background: none;
   border: 0;
-  border-radius: 4px;
+  border-radius: var(--radius);
   cursor: pointer;
 }
 
@@ -1615,11 +1688,11 @@ a.station-body:hover .station-count {
   height: 44px;
   padding: 0 14px;
   font: inherit;
-  font-size: 15px;
+  font-size: var(--fs-base);
   color: var(--ink);
   background: var(--surface);
   border: 1px solid var(--border-strong);
-  border-radius: 4px;
+  border-radius: var(--radius);
   cursor: pointer;
   white-space: nowrap;
 }
@@ -1662,7 +1735,7 @@ a.station-body:hover .station-count {
   padding: 6px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: var(--radius);
   box-shadow: 0 8px 24px rgba(20, 20, 20, 0.12);
 }
 
@@ -1689,7 +1762,7 @@ a.station-body:hover .station-count {
   gap: 10px;
   height: 40px;
   padding: 0 8px;
-  font-size: 15px;
+  font-size: var(--fs-base);
   color: var(--ink);
   border-radius: 3px;
   cursor: pointer;
@@ -1768,7 +1841,7 @@ a.station-body:hover .station-count {
   align-items: center;
   gap: 2px;
   padding: 3px 4px 3px 10px;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   line-height: 1.3;
   color: var(--ink);
   background: var(--surface);
@@ -1812,7 +1885,7 @@ a.station-body:hover .station-count {
 
 .no-results {
   margin: 0;
-  font-size: 17px;
+  font-size: var(--fs-lg);
   color: var(--ink);
 }
 
@@ -1866,7 +1939,7 @@ a.station-body:hover .station-count {
   margin: 0;
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 600;
-  font-size: 30px;
+  font-size: var(--fs-h2);
   line-height: 1.1;
   letter-spacing: -0.015em;
   color: var(--ink);
@@ -1874,7 +1947,7 @@ a.station-body:hover .station-count {
 
 .group-question {
   margin: 0;
-  font-size: 16px;
+  font-size: var(--fs-md);
   color: var(--muted);
 }
 
@@ -1913,7 +1986,7 @@ a.station-body:hover .station-count {
   height: 100%;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   text-decoration: none;
   color: inherit;
@@ -1948,7 +2021,7 @@ a.station-body:hover .station-count {
   margin-top: 2px;
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 600;
-  font-size: 19px;
+  font-size: var(--fs-2xl);
   line-height: 1.25;
   letter-spacing: -0.01em;
   color: var(--ink);
@@ -1957,7 +2030,7 @@ a.station-body:hover .station-count {
 .card-intent {
   display: block;
   margin-top: 6px;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   line-height: 21px;
   color: var(--text-3);
 }
@@ -1996,7 +2069,7 @@ a.station-body:hover .station-count {
   list-style: none;
   margin: 0;
   padding: 0;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   color: var(--muted);
 }
 
@@ -2103,9 +2176,9 @@ a.station-body:hover .station-count {
 /* A short paragraph that is the whole of its section — "When to use". */
 .prose-lead {
   margin: 0;
-  max-width: 68ch;
-  font-size: 17px;
-  line-height: 27px;
+  max-width: 64ch;
+  font-size: var(--fs-prose);
+  line-height: var(--lh-prose);
   color: var(--text-2);
 }
 
@@ -2120,7 +2193,7 @@ a.station-body:hover .station-count {
 .tag {
   display: inline-block;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   line-height: 16px;
   letter-spacing: 0.01em;
   padding: 3px 8px;
@@ -2157,13 +2230,13 @@ a.station-body:hover .station-count {
  */
 .draft-tag {
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 3px 8px;
   border: 1px dashed var(--border-strong);
-  border-radius: 4px;
+  border-radius: var(--radius);
   color: var(--muted);
   white-space: nowrap;
 }
@@ -2178,7 +2251,7 @@ a.station-body:hover .station-count {
   padding: 22px 24px 24px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: var(--radius-lg);
 }
 
 .mechanism-head {
@@ -2192,7 +2265,7 @@ a.station-body:hover .station-count {
 
 .mechanism-arc {
   margin: 0;
-  font-size: 15px;
+  font-size: var(--fs-base);
   color: var(--muted);
 }
 
@@ -2246,7 +2319,7 @@ a.station-body:hover .station-count {
   min-width: 0;
   padding: 14px 14px 16px;
   border: 1px solid var(--border-strong);
-  border-radius: 4px;
+  border-radius: var(--radius);
   background: var(--surface);
 }
 
@@ -2271,14 +2344,14 @@ a.station-body:hover .station-count {
   margin-top: 6px;
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 600;
-  font-size: 17px;
+  font-size: var(--fs-lg);
   line-height: 1.25;
   letter-spacing: -0.01em;
 }
 
 .flow-detail {
   margin-top: 6px;
-  font-size: 15px;
+  font-size: var(--fs-base);
   line-height: 21px;
   color: var(--text-3);
 }
@@ -2300,7 +2373,7 @@ a.station-body:hover .station-count {
   margin: 0;
   padding-left: 14px;
   border-left: 2px solid var(--border-strong);
-  font-size: 15px;
+  font-size: var(--fs-base);
   line-height: 22px;
   color: var(--text-2);
 }
@@ -2326,7 +2399,7 @@ a.station-body:hover .station-count {
 .jump-pill {
   display: inline-block;
   padding: 6px 14px;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   line-height: 1.3;
   color: var(--ink);
   background: var(--surface);
@@ -2373,7 +2446,7 @@ a.station-body:hover .station-count {
 .consideration-body {
   margin: 0;
   max-width: 68ch;
-  font-size: 16px;
+  font-size: var(--fs-md);
   line-height: 25px;
   color: var(--text-2);
 }
@@ -2394,7 +2467,7 @@ a.station-body:hover .station-count {
   padding: 18px 20px 20px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: var(--radius-lg);
 }
 
 /* The only 1.5px border on the page: which of the two is the
@@ -2411,7 +2484,7 @@ a.station-body:hover .station-count {
   margin: 0;
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 600;
-  font-size: 17px;
+  font-size: var(--fs-lg);
   line-height: 1.4;
   letter-spacing: -0.01em;
   color: var(--ink);
@@ -2424,7 +2497,7 @@ a.station-body:hover .station-count {
 
 .panel-caption {
   margin: 10px 0 0;
-  font-size: 15px;
+  font-size: var(--fs-base);
   line-height: 22px;
   color: var(--text-3);
 }
@@ -2448,7 +2521,7 @@ a.station-body:hover .station-count {
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
-  border-radius: 4px;
+  border-radius: var(--radius-lg);
 }
 
 .example-image {
@@ -2469,13 +2542,20 @@ a.station-body:hover .station-count {
 
 .example-credit {
   margin-top: 8px;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   line-height: 20px;
   color: var(--muted);
 }
 
 .example-credit a {
   color: inherit;
+}
+
+/* The credit where the example has no figure. It is the first thing in the
+   cell rather than a line under a picture, so it carries neither the gap
+   above it nor a paragraph's own margin below. */
+.example-source {
+  margin: 0;
 }
 
 /* The verdict is a shape and a word before it is a colour. */
@@ -2494,7 +2574,7 @@ a.station-body:hover .station-count {
 
 .example-caption {
   margin: 8px 0 0;
-  font-size: 15px;
+  font-size: var(--fs-base);
   line-height: 22px;
   color: var(--text-2);
 }
@@ -2516,7 +2596,7 @@ a.station-body:hover .station-count {
   padding: 14px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: var(--radius-lg);
   text-decoration: none;
   color: inherit;
 }
@@ -2534,7 +2614,7 @@ a.station-body:hover .station-count {
   flex: none;
   width: 88px;
   height: 48px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
 }
 
 /* The same slot, filled by the drawing instead of the generated tile. The
@@ -2560,7 +2640,7 @@ a.station-body:hover .station-count {
   margin-top: 3px;
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 600;
-  font-size: 17px;
+  font-size: var(--fs-lg);
   line-height: 1.25;
   letter-spacing: -0.01em;
   color: var(--ink);
@@ -2569,7 +2649,7 @@ a.station-body:hover .station-count {
 .relation-note {
   display: block;
   margin-top: 4px;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   line-height: 20px;
   color: var(--text-3);
 }
@@ -2606,7 +2686,7 @@ a.station-body:hover .station-count {
 
 .source-title {
   display: block;
-  font-size: 15px;
+  font-size: var(--fs-base);
   line-height: 21px;
   color: var(--ink);
 }
@@ -2620,7 +2700,7 @@ a.station-body:hover .station-count {
 .source-meta {
   display: block;
   margin-top: 2px;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   line-height: 20px;
   color: var(--muted);
 }
@@ -2634,7 +2714,7 @@ a.station-body:hover .station-count {
 .source:target {
   background: var(--panel);
   box-shadow: 0 0 0 6px var(--panel);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
 }
 
 @media (max-width: 560px) {
@@ -2684,7 +2764,7 @@ a.station-body:hover .station-count {
 
 .fact-value {
   margin: 3px 0 0;
-  font-size: 16px;
+  font-size: var(--fs-md);
   line-height: 22px;
   color: var(--ink);
 }
@@ -2728,7 +2808,7 @@ a.station-body:hover .station-count {
   padding: 5px 0 5px 14px;
   margin-left: -2px;
   border-left: 2px solid transparent;
-  font-size: 15px;
+  font-size: var(--fs-base);
   line-height: 21px;
   color: var(--muted);
   text-decoration: none;
@@ -2783,7 +2863,7 @@ a.station-body:hover .station-count {
 }
 
 .pager-all {
-  font-size: 15px;
+  font-size: var(--fs-base);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -2801,7 +2881,7 @@ a.station-body:hover .station-count {
   margin-top: 2px;
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 600;
-  font-size: 19px;
+  font-size: var(--fs-2xl);
   letter-spacing: -0.01em;
 }
 
@@ -2828,10 +2908,10 @@ a.station-body:hover .station-count {
   padding: 8px 14px;
   background: var(--panel);
   border: 1px solid var(--edge);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
   font-weight: 600;
-  font-size: 15px;
+  font-size: var(--fs-base);
   color: var(--ink);
   cursor: pointer;
   list-style: none;
@@ -2865,7 +2945,7 @@ a.station-body:hover .station-count {
 .section-note {
   max-width: 62ch;
   margin: 0 0 20px;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   color: var(--muted);
 }
 
@@ -2910,12 +2990,12 @@ a.station-body:hover .station-count {
   color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 2px;
-  font-size: 17px;
+  font-size: var(--fs-lg);
 }
 
 .elsewhere-note {
   margin: 4px 0 0;
-  font-size: 15px;
+  font-size: var(--fs-base);
   color: var(--ink);
 }
 
@@ -2934,7 +3014,7 @@ a.station-body:hover .station-count {
 .review-flag-head {
   margin: 0;
   font-family: var(--font-condensed), sans-serif;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -2943,14 +3023,14 @@ a.station-body:hover .station-count {
 
 .review-flag-note {
   margin: 6px 0 12px;
-  font-size: 15px;
+  font-size: var(--fs-base);
   color: var(--ink);
 }
 
 .review-flag-list {
   margin: 0;
   padding-left: 20px;
-  font-size: 15px;
+  font-size: var(--fs-base);
   color: var(--ink);
 }
 
@@ -2981,7 +3061,7 @@ a.station-body:hover .station-count {
 
 .review-index-count {
   font-family: var(--font-mono), monospace;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--status-caution);
 }
 
@@ -3022,7 +3102,7 @@ a.station-body:hover .station-count {
 .section-caption {
   max-width: 68ch;
   margin: 16px 0 0;
-  font-size: 15px;
+  font-size: var(--fs-base);
   color: var(--muted);
 }
 
@@ -3051,7 +3131,7 @@ a.station-body:hover .station-count {
 
 .def dd {
   margin: 0;
-  font-size: 15px;
+  font-size: var(--fs-base);
   color: var(--ink);
 }
 
@@ -3086,7 +3166,7 @@ a.station-body:hover .station-count {
 
 .matrix th {
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -3135,7 +3215,7 @@ a.station-body:hover .station-count {
 
 .matrix-list a {
   text-decoration: none;
-  font-size: 15px;
+  font-size: var(--fs-base);
   line-height: 1.3;
 }
 
@@ -3147,7 +3227,7 @@ a.station-body:hover .station-count {
 
 .matrix-num {
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   color: var(--muted);
 }
 
@@ -3157,7 +3237,7 @@ a.station-body:hover .station-count {
   padding: 14px 18px;
   border: 1px dashed var(--edge);
   border-radius: var(--radius);
-  font-size: 15px;
+  font-size: var(--fs-base);
   color: var(--ink);
 }
 
@@ -3179,7 +3259,7 @@ a.station-body:hover .station-count {
 .changelog-date {
   margin: 0;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 500;
   color: var(--muted);
   padding-top: 2px;
@@ -3207,7 +3287,7 @@ a.station-body:hover .station-count {
 
 .changelog-pattern {
   font-family: var(--font-display), system-ui, sans-serif;
-  font-size: 19px;
+  font-size: var(--fs-2xl);
   text-decoration: none;
 }
 
@@ -3231,12 +3311,12 @@ a.station-body:hover .station-count {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 10px;
-  font-size: 15px;
+  font-size: var(--fs-base);
   color: var(--ink);
 }
 
 .changelog-hash {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   color: var(--muted);
 }
 
@@ -3247,7 +3327,7 @@ a.station-body:hover .station-count {
 .changelog-touched {
   text-transform: none;
   letter-spacing: 0.04em;
-  font-size: 11px;
+  font-size: var(--fs-2xs);
 }
 
 @media (max-width: 640px) {
@@ -3265,7 +3345,7 @@ a.station-body:hover .station-count {
 .page-byline {
   margin: 14px 0 0;
   max-width: 62ch;
-  font-size: 15px;
+  font-size: var(--fs-base);
   color: var(--muted);
 }
 
@@ -3318,7 +3398,7 @@ a.station-body:hover .station-count {
   border-left: 2px solid var(--edge);
   background: var(--surface);
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   line-height: 1.6;
   color: var(--ink);
 }
@@ -3348,7 +3428,7 @@ a.station-body:hover .station-count {
   padding-left: 2px;
   font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
   font-weight: 600;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
@@ -3358,7 +3438,7 @@ a.station-body:hover .station-count {
   padding: 14px;
   background: var(--surface);
   border: 1px solid var(--edge);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
 }
 
 .console-readout {
@@ -3378,7 +3458,7 @@ a.station-body:hover .station-count {
 .console-cell dt {
   font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
   font-weight: 600;
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
@@ -3387,7 +3467,7 @@ a.station-body:hover .station-count {
 .console-cell dd {
   margin: 2px 0 0;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   color: var(--ink);
 }
 
@@ -3407,7 +3487,7 @@ a.station-body:hover .station-count {
 
 .console-hint {
   margin: 10px 0 0;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   line-height: 1.4;
   color: var(--muted);
 }
@@ -3417,9 +3497,9 @@ a.station-body:hover .station-count {
   padding: 6px 12px;
   background: none;
   border: 1px solid var(--edge);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   font: inherit;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--ink);
   cursor: pointer;
 }
@@ -3430,7 +3510,9 @@ a.station-body:hover .station-count {
 
 /* ---------- Notes (markdown body) ---------- */
 .prose {
-  max-width: 68ch;
+  max-width: 62ch;
+  font-size: var(--fs-prose);
+  line-height: var(--lh-prose);
   color: var(--ink);
 }
 
@@ -3443,11 +3525,11 @@ a.station-body:hover .station-count {
 }
 
 .prose h2 {
-  font-size: 28px;
+  font-size: var(--fs-h2);
 }
 
 .prose h3 {
-  font-size: 22px;
+  font-size: var(--fs-5xl);
 }
 
 .prose a {
@@ -3468,7 +3550,7 @@ a.station-body:hover .station-count {
 /* The superscript in the prose. Kept out of the line box so a cited sentence
    does not sit taller than an uncited one. */
 .cite {
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   line-height: 0;
   vertical-align: super;
 }
@@ -3512,7 +3594,7 @@ a.station-body:hover .station-count {
 
 .empty-hint {
   margin-top: 4px !important;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   color: var(--muted);
 }
 
@@ -3546,7 +3628,7 @@ a.station-body:hover .station-count {
   margin: 0;
   font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
   font-weight: 600;
-  font-size: clamp(24px, 5vw, 34px);
+  font-size: var(--fs-display-sm);
   line-height: 1.1;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -3559,7 +3641,7 @@ a.station-body:hover .station-count {
 
 .envelope-line {
   margin: 12px 0 0;
-  font-size: 17px;
+  font-size: var(--fs-lg);
 }
 
 .envelope-confidence {
@@ -3569,7 +3651,7 @@ a.station-body:hover .station-count {
   padding-top: 14px;
   border-top: 1px solid var(--rule);
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   color: var(--muted);
 }
 
@@ -3622,7 +3704,7 @@ a.station-body:hover .station-count {
   margin: 0 auto;
   font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
   font-weight: 600;
-  font-size: 15px;
+  font-size: var(--fs-base);
   line-height: 1.25;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -3631,7 +3713,7 @@ a.station-body:hover .station-count {
 .hold-hint {
   margin: 0;
   max-width: 24ch;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   color: var(--muted);
 }
 
@@ -3640,7 +3722,7 @@ a.station-body:hover .station-count {
 .hold-outcome {
   margin: 28px 0 0;
   min-height: 1.6em;
-  font-size: 17px;
+  font-size: var(--fs-lg);
 }
 
 .hold-outcome a {
@@ -3655,7 +3737,7 @@ a.station-body:hover .station-count {
   margin-top: 36px;
   padding-top: 20px;
   border-top: 1px solid var(--rule);
-  font-size: 15px;
+  font-size: var(--fs-base);
 }
 
 .envelope-links a {
@@ -3673,15 +3755,45 @@ a.station-body:hover .station-count {
 }
 
 
+/* ---------- Editorial prose ----------
+ *
+ * Newsreader, and only here. The division is what the reader is doing, not
+ * what the element is: text they read in sentences is the serif, text they
+ * scan, operate or navigate by is Inter. So the tale, the body sections,
+ * the Therefore and the captions are set in it, and the headings above
+ * them, the cards beside them, the mechanism strip, the demos, the nav,
+ * the labels and the sources metadata are not.
+ *
+ * Headings and mono inside .prose keep their own font-family declarations,
+ * which is what stops them inheriting this one.
+ *
+ * font-optical-sizing: auto lets Newsreader's opsz axis follow the rendered
+ * size, so the 15px captions get the sturdier drawing meant for small text
+ * and the 21px lede gets the finer one. Nothing has to name a value.
+ */
+.lede,
+.prose,
+.prose-lead,
+.tale-story,
+.tale-kicker,
+.therefore,
+.insight-text,
+.consideration-body,
+.panel-caption,
+.example-caption {
+  font-family: var(--font-serif), Georgia, serif;
+  font-optical-sizing: auto;
+}
+
 /* ---------- Cautionary tale, anti-pattern, therefore ---------- */
 .tale-head {
-  font-size: clamp(22px, 2.4vw, 28px);
+  font-size: var(--fs-h2);
 }
 
 .tale-dateline {
   margin: 6px 0 0;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
@@ -3689,9 +3801,9 @@ a.station-body:hover .station-count {
 
 .tale-story {
   margin: 14px 0 0;
-  max-width: 62ch;
-  font-size: 17px;
-  line-height: 1.6;
+  max-width: 55ch;
+  font-size: var(--fs-prose);
+  line-height: var(--lh-prose);
   color: var(--ink);
 }
 
@@ -3701,9 +3813,169 @@ a.station-body:hover .station-count {
   max-width: 62ch;
   padding-left: 14px;
   border-left: 3px solid var(--ink);
-  font-size: 17px;
-  line-height: 1.55;
+  font-size: var(--fs-prose);
+  line-height: var(--lh-prose);
   color: var(--ink);
+}
+
+/* ---------- The tale's countdown ----------
+ *
+ * The same two-states-no-half-wrap flex the mechanism row uses, and for the
+ * same reason: a countdown broken as three markers and then two reads as two
+ * groups, which is a claim about the sequence that the sequence is not
+ * making. The threshold is built from `--marks` on the element, so a
+ * three-marker timeline holds its row down to a width where a six-marker one
+ * has long since stacked, instead of every tale sharing one guessed
+ * breakpoint.
+ *
+ * `--mark-min` is what sets where the switch lands, and 120px is chosen
+ * against the narrowest the article column ever gets while the page is still
+ * two columns: the aside leaves at 1100px, and just above that the article is
+ * about 700px. Five markers have to stay in a row there, or the strip would
+ * stack on a laptop and then unstack on the tablet below it.
+ *
+ * The rule is the markers' own top border: side by side they join into one
+ * line with the marks sitting on it, and stacked they become a hairline
+ * above each marker. Nothing here moves or reacts to the pointer.
+ */
+.tale-timeline {
+  --mark-gap: 18px;
+  --mark-min: 120px;
+  --threshold: calc(var(--marks, 5) * var(--mark-min) + (var(--marks, 5) - 1) * var(--mark-gap));
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mark-gap);
+  list-style: none;
+  margin: 26px 0 0;
+  padding: 0;
+}
+
+.tale-mark {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-basis: calc((var(--threshold) - 100%) * 999);
+  /* A long label would otherwise hold the row open at its min-content width
+     and defeat the switch. */
+  min-width: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-strong);
+}
+
+/*
+ * The mark on the rule: a hollow circle for every reading, a filled square
+ * for the impact. Shape and fill, not hue — the strip reads the same in
+ * greyscale and in print, which is the only way a countdown to a death
+ * should be drawn.
+ */
+.tale-mark-dot {
+  position: absolute;
+  top: -5px;
+  left: 0;
+  box-sizing: border-box;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--ground);
+}
+
+.tale-mark.is-impact {
+  border-top-color: var(--ink);
+}
+
+.tale-mark.is-impact .tale-mark-dot {
+  top: -6px;
+  width: 11px;
+  height: 11px;
+  border-radius: 0;
+  border-color: var(--ink);
+  background: var(--ink);
+}
+
+.tale-mark-at {
+  color: var(--muted);
+}
+
+.tale-mark.is-impact .tale-mark-at {
+  color: var(--ink);
+}
+
+.tale-mark-label {
+  margin-top: 4px;
+  font-size: var(--fs-base);
+  line-height: 1.3;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.tale-mark.is-impact .tale-mark-label {
+  font-weight: 600;
+}
+
+.tale-mark-detail {
+  margin-top: 5px;
+  font-size: var(--fs-base-sm);
+  line-height: 1.45;
+  color: var(--text-3);
+}
+
+/*
+ * The line the story was told for. A pull quote rather than a sentence of
+ * the paragraph above: the story stops, and this is said about it.
+ */
+.tale-kicker {
+  margin: 28px 0 0;
+  max-width: 44ch;
+  padding: 0;
+  border: 0;
+  /* The family comes from the editorial block above: the kicker is the last
+     line of the story, not a heading over it. It used to be set in the
+     display face, which was right while the story was Inter and is wrong
+     now that the story is a serif. */
+  font-size: var(--fs-display-2xs);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.tale-kicker p {
+  margin: 0;
+}
+
+/* ---------- The insight callout ----------
+ *
+ * The condition on the Therefore above it. Two hairlines and nothing else:
+ * set apart from the prose, but quieter than the bar-and-ink statement it
+ * qualifies, because it is the caveat on the pattern and not a second
+ * pattern. The lead sentence carries the ink.
+ */
+.insight {
+  margin-top: 20px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.insight-text {
+  margin: 0;
+  max-width: 62ch;
+  font-size: var(--fs-base);
+  line-height: var(--lh-prose);
+  color: var(--text-2);
+}
+
+.insight-text strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* The duo column already sets the measure; the cap inside it would only
+   narrow the callout further. */
+.duo-col .insight-text {
+  max-width: none;
 }
 
 /* ---------- Learning Loop: the bow doors demo ----------
@@ -3735,7 +4007,7 @@ a.station-body:hover .station-count {
 .ll-bridge dd {
   margin: 0;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   line-height: 1.5;
   letter-spacing: 0.04em;
 }
@@ -3746,7 +4018,7 @@ a.station-body:hover .station-count {
 }
 
 .ll-bridge dd {
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
 }
 
 .ll-track {
@@ -3760,7 +4032,7 @@ a.station-body:hover .station-count {
   align-items: baseline;
   gap: 8px;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   line-height: 1.5;
   opacity: 0.6;
 }
@@ -3800,7 +4072,7 @@ a.station-body:hover .station-count {
   min-height: 132px;
   margin: 0 0 14px;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   line-height: 1.5;
 }
 
@@ -3814,7 +4086,7 @@ a.station-body:hover .station-count {
   margin: 0;
   white-space: pre;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   line-height: 1.5;
   color: var(--ink);
   transition: opacity 240ms ease;
@@ -3861,7 +4133,7 @@ a.station-body:hover .station-count {
   padding: 0;
   font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
   font-weight: 600;
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
@@ -3872,9 +4144,9 @@ a.station-body:hover .station-count {
   padding: 6px 8px;
   background: var(--panel);
   border: 1px solid var(--edge);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   text-transform: uppercase;
   color: var(--ink);
 }
@@ -3886,9 +4158,9 @@ a.station-body:hover .station-count {
   padding: 6px 12px;
   background: none;
   border: 1px solid var(--edge);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   font: inherit;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--ink);
   cursor: pointer;
 }
@@ -3926,7 +4198,7 @@ a.station-body:hover .station-count {
   padding: 0;
   list-style: none;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   line-height: 1.5;
   color: var(--muted);
 }
@@ -3987,7 +4259,7 @@ a.station-body:hover .station-count {
   margin: 0 0 8px;
   font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
   font-weight: 600;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--ink);
 }
 
@@ -4007,9 +4279,9 @@ a.station-body:hover .station-count {
   padding: 0 4px;
   background: none;
   border: 0;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   line-height: 1.5;
   text-align: left;
   color: var(--ink);
@@ -4027,7 +4299,7 @@ a.station-body:hover .station-count {
 .tri-ranked {
   margin: 0 0 14px;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   line-height: 1.5;
 }
 
@@ -4046,7 +4318,7 @@ a.station-body:hover .station-count {
 .tri-rank-word {
   font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
   font-weight: 600;
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   line-height: 21px;
   letter-spacing: 0.08em;
 }
@@ -4117,9 +4389,9 @@ a.station-body:hover .station-count {
   gap: 4px 10px;
   padding: 7px 8px;
   border: 1px solid var(--edge);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   cursor: pointer;
 }
 
@@ -4145,7 +4417,7 @@ a.station-body:hover .station-count {
 .fc-choice-note {
   grid-column: 2 / -1;
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   color: var(--muted);
 }
 
@@ -4164,16 +4436,16 @@ a.station-body:hover .station-count {
   margin: 0 0 12px;
   padding: 8px 10px;
   border: 1px dashed var(--edge);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
 }
 
 .fc-proposal-label {
   margin: 0 0 4px;
   font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
   font-weight: 600;
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
@@ -4191,7 +4463,7 @@ a.station-body:hover .station-count {
   margin: 0 0 10px;
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 700;
-  font-size: 16px;
+  font-size: var(--fs-md);
   color: var(--ink);
 }
 
@@ -4345,7 +4617,7 @@ a.station-body:hover .station-count {
 .at-cell-sub {
   margin: 0;
   font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--crt-mid);
@@ -4360,7 +4632,7 @@ a.station-body:hover .station-count {
 .at-speed {
   margin: 2px 0 0;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 26px;
+  font-size: var(--fs-7xl);
   line-height: 1.1;
   color: var(--crt-green);
   font-variant-numeric: tabular-nums;
@@ -4375,7 +4647,7 @@ a.station-body:hover .station-count {
 .at-trend {
   margin-left: 10px;
   font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -4383,7 +4655,7 @@ a.station-body:hover .station-count {
 .at-mode {
   margin: 2px 0 0;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   color: var(--crt-mid);
 }
 
@@ -4426,7 +4698,7 @@ a.station-body:hover .station-count {
 .at-warn {
   margin: 0 0 12px;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   color: #ffc14d;
 }
 
@@ -4442,7 +4714,7 @@ a.station-body:hover .station-count {
   flex: 1;
   height: 92px;
   border: 1px solid var(--crt-dim);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
@@ -4477,7 +4749,7 @@ a.station-body:hover .station-count {
 
 .at-debrief {
   margin: 10px 0 0;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   line-height: 1.45;
   color: var(--crt-mid);
 }
@@ -4499,7 +4771,7 @@ a.station-body:hover .station-count {
   height: 46px;
   margin: 4px 0 14px;
   border: 1px solid var(--crt-dim);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
 }
 
 /* The aisle floor the robot runs along. */
@@ -4537,7 +4809,7 @@ a.station-body:hover .station-count {
 .sa-aisle-text {
   margin: 4px 0 14px;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   white-space: pre;
   color: var(--crt-green);
 }
@@ -4557,17 +4829,17 @@ a.station-body:hover .station-count {
   padding: 11px 12px;
   background: #f2c500;
   border: 2px solid #b3241c;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-condensed), var(--font-sans), system-ui, sans-serif;
   font-weight: 700;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   line-height: 1.2;
   color: #b3241c;
   cursor: pointer;
 }
 
 .sa-stop-shape {
-  font-size: 15px;
+  font-size: var(--fs-base);
 }
 
 .sa-stop:hover:not(:disabled) {
@@ -4596,9 +4868,9 @@ a.station-body:hover .station-count {
   padding: 9px 14px;
   background: none;
   border: 1px solid var(--crt-mid);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   font: inherit;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--crt-green);
   cursor: pointer;
   touch-action: none; /* a hold must not become a scroll */
@@ -4653,7 +4925,7 @@ a.station-body:hover .station-count {
 .af-outcome {
   margin: 0 0 12px;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   font-weight: 700;
   line-height: 1.5;
   color: #b9ffc6;
@@ -4676,9 +4948,9 @@ a.station-body:hover .station-count {
   overflow: hidden;
   background: none;
   border: 1px solid var(--crt-mid);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   font: inherit;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   text-align: center;
   color: var(--crt-green);
   cursor: pointer;
@@ -4811,7 +5083,7 @@ a.station-body:hover .station-count {
   padding: 0;
   list-style: none;
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 14px;
+  font-size: var(--fs-base-sm);
   line-height: 1.5;
 }
 
@@ -4840,7 +5112,7 @@ a.station-body:hover .station-count {
 .pl-edit {
   flex: none;
   padding: 2px 8px;
-  font-size: 12px;
+  font-size: var(--fs-xs);
 }
 
 .pl-changers {

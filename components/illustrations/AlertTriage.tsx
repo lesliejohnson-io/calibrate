@@ -258,7 +258,7 @@ function WithScreen() {
     <div className="console">
       <p className="console-title">Control room alarm panel</p>
       <div className="console-screen">
-        <div className="tri-ranked" style={{ minHeight: "calc(9 * 1.5 * 14px)" }}>
+        <div className="tri-ranked" style={{ minHeight: "calc(9 * 1.5 * var(--fs-base-sm))" }}>
           {printed("t-warn") && (
             <div className="tri-rank is-warning">
               <p className="tri-rank-head">

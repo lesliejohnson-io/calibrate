@@ -42,18 +42,27 @@ cautionaryTale:
   place: "Tempe, Arizona"
   story: >-
     Just before 10 p.m., an Uber test SUV driving itself struck and killed a
-    woman pushing a bicycle across N. Mill Avenue. What the machine had done
-    was not left to argument afterwards, because the machine had written it
-    down: its automated driving system recorded when it detected her, how it
-    classified her and what path it predicted each time that changed, the
-    vehicle's own dynamics, and the actions it planned and took. At the
-    NTSB's request, Uber's Advanced Technologies Group played the data back,
-    and investigators built the timeline from the sensor output. First
-    detection came 5.6 seconds before impact; the classification alternated
-    between vehicle, bicycle and other; and 1.2 seconds out, when stopping
-    would have taken more braking than the system was allowed, it began a
-    one-second suppression that held braking off. None of that is testimony.
-    It is a readout.
+    woman pushing a bicycle across N. Mill Avenue. Nobody had to argue
+    afterwards about what the machine had done, because the machine had
+    written it down. At the NTSB's request, Uber's Advanced Technologies
+    Group played the data back, and investigators built the timeline from the
+    car's own sensor output.
+  timeline:
+    - at: "−5.6 s"
+      label: "First detection"
+      detail: "Classified as a vehicle, by radar. 44.1 mph."
+    - at: "−5.6 to −1.2 s"
+      label: "Classification keeps changing"
+      detail: "Vehicle, bicycle, other. Each label comes with a new predicted path."
+    - at: "−1.2 s"
+      label: "Action suppression begins"
+      detail: "Bicycle, by lidar. Stopping now needs more braking than the system is allowed."
+    - at: "−0.2 s"
+      label: "Suppression ends"
+      detail: "One second after it began."
+    - at: "0 s"
+      label: "Impact"
+  kicker: "None of that is testimony. It is a readout."
   sourceId: ntsb-har-19-03
 
 therefore: >-
@@ -61,17 +70,23 @@ therefore: >-
   the record where no single party can alter or withhold it, and make it
   readable by the people it concerns.
 
+insight: >-
+  The data is rarely what's missing. In both the crash and the Horizon case,
+  the records existed. What decides whether a log protects people is who can
+  reach it, and who can change it.
+
 without:
   steps: ["Change applied", "No trace of who", "The operator carries it"]
-  caption: "After the 2019 Key Largo crash the record existed too, and it was the most important evidence in the case: what the car detected, and when. But it sat entirely with the company that built the car, out of reach of the people it concerned. Whatever the reasons, the effect was the same: for years, the people harmed had only their word, and the system's builder had everything else.[cite:wapo-tesla-data]"
+  caption: "After the 2019 Key Largo crash, the record existed too: within moments of impact, the car uploaded a collision snapshot to the company that built it. But it sat with that company, out of reach of the people it concerned. For years, the people harmed had only their word, and the system's builder had everything else.[cite:wapo-tesla-data]"
 
 with:
   steps: ["Change applied", "Actor recorded", "Responsibility traceable"]
-  caption: "Every state change carries its author and its time. At Tempe the ADS data held the detection times, the successive classifications and the suppressed brake command, so the sequence could be established rather than argued."
+  caption: "Every state change carries its author and its time."
 
 examples:
-  - alt: "Placeholder for a figure from the Key Largo case: the collision snapshot the car uploaded to Tesla's servers, and the acknowledgement sent back to the car."
-    credit: "Trisha Thadani and Faiz Siddiqui, The Washington Post, 2025"
+  - alt: "Line drawing of the Key Largo data flow: the crash, the car uploading a collision snapshot to Tesla's servers, the server acknowledging it, the car marking its own copy for deletion, and years later a hacker recovering it from a forensic copy of the Autopilot unit."
+    placeholder: false
+    credit: "The Washington Post"
     url: "https://www.spokesman.com/stories/2025/aug/29/tesla-said-it-didnt-have-key-data-in-a-fatal-crash"
     verdict: without
     domain: automotive
@@ -92,6 +107,13 @@ related:
     note: "Friction makes a consequential action deliberate. The log is what makes it accountable once it has happened."
 
 review:
+  - "Readability pass, 2026-11-10. The six entries below this one are from it; everything under them is from the pass before, where “this pass” means that one."
+  - "Opening story cut to its first and last moves, with the sequence lifted out of the paragraph into `cautionaryTale.timeline` and the closing line into `cautionaryTale.kicker`. No reading changed and none was added: −5.6 s first detection at 44.1 mph, the classification alternating between vehicle, bicycle and other, and action suppression beginning at −1.2 s and ending at −0.2 s one second later, are the same figures from NTSB/HAR-19/03 §1.5.6.1 and its table of selected ADS parameters that the prose carried. The timeline states them as a countdown instead of a sentence. “None of that is testimony. It is a readout.” is the paragraph's own last line, moved."
+  - "Anti-pattern caption shortened. Key Largo, the uploaded collision snapshot and the Washington Post citation stay; “it was the most important evidence in the case: what the car detected, and when”, “entirely”, and “Whatever the reasons, the effect was the same” are gone."
+  - "Demo caption cut to its first sentence, which makes the cut flagged below as “the obvious next cut”. The Tempe sentence it named is gone; the timeline in the opening now carries those readings, so the caption was stating them a second time two screens down."
+  - "`## Notes` moved, unchanged, into the new top-level `insight` field, so it reads under Therefore rather than above the Sources list. The Sources section no longer has a notes paragraph."
+  - "In the field no longer tells Tempe or Key Largo a second time. Both are already on this page — one as the opening, one as the anti-pattern — so their two entries are replaced by a pointer at the end of the section, and the sentence sending readers to The Handoff for the same crash went with the Uber entry. UN R157 and Horizon are untouched."
+  - "Example: no figure until the drawing exists. `image` is out and `placeholder: false` is set, so the example renders as a credit line, verdict and caption rather than a broken image or an empty box, and the credit is “The Washington Post” linking out to the story — the source, since there is no drawing yet to credit. The `alt` text still describes the drawing to come: when /illustrations/examples/key-largo-snapshot.svg lands, restore `image`, drop `placeholder`, set the credit back to “Drawing: Leslie Johnson, after The Washington Post, 2025” and clear `drafts.examples`."
   - "Opening story replaced this pass: Tempe in, Key Largo out. The new tale is verified against NTSB/HAR-19/03. §1.5.6.1: “The ADS data included the time the system detected the pedestrian, how the system classified and assigned predicted paths to the pedestrian, various vehicle dynamics, and the ADS's planned and executed actions. At the request of NTSB investigators, ATG provided a playback of sensor and vehicle dynamics information showing the events leading up to the crash. Investigators examined the output from the sensor systems to create a timeline of the events.” The table of selected ADS parameters carries first detection at −5.6 seconds, “Classification: Vehicle--by radar”, and at −1.2 seconds “Classification: Bicycle--by lidar … situation becomes hazardous (emergency situation) … Action suppression begins”, ending at −0.2 seconds “1 second after it begins”. §1.5.6.1 again: the ADS “changed the pedestrian's classification several times, alternating between vehicle, bicycle, and other”, and at 1.2 seconds “preventing the collision would have required braking beyond the ADS braking design specifications”. The 911 call came in at 10:00 p.m., which is where “just before 10 p.m.” comes from — the report gives no clock time for the impact itself."
   - "Tempe opens only this pattern now. It used to be the cautionary tale on The Handoff as well; that page's opening was replaced with the Santiago de Compostela derailment, and Tempe is an In the field entry there. The cross-reference in this page's In the field entry was reworded to match, and so was the one on Readiness Check."
   - "Anti-pattern caption changed, not silently. It read “The record existed, and it was the most important evidence in the case…”, where “the case” meant Key Largo because Key Largo was the opening. With Tempe at the top, “the case” would now be read as Tempe — and at Tempe the data was handed over, so the sentence would have become false. It now names the 2019 Key Largo crash and carries the Washington Post citation. Nothing else in it changed."
@@ -159,14 +181,8 @@ sources:
 
 ## In the field
 
-**Observed · Automotive.** [Uber, Tempe](#tale): investigators rebuilt what the car detected and when from its own data — the first detection at 5.6 seconds, the successive reclassifications, and the one-second action suppression that held off braking.[cite:ntsb-har-19-03] The same crash is an In the field entry on [The Handoff](/patterns/handoff), for the takeover that was never asked for.
-
-**Observed · Automotive.** Tesla, Key Largo. The collision snapshot was uploaded, acknowledged and marked for deletion in the car within moments, and then sat with the company that built the car for years.[cite:wapo-tesla-data]
-
 **Observed · Automotive.** UN R157 requires automated lane keeping systems to log activation, transition demands, overrides, emergency manoeuvres, collisions, minimum risk manoeuvres and severe failures, each with a timestamp and the software version that produced it.[cite:un-r157]
 
 **Observed · Software.** The Post Office Horizon scandal. The Inquiry's first volume puts the number of people prosecuted and convicted on Horizon evidence at approximately 1,000 across the United Kingdom.[cite:horizon-vol1]
 
-## Notes
-
-The data is rarely what's missing. In both the crash and the Horizon case, the records existed. What decides whether a log protects people is who can reach it, and who can change it.
+Also on this page: [Uber, Tempe](#tale) (the opening) · Tesla, Key Largo (the anti-pattern)

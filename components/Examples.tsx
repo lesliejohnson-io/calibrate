@@ -10,43 +10,62 @@ import { ExternalLink } from "./ExternalLink";
  * rust. Where an example carries an evidence label it sits between the two,
  * so the reader sees how much stands behind the example before the claim.
  * A figure whose image has not been cleared for reuse yet shows a
- * placeholder with its own description rather than being dropped.
+ * placeholder with its own description rather than being dropped, unless the
+ * example sets `placeholder: false`. That one has no figure at all: its
+ * credit is promoted to a source line above the verdict, which is what an
+ * example that is a citation rather than a picture should look like.
  */
 export function Examples({ examples }: { examples: Example[] }) {
   return (
     <ul className="examples">
-      {examples.map((e) => (
-        <li key={e.caption} className="example">
-          <figure className="example-figure">
-            {e.image ? (
-              // Plain <img>: these are author-supplied paths, often remote.
-              // eslint-disable-next-line @next/next/no-img-element
-              <img className="example-image" src={e.image} alt={e.alt} />
-            ) : (
-              <div className="example-placeholder" role="img" aria-label={e.alt}>
-                <span className="label">[Image: {e.alt}]</span>
-              </div>
-            )}
-            {e.credit && (
-              <figcaption className="example-credit">
-                {e.url ? <ExternalLink href={e.url}>{e.credit}</ExternalLink> : e.credit}
-              </figcaption>
-            )}
-          </figure>
+      {examples.map((e) => {
+        const media = e.image ? (
+          // Plain <img>: these are author-supplied paths, often remote.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img className="example-image" src={e.image} alt={e.alt} />
+        ) : e.placeholder ? (
+          <div className="example-placeholder" role="img" aria-label={e.alt}>
+            <span className="label">[Image: {e.alt}]</span>
+          </div>
+        ) : null;
 
-          <p className={`mono-label example-verdict is-${e.verdict}`}>
-            <span aria-hidden="true">{VERDICT_SHAPES[e.verdict]}</span> {VERDICT_LABELS[e.verdict]}
-          </p>
-          {/* How much evidence stands behind the example: observed,
-              illustrative or speculative, defined on the About page. */}
-          {e.evidence && (
-            <p className="example-evidence">
-              <span className={`tag tag-evidence tag-${e.evidence}`}>{humanize(e.evidence)}</span>
+        const credit = e.credit ? (
+          e.url ? (
+            <ExternalLink href={e.url}>{e.credit}</ExternalLink>
+          ) : (
+            e.credit
+          )
+        ) : null;
+
+        return (
+          <li key={e.caption} className="example">
+            {/* With nothing to show there is no figure to caption, so the
+                credit stands on its own as the line saying where this came
+                from. */}
+            {media ? (
+              <figure className="example-figure">
+                {media}
+                {credit && <figcaption className="example-credit">{credit}</figcaption>}
+              </figure>
+            ) : (
+              credit && <p className="example-credit example-source">{credit}</p>
+            )}
+
+            <p className={`mono-label example-verdict is-${e.verdict}`}>
+              <span aria-hidden="true">{VERDICT_SHAPES[e.verdict]}</span>{" "}
+              {VERDICT_LABELS[e.verdict]}
             </p>
-          )}
-          <p className="example-caption">{e.caption}</p>
-        </li>
-      ))}
+            {/* How much evidence stands behind the example: observed,
+                illustrative or speculative, defined on the About page. */}
+            {e.evidence && (
+              <p className="example-evidence">
+                <span className={`tag tag-evidence tag-${e.evidence}`}>{humanize(e.evidence)}</span>
+              </p>
+            )}
+            <p className="example-caption">{e.caption}</p>
+          </li>
+        );
+      })}
     </ul>
   );
 }

@@ -118,10 +118,13 @@ considerations: []
 # either `applies` (the pattern in use) or `without` (what its absence costs) —
 # shown as a shape and a word, never colour alone. `alt` is required; leave
 # `image` out while the figure is still a placeholder and the slot renders as a
-# stated gap. Confirm an image's reuse terms before publishing it.
+# stated gap, or add `placeholder: false` to drop the slot too and render the
+# example as a credit line, verdict and caption. Confirm an image's reuse terms
+# before publishing it.
 examples: []
 #  - image: "/examples/my-image.png"
 #    alt: "What the image shows, for screen readers"
+#    placeholder: false   # no image and no stated gap: a citation, not a figure
 #    credit: "Who it is from, e.g. BEA, AF447 Final Report, 2012, Figure 70"
 #    url: "https://example.com"
 #    verdict: applies

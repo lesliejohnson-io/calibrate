@@ -119,7 +119,7 @@ export function Log({
   return (
     <div
       className="fc-log"
-      style={minLines ? { minHeight: `calc(${minLines} * 1.5 * 14px)` } : undefined}
+      style={minLines ? { minHeight: `calc(${minLines} * 1.5 * var(--fs-base-sm))` } : undefined}
     >
       {lines.map((line) => (
         <p

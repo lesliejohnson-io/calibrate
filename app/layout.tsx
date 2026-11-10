@@ -28,9 +28,16 @@ const THEME_SCRIPT = `try{var t=localStorage.getItem("theme");if(t==="dark"||t==
  * the files removes the network from the build entirely.
  *
  * Each file is the `latin` subset of the family's variable font, taken from
- * Google Fonts (Archivo, Inter and JetBrains Mono, all under the SIL Open
- * Font License). The variable axis covers every weight the CSS asks for, so
- * one file per family replaces the fixed weights we used to request. The
+ * Google Fonts (Archivo, Inter, Newsreader and JetBrains Mono, all under the
+ * SIL Open Font License). The variable axis covers every weight the CSS asks
+ * for, so one file per family replaces the fixed weights we used to request.
+ *
+ * The two sans faces have different jobs. Archivo is the display face, and
+ * Inter is now the interface face — nav, cards, labels, the mechanism strip,
+ * the demos — rather than the reading face it used to be. Reading text is
+ * Newsreader: the opening tale, the body sections, the Therefore and the
+ * captions. Newsreader ships upright and italic as two files, so an emphasis
+ * in reading text is a drawn italic rather than a slanted upright. The
  * `latin` subset carries U+0000-00FF, which covers the accented characters in
  * the patterns and the source list; the geometric glyphs in the diagrams
  * (U+25xx) are outside every Google latin subset and render from the system
@@ -50,7 +57,7 @@ const display = localFont({
   variable: "--font-display",
   fallback: ["system-ui", "sans-serif"],
 });
-/* Prose: lede, body, card intents. */
+/* Interface: nav, cards, card intents, controls, demo text. */
 const sans = localFont({
   src: "./fonts/Inter-Variable-latin.woff2",
   weight: "100 900",
@@ -58,6 +65,18 @@ const sans = localFont({
   display: "swap",
   variable: "--font-sans",
   fallback: ["system-ui", "sans-serif"],
+});
+/* Editorial: the opening tale, body sections, Therefore, captions. Two files,
+   because the italic is drawn rather than sloped. `opsz` is left to
+   font-optical-sizing in globals.css, which reads it off the rendered size. */
+const serif = localFont({
+  src: [
+    { path: "./fonts/Newsreader-Variable-latin.woff2", weight: "200 800", style: "normal" },
+    { path: "./fonts/Newsreader-Italic-Variable-latin.woff2", weight: "200 800", style: "italic" },
+  ],
+  display: "swap",
+  variable: "--font-serif",
+  fallback: ["Georgia", "serif"],
 });
 /* Data: labels, numbers, meta, verdicts. */
 const mono = localFont({
@@ -70,7 +89,7 @@ const mono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Calibrate: Patterns for human–machine trust", template: "%s · Calibrate" },
+  title: { default: "Calibrate Patterns: Designing for human–machine trust", template: "%s · Calibrate" },
   description:
     "Named, reusable design patterns for the trust layer between humans and autonomous machines.",
   /* REMOVE AT DOMAIN LAUNCH. Keeps the whole site out of search indexes while
@@ -84,7 +103,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const facets = toFacets(getAllPatterns().map(toCardData));
 
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
+    <html
+      lang="en"
+      className={`${display.variable} ${sans.variable} ${serif.variable} ${mono.variable}`}
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>

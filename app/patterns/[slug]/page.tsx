@@ -22,6 +22,7 @@ import { DraftTag } from "@/components/DraftTag";
 import { TocDisclosure } from "@/components/TocDisclosure";
 import type { TocItem } from "@/components/PatternToc";
 import { CautionaryTale } from "@/components/CautionaryTale";
+import { Insight } from "@/components/Insight";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -127,6 +128,10 @@ export default async function PatternPage({ params }: Props) {
                 <strong>Therefore:</strong> {p.therefore}
               </p>
             )}
+            {/* The condition on the Therefore above, where the pattern has
+                one: quieter than the statement it qualifies, and set apart
+                from it so it does not read as a second sentence of it. */}
+            {p.insight && <Insight text={p.insight} />}
           </section>
         </div>
 

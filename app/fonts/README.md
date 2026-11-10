@@ -11,9 +11,16 @@ the files here takes the network out of the build.
 | `Archivo-Variable-latin.woff2` | Archivo | `wght` 100–900 | Google Fonts, `latin` subset |
 | `Inter-Variable-latin.woff2` | Inter | `wght` 100–900 | Google Fonts, `latin` subset |
 | `JetBrainsMono-Variable-latin.woff2` | JetBrains Mono | `wght` 100–800 | Google Fonts, `latin` subset |
+| `Newsreader-Variable-latin.woff2` | Newsreader | `opsz` 6–72, `wght` 200–800 | Google Fonts, `latin` subset |
+| `Newsreader-Italic-Variable-latin.woff2` | Newsreader, italic | `opsz` 6–72, `wght` 200–800 | Google Fonts, `latin` subset |
 
 Each is the variable font for its family, so one file covers every weight
-`app/globals.css` asks for (400–700). The `latin` subset covers U+0000–00FF,
+`app/globals.css` asks for (400–700). Newsreader is the exception with two
+files: its italic is a drawn face rather than a slope, so it is a separate
+font, and `app/layout.tsx` registers the pair under one family. Its second
+axis, `opsz`, is named by no rule — `font-optical-sizing: auto` lets it
+follow the rendered size, so the 15px captions get the sturdier drawing and
+the 21px lede the finer one. The `latin` subset covers U+0000–00FF,
 which includes the accented characters in the patterns and the source list.
 Glyphs outside it — the geometric shapes in the diagrams (U+25xx) and the
 arrows `←` `→` — are in no Google latin subset and render from the system
@@ -27,11 +34,13 @@ if a rule ever asks for the family without naming a weight.
 
 ## Licence
 
-All three families are licensed under the SIL Open Font License, Version 1.1:
+All four families are licensed under the SIL Open Font License, Version 1.1:
 
 - Archivo — Copyright (c) Omnibus-Type
 - Inter — Copyright (c) The Inter Project Authors
 - JetBrains Mono — Copyright (c) JetBrains s.r.o.
+- Newsreader — Copyright 2020 The Newsreader Project Authors
+  (<http://github.com/productiontype/Newsreader>)
 
 The licence text is at <https://openfontlicense.org/open-font-license-official-text/>.
 The OFL permits bundling and redistribution with a work; it does not require
@@ -46,6 +55,12 @@ replace the file:
 
     curl -A "<browser UA>" \
       "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+
+A family with more than one axis has to name them all, and one with a real
+italic asks for both and yields two `latin` files:
+
+    curl -A "<browser UA>" \
+      "https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap"
 
 To widen glyph coverage, add the matching `latin-ext` file with its own
 `unicode-range` descriptor alongside the existing `@font-face`.
