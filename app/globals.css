@@ -495,14 +495,24 @@ code {
   text-underline-offset: 2px;
 }
 
-/* Theme toggle: a 44px target around a 17px icon. */
+/* Appearance: a 44px target around a 17px icon, and the menu it opens. The
+   wrapper is the popover's anchor, so the panel hangs off the button's right
+   edge rather than off the nav. */
+.theme-menu {
+  position: relative;
+  display: inline-flex;
+  /* The optical overhang that used to sit on the button itself. It belongs
+     on the wrapper now, so the wrapper's right edge is the button's right
+     edge and the menu hangs off that rather than 10px inside it. */
+  margin-right: -10px;
+}
+
 .theme-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 44px;
   height: 44px;
-  margin-right: -10px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -521,41 +531,92 @@ code {
 }
 
 /*
- * Each icon shows the theme you would switch TO, so the moon shows while
- * light and the sun while dark. Decided in CSS from the resolved theme, which
- * keeps the button free of React state and safe to server-render.
+ * The icon names the choice on record, not the colour on screen: sun for
+ * Light, moon for Dark, half circle for System. So this reads `data-theme`
+ * alone and never `prefers-color-scheme` -- System shows the half circle
+ * whichever way the OS is leaning, which is the whole point of it.
+ *
+ * It was the other way round when this was a switch, where each icon showed
+ * the theme you would move TO. A menu does not move you anywhere, so the icon
+ * went from a promise to a statement.
+ *
+ * Still CSS rather than React: `data-theme` is on the root before first
+ * paint, so the button is identical on the server and the client.
  */
 .theme-icon {
   display: none;
 }
 
-.icon-moon {
+.icon-system {
   display: block;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .icon-moon {
-    display: none;
-  }
-  :root:not([data-theme="light"]) .icon-sun {
-    display: block;
-  }
-}
-
-:root[data-theme="dark"] .icon-moon {
+:root[data-theme="light"] .icon-system,
+:root[data-theme="dark"] .icon-system {
   display: none;
-}
-
-:root[data-theme="dark"] .icon-sun {
-  display: block;
-}
-
-:root[data-theme="light"] .icon-moon {
-  display: block;
 }
 
 :root[data-theme="light"] .icon-sun {
-  display: none;
+  display: block;
+}
+
+:root[data-theme="dark"] .icon-moon {
+  display: block;
+}
+
+/* The menu. Same surface, border, radius and shadow as the domain popover --
+   it is the same kind of object and should not look like a second system. */
+.theme-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 30;
+  width: 160px;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(20, 20, 20, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-pop {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  }
+}
+
+:root[data-theme="dark"] .theme-pop {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.theme-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 40px;
+  padding: 0 10px;
+  font: inherit;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: var(--fs-sm);
+  text-align: left;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.theme-item:hover {
+  background: var(--ground);
+}
+
+/* The tick reserves its column whether or not it is showing, so the three
+   labels line up and the menu does not shift as the choice moves. */
+.theme-item-check {
+  flex: none;
+  width: 12px;
+  color: var(--ink);
 }
 
 /* ---------- Mobile header and navigation drawer ---------- */
@@ -600,7 +661,7 @@ code {
 
 .hamburger:focus-visible,
 .drawer-close:focus-visible,
-.drawer-theme:focus-visible,
+.drawer-segment:focus-visible,
 .drawer-brand:focus-visible,
 .drawer-link:focus-visible,
 .drawer-moment:focus-visible,
@@ -782,18 +843,65 @@ code {
   text-underline-offset: 3px;
 }
 
-.drawer-theme {
+/* ---------- Appearance ---------- */
+/*
+ * A setting, not a destination. The label is smaller and quieter than the
+ * 20px nav links above it so the row reads as something you adjust on the
+ * way past rather than another place to go, and the segmented control sits
+ * opposite it the way a setting's control does in a list.
+ *
+ * Every colour here is on #0A0A0A: the label and the unselected options are
+ * white at 0.7 and 0.75, which clear 4.5:1, and the selected option inverts
+ * to #0A0A0A on #FFF rather than brightening, so the row never outshines the
+ * navigation it sits under.
+ */
+.drawer-appearance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-height: 44px;
+  margin-top: 32px;
+}
+
+/* 9.6:1 on #0A0A0A. */
+.drawer-appearance-label {
+  margin: 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.drawer-segmented {
+  display: inline-flex;
+  flex: none;
+  padding: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+}
+
+/* 10.4:1 on #0A0A0A unselected; the checked option inverts instead. */
+.drawer-segment {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  margin: 24px 0 0 -11px;
-  padding: 0;
-  border: 0;
+  min-height: 44px;
+  padding: 0 12px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.75);
   background: transparent;
-  color: #ffffff;
+  border: 0;
+  border-radius: 999px;
   cursor: pointer;
+}
+
+.drawer-segment[aria-checked="true"] {
+  color: #0a0a0a;
+  background: #ffffff;
 }
 
 /* ---------- Drawer footer ---------- */

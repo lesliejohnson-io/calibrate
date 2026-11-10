@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MOMENTS } from "@/lib/schema";
 import { SOCIAL_LINKS, SocialIcon } from "./SocialLinks";
-import { resolvedTheme, toggleTheme, type Theme } from "./ThemeToggle";
+import { setThemeChoice, storedChoice, type ThemeChoice } from "./ThemeToggle";
 
 /**
  * The small-screen menu: a hamburger in the header and a drawer behind it.
@@ -23,6 +23,13 @@ import { resolvedTheme, toggleTheme, type Theme } from "./ThemeToggle";
  * Short labels, by the brief: the moment named "After and over time"
  * everywhere else on the site is "After" in here.
  */
+
+/** The appearance options, in the order the arrow keys walk them. */
+const CHOICES: { value: ThemeChoice; label: string }[] = [
+  { value: "system", label: "System" },
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+];
 
 /** The moments, in loop order, with the names the drawer uses. */
 const MOMENT_SHORT: Record<(typeof MOMENTS)[number], string> = {
@@ -199,7 +206,7 @@ export function NavDrawer() {
             </Link>
           </nav>
 
-          <DrawerTheme />
+          <DrawerAppearance />
 
           <div className="drawer-foot">
             <p className="drawer-name">Leslie Johnson</p>
@@ -226,51 +233,76 @@ export function NavDrawer() {
 }
 
 /**
- * The header's switch decides which icon to show in CSS, so it can be
- * server-rendered with no state at all. This one cannot: its label has to say
- * which way the switch goes, and that is a sentence, not a stylesheet. It is
- * only ever read inside an open drawer, so there is nothing to flash.
+ * Appearance, as a setting rather than a switch.
+ *
+ * The header's icon toggle flips between two states and can decide which
+ * icon to show in CSS, so it needs no state at all. This one cannot: there
+ * are three options, and "System" is the absence of a stored choice, which no
+ * stylesheet can see. So it reads the choice in an effect and renders nothing
+ * checked until then -- a radio group whose server markup guessed wrong would
+ * announce the wrong setting for as long as hydration took.
+ *
+ * Roving tabindex, per the radiogroup pattern: the group is one tab stop and
+ * the arrows move within it. Until the choice is known nothing is checked, so
+ * the first option carries the tabindex to keep the group reachable.
  */
-function DrawerTheme() {
-  const [theme, setTheme] = useState<Theme | null>(null);
+function DrawerAppearance() {
+  const [choice, setChoice] = useState<ThemeChoice | null>(null);
+  const labelId = useId();
+  const groupRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => setTheme(resolvedTheme()), []);
+  useEffect(() => setChoice(storedChoice()), []);
 
-  const label =
-    theme === null
-      ? "Switch between light and dark mode"
-      : theme === "dark"
-        ? "Switch to light mode"
-        : "Switch to dark mode";
+  const pick = (next: ThemeChoice) => {
+    setThemeChoice(next);
+    setChoice(next);
+  };
+
+  // Left and Right move to the next option and select it, wrapping at both
+  // ends. Selection follows focus, which is the right call here because every
+  // option is instant and reversible -- there is nothing to commit.
+  const onKeyDown = (event: React.KeyboardEvent) => {
+    const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+    if (step === 0) return;
+    event.preventDefault();
+
+    const from = CHOICES.findIndex((c) => c.value === choice);
+    const next = CHOICES[(((from === -1 ? 0 : from) + step) + CHOICES.length) % CHOICES.length];
+    pick(next.value);
+    groupRef.current
+      ?.querySelectorAll<HTMLButtonElement>("button")
+      [CHOICES.indexOf(next)]?.focus();
+  };
 
   return (
-    <button
-      type="button"
-      className="drawer-theme"
-      aria-label={label}
-      onClick={() => setTheme(toggleTheme())}
-    >
-      {theme === "dark" ? (
-        <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false">
-          <circle cx="10" cy="10" r="3.6" fill="none" stroke="currentColor" strokeWidth="1.4" />
-          <path
-            d="M10 1.6v2.1M10 16.3v2.1M18.4 10h-2.1M3.7 10H1.6M15.94 4.06l-1.48 1.48M5.54 14.46l-1.48 1.48M15.94 15.94l-1.48-1.48M5.54 5.54 4.06 4.06"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-          />
-        </svg>
-      ) : (
-        <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false">
-          <path
-            d="M16.5 12.4A7 7 0 0 1 7.6 3.5a7 7 0 1 0 8.9 8.9Z"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinejoin="round"
-          />
-        </svg>
-      )}
-    </button>
+    <div className="drawer-appearance">
+      <p className="drawer-appearance-label" id={labelId}>
+        Appearance
+      </p>
+      <div
+        className="drawer-segmented"
+        ref={groupRef}
+        role="radiogroup"
+        aria-labelledby={labelId}
+        onKeyDown={onKeyDown}
+      >
+        {CHOICES.map((option, index) => {
+          const checked = choice === option.value;
+          return (
+            <button
+              key={option.value}
+              type="button"
+              className="drawer-segment"
+              role="radio"
+              aria-checked={checked}
+              tabIndex={checked || (choice === null && index === 0) ? 0 : -1}
+              onClick={() => pick(option.value)}
+            >
+              {option.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }
