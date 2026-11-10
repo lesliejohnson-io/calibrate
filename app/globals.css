@@ -2875,6 +2875,17 @@ a.station-body:hover .station-count {
   margin-top: 0;
 }
 
+/* The demo's note line also carries its DRAFT tag, which is taller than the
+   14px text beside it: a row rather than a paragraph, so the tag sits on the
+   text's centre line and wraps below it in a narrow column instead of
+   stretching the line height. */
+.demo-note {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .elsewhere {
   list-style: none;
   margin: 0;
@@ -3695,6 +3706,83 @@ a.station-body:hover .station-count {
   color: var(--ink);
 }
 
+/* ---------- Learning Loop: the bow doors demo ----------
+ *
+ * Two pieces that are not printed lines: the bridge status card above the
+ * readout, and the report's status track below it. Both sit inside the
+ * console, so they borrow the display's own monospace and green rather than
+ * the page's type — but neither is a line the machine printed, so neither is
+ * drawn as one.
+ *
+ * The track's stage shapes are ● done and ○ pending, each with the word
+ * carried for a screen reader, so the stage a report has reached never rests
+ * on colour or on position.
+ */
+.ll-bridge {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  margin: 0 0 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+
+.ll-cell {
+  min-width: 0;
+}
+
+.ll-bridge dt,
+.ll-bridge dd {
+  margin: 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+
+.ll-bridge dt {
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+
+.ll-bridge dd {
+  font-size: 14px;
+}
+
+.ll-track {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.ll-stage {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  opacity: 0.6;
+}
+
+.ll-stage.is-done {
+  opacity: 1;
+}
+
+.ll-mark {
+  flex: none;
+}
+
+.ll-stage-label {
+  min-width: 0;
+}
+
+.ll-reports {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 /* ---------- Flight computer printout (Intent Preview, Explainable Fault) ----
  *
  * A machine printing to a fixed-width display, one line at a time. The
@@ -3716,9 +3804,18 @@ a.station-body:hover .station-count {
   line-height: 1.5;
 }
 
+/* The type is on the line, not only on the log around it. It used to be set
+   on `.fc-log` alone, so a printed line rendered anywhere else inside a
+   display — a gauge, a status track, a list under the readout — silently fell
+   back to the page's proportional face, which also breaks the alignment of
+   anything drawn in columns. The values are the ones `.fc-log` already set,
+   so nothing inside a log changes. */
 .fc-line {
   margin: 0;
   white-space: pre;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 14px;
+  line-height: 1.5;
   color: var(--ink);
   transition: opacity 240ms ease;
 }

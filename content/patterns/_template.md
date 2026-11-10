@@ -127,9 +127,20 @@ examples: []
 #    verdict: applies
 #    caption: "One sentence on what this shows."
 
-# drafts: which of the three drafted fields still carry a DRAFT tag next to
-# their heading. Clear them one at a time as each is reviewed.
+# drafts: which drafted parts of the page still carry a DRAFT tag. Clear them
+# one at a time as each is reviewed, rather than all at once with the
+# pattern's status.
+#
+# `tale`, `antiPattern` and `demo` cover the three things above the fold. An
+# opening incident is the most authoritative-looking prose on the page — a
+# dated, cited paragraph about something that really happened — so a freshly
+# written one has to be able to say it has not been checked yet. The demo has
+# no heading of its own, so its tag rides on the `demoNote` line, which is
+# rendered for the tag alone when there is no note to carry.
 # drafts:
+#   tale: true
+#   antiPattern: true
+#   demo: true
 #   whenToUse: true
 #   considerations: true
 #   examples: true

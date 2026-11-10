@@ -31,7 +31,7 @@ steps:
   - title: "Human leads"
     detail: "Machine confirms release"
 
-antiPattern: "The Handoff That Never Came"
+antiPattern: "The Unannounced Handoff"
 
 interface:
   component: handoff
@@ -40,20 +40,37 @@ interface:
 # the construction zone and the countdowns are written for this page.
 demoNote: "Simplified illustration."
 
+# VERIFY against the CIAF report and the 2024 ruling: train number, ETCS
+# onboard switched off and why (processing delay) and the date of the order,
+# transition point and signage, speeds (approach ~200 km/h, curve entry
+# ~179-192 km/h, limit 80 km/h), the call from the conductor (timing and
+# length), deaths (79 per court, 80 per CIAF; match the cited source) and
+# injuries.
 cautionaryTale:
-  title: "Uber self-driving test vehicle"
-  date: "March 18, 2018"
-  place: "Tempe, Arizona"
+  title: "Alvia train at Santiago de Compostela"
+  date: "July 24, 2013"
+  place: "Santiago de Compostela, Spain"
   story: >-
-    Just before 10 p.m., an Uber test SUV driving itself at about 40 mph
-    detected a woman walking a bicycle across the road 5.6 seconds before
-    reaching her. Its software kept changing its mind about what she was, and
-    didn't conclude she was in its path until about a second before impact.
-    The system relied on the safety operator behind the wheel to brake in an
-    emergency, but it wasn't designed to alert her. She was looking down, and
-    she grabbed the wheel a split second before the car struck and killed the
-    pedestrian.
-  sourceId: ntsb-har-19-03
+    On the evening run from Madrid to Ferrol, an Alvia train approached
+    Santiago de Compostela on a new high-speed line. That line was built with
+    a European train control system that would have announced the end of the
+    high-speed section, asked the driver to acknowledge it, and braked if he
+    didn't. But a processing delay in the onboard equipment meant trains had
+    been ordered to run on Spain's older ASFA system instead, which warns a
+    driver but doesn't brake for him. A few kilometres before the city, the
+    line passed from high-speed to conventional track, and slowing from about
+    200 km/h to the 80 km/h limit for the A Grandeira curve became entirely
+    the driver's job, marked only by trackside signs. He was on a work call
+    from the train's conductor as the train passed the point where he needed
+    to start braking. It entered the curve at more than twice the limit and
+    derailed. 79 people died and more than 140 were injured.
+  sourceId: ciaf-santiago-2014
+
+# Which of the sections above the fold are freshly written and unchecked.
+drafts:
+  tale: true
+  antiPattern: true
+  examples: true
 
 therefore: >-
   Hand over control early and on purpose: signal clearly, tell the operator
@@ -62,11 +79,17 @@ therefore: >-
 
 without:
   steps: ["Machine driving", "Sudden alarm", "Human takes over cold"]
+  # VERIFY against the CIAF report: that the transition from high-speed to
+  # conventional track happened at a fixed point on the line rather than on a
+  # condition; that nothing in the cab annunciated it, leaving trackside
+  # signage as the only marker; and that the ETCS onboard equipment - which
+  # would have announced the transition, demanded an acknowledgement and
+  # applied the brakes without one - had been switched off by order.
   caption: >-
-    The system's design depended on a person taking over in an emergency, but
-    it had no way to ask her. The handoff existed only in the plan. And even a
-    perfect alarm a second before impact would have been too late: by then,
-    there's no time to look up, understand and act.
+    The track handed speed control to the driver at a fixed point, at full
+    speed, with nothing in the cab to say it had happened. The version that
+    would have announced it, asked for an acknowledgement and braked if none
+    came had been switched off.
 
 with:
   steps: ["Early signal", "State briefing", "Confirmed takeover"]
@@ -80,6 +103,12 @@ related:
     note: "The state briefing only works if the human's model of the situation is already current."
 
 review:
+  - "Opening story replaced this pass: the Alvia derailment at Santiago de Compostela in, Tempe out. Nothing in the new tale or the new anti-pattern has been read against the CIAF report or the 2024 ruling, neither of which could be linked - see their source notes. Both carry `drafts:` flags and VERIFY comments."
+  - "The death toll is unsettled on the page. The tale says 79, which the brief attributes to the 2024 ruling, and the footnote at the end of the paragraph points at the CIAF report, which the brief says carries 80. As written, the opening cites a source for a number that source does not give. Reconcile before the DRAFT tag comes off: either change the figure or change the footnote."
+  - "The anti-pattern was renamed from “The Handoff That Never Came” to “The Unannounced Handoff”, which is a different failure. The old name is a handoff the design never made at all, which is Tempe; the new one is a handoff that happened without being announced, which is Santiago. The rest of the page still argues the old name in places - the first design consideration is “Never depend on someone you can't alert”, and the `with` caption turns on acknowledgement. Both failures are real; decide which one this pattern is about."
+  - "Three new sources carry no `url`. The CIAF report, the 2024 ruling and the IRJ article were all supplied by title only, and none was located at a stable public address, so the opening story on this page rests on two sources a reader cannot follow. This is the strongest reason the tale keeps its DRAFT tag."
+  - "In the field now mixes two formats. The two new entries use the verdict shapes — `■ Without it`, `● Applies the pattern` — as the brief asked; the two existing entries below them still use `**Observed · Domain.**`, which is what the other fourteen patterns use. The same mismatch was introduced on Learning Loop in the same pass. Pick one format and convert the library."
+  - "`domains` is still `[automotive, surgical, drone]` and the opening story is now a railway. Add `rail` to `DOMAINS` in the schema and to this pattern, or accept that the page opens in a domain the vocabulary does not have. There is no `rail` value at present, which is why nothing was changed here."
   - "Tale, the speed does not match the report. The story has the SUV “driving itself at about 40 mph” at the moment it detected her. NTSB HAR-19/03 has it approaching the site “at a speed of 45 mph” and recorded at 44.1 mph 5.6 seconds before impact; 40.5 mph is its speed 0.2 seconds before impact, and 39 mph is the impact speed. “About 45 mph” is what the source carries for the moment the sentence describes. Text left as supplied."
   - "Tale, “it wasn't designed to alert her” is contradicted by the report, and this is the page's load-bearing claim. The ADS was designed to alert: “If a collision could not be avoided with the application of maximum allowed braking, the system was designed to send an auditory alert to the vehicle operator while simultaneously initiating gradual vehicle slowdown.” It did so, 0.2 seconds before impact. What the report supports is narrower and still damning: no alert was given when the system first recognised the emergency at 1.2 seconds (“No alert was given to the operator when action suppression was initiated”), and the alert it was designed to send announced the vehicle's own slowdown rather than asking her to take over. The system had no way to ask for a takeover; it is not true that it had no way to alert her. Text left as supplied."
   - "Anti-pattern, “it had no way to ask her” carries the same problem as the tale's last clause, for the same reason. Accurate as written if “ask” means “request a takeover”; wrong if a reader takes it as “no alert of any kind”. Text left as supplied."
@@ -96,6 +125,22 @@ openQuestions:
   - "What if the operator says no? A handoff assumes the person will accept control. The design needs an answer for when they can't or won't."
 
 sources:
+  - id: ciaf-santiago-2014
+    title: "Final report on the derailment of Alvia service 04155 at Santiago de Compostela, 24 July 2013"
+    author: "Comisión de Investigación de Accidentes Ferroviarios (CIAF)"
+    year: 2014
+    type: incident-report
+    note: "Observed, and the source for the opening story. FLAGGED, and the reason this entry has no `url`: the CIAF report was not located at a stable public address, so nothing could be linked without inventing a citation. Note also that the death toll differs between the sources - the tale says 79, which is the figure in the 2024 ruling; the CIAF report is cited for 80. Reconcile the two and make the number match whichever source carries the footnote. Nothing in the tale or the anti-pattern has been read against either document; the VERIFY comments in this frontmatter list what to check."
+  - id: santiago-ruling-2024
+    title: "Court ruling on the Angrois derailment, 26 July 2024"
+    year: 2024
+    type: incident-report
+    note: "Observed. The ruling found both the driver and the former head of operating safety at Adif responsible, which is why this pattern can say the handoff was a design decision rather than only a lapse. FLAGGED: no `url`, for the same reason as the CIAF entry - no stable public address was located. It is also the source of the 79 figure in the opening story."
+  - id: irj-etcs-santiago
+    title: "ETCS a crucial factor in Santiago accident inquiry"
+    author: "International Railway Journal"
+    type: article
+    note: "Secondary, and the source for the ETCS level-transition behaviour in the In the field entry: a text announcement, a flashing acknowledgement prompt, and a brake application if no acknowledgement comes. FLAGGED: no `url`, and the five-second figure in that entry is not verified - see the VERIFY comment beside it."
   - id: bainbridge-1983
     title: "Ironies of Automation"
     author: "Lisanne Bainbridge"
@@ -167,7 +212,25 @@ sources:
 
 ## In the field
 
-**Observed · Automotive.** [Tempe, 2018](#tale): the design made the operator its emergency countermeasure, and the handoff never reached her in time to be one.[cite:ntsb-har-19-03]
+<!-- VERIFY: the Tempe entry below is this page's displaced opening story,
+     cut to one sentence and keeping its NTSB source. One claim in it is
+     contradicted by the report and is this page's long-standing flag, kept
+     here so it is not lost in the move: the ADS *was* designed to alert, and
+     did so 0.2 seconds before impact. What the report supports is that no
+     alert was given when the system first recognised the emergency at 1.2
+     seconds, and that the alert it was designed to send announced the car's
+     own slowdown rather than asking for a takeover. See this file's review
+     list. -->
+**■ Without it · Automotive:** The system relied on the safety operator to brake in an emergency but wasn't designed to alert her.[cite:ntsb-har-19-03] See [Provenance Log](/patterns/provenance-log) for the full timeline.
+
+<!-- VERIFY the five seconds, which is the one number in this entry and the
+     least certain thing in it: the IRJ article is the source for the shape of
+     an ETCS level transition - text announcement, flashing acknowledgement
+     prompt, brake application without one - but the acknowledgement window is
+     set by the ETCS specification rather than by the article, and "within
+     seconds" is written here deliberately vaguely because of that. Replace it
+     with the figure from SUBSET-026 and name the subset. -->
+**● Applies the pattern · Rail:** ETCS level transitions. The driver gets a text announcement, then a flashing prompt to acknowledge, and the train brakes if no acknowledgement comes within seconds.[cite:irj-etcs-santiago]
 
 **Observed · Automotive.** UN R157 names this moment the transition demand, and requires non-driving displays to suspend once it starts.[cite:un-r157]
 

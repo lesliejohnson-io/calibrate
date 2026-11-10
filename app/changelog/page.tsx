@@ -12,8 +12,20 @@ export default function ChangelogPage() {
   const patterns = getAllPatterns();
   const bySlug = new Map(patterns.map((p) => [p.slug, p]));
   const commits = getCommits();
+  /**
+   * Only changes to patterns belong on this page. A commit that touched no
+   * file under content/patterns — tooling, the stylesheet, an illustration,
+   * a copy fix on the about page — is repository history rather than library
+   * change, and listing it told the reader nothing about the library.
+   *
+   * The filter is here rather than in `getCommits`, so the "history was not
+   * available" note below still answers the question it is asking: whether
+   * git could be read at all, not whether anything it said was about a
+   * pattern.
+   */
+  const patternCommits = commits.filter((c) => c.patterns.length > 0);
   const days = buildChangelog(
-    commits,
+    patternCommits,
     patterns.map((p) => ({ slug: p.slug, updated: p.updated })),
   );
 
@@ -34,7 +46,7 @@ export default function ChangelogPage() {
           <p className="lede">
             Built from the <code>updated</code> date on each pattern and from the commit history.
             It doubles as a learning record: the shape of the library over time, including the
-            parts that were rewritten.
+            parts that were rewritten. Only changes to patterns are listed.
           </p>
         </header>
 
@@ -71,11 +83,9 @@ export default function ChangelogPage() {
                       <li key={commit.hash} className="changelog-commit">
                         <code className="changelog-hash">{commit.hash}</code>
                         <span className="changelog-subject">{commit.subject}</span>
-                        {commit.patterns.length > 0 && (
-                          <span className="changelog-touched label">
-                            touched {commit.patterns.join(", ")}
-                          </span>
-                        )}
+                        <span className="changelog-touched label">
+                          touched {commit.patterns.join(", ")}
+                        </span>
                       </li>
                     ))}
                   </ul>

@@ -372,6 +372,7 @@ export const INTERFACE_COMPONENTS = [
   "capability-disclosure",
   "readiness-check",
   "provenance-log",
+  "learning-loop",
 ] as const;
 export type InterfaceComponent = (typeof INTERFACE_COMPONENTS)[number];
 
@@ -421,9 +422,17 @@ const considerationSchema = z.object({
 /**
  * Which drafted sections still carry a DRAFT tag. Cleared field by field as
  * each one is reviewed, rather than all at once with the pattern's status.
+ *
+ * `tale`, `antiPattern` and `demo` cover the three things above the fold,
+ * which used to have no way to say they were unreviewed: an opening incident
+ * is the most authoritative-looking prose on the page, so a freshly written
+ * one needs to be able to admit it is a draft.
  */
 const draftsSchema = z
   .object({
+    tale: z.boolean().optional(),
+    antiPattern: z.boolean().optional(),
+    demo: z.boolean().optional(),
     whenToUse: z.boolean().optional(),
     considerations: z.boolean().optional(),
     examples: z.boolean().optional(),

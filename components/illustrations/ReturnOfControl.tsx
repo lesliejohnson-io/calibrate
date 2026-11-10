@@ -5,169 +5,192 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Log, usePrinter, useStepFocus } from "./printout";
 
 /**
- * The same disagreement twice. On both screens the automation wants the nose
- * up and the reader wants it down; what differs is whether pushing the nose
- * down ends the argument or just loses a round of it.
+ * The same interruption twice. On both screens a person steps into the aisle
+ * and the forklift stops; what differs is who decides it is over.
  *
- * Nothing here is taken from the pattern's sources, which describe an
- * approach to Nagoya and two 737 MAX accidents: the scale, the degrees, the
- * 15-second window and the counter are written for this page. What is taken
- * from them is the shape of the failure — a correction reversed without
- * anything saying so.
+ * Nothing here is taken from the pattern's source, which describes a water
+ * bottling plant rather than this aisle: the fifteen slots, the two-second
+ * delay and the wording are written for this page. What is taken from it is
+ * the shape of the failure — a machine that treats a stop as a pause and
+ * starts again on its own once its sensors clear.
+ *
+ * The aisle is drawn in characters inside the printed display rather than as
+ * positioned elements, so it needs no animation and no stylesheet of its own:
+ * the forklift is a square and the person a circle, both named in a legend
+ * line underneath, so neither rests on colour or on recognising a glyph.
  *
  * Lines are hand-split to stay inside the column: `.fc-line` is
  * `white-space: pre`, so a long line runs off the panel instead of wrapping.
  */
 
-/** Where the automation wants the nose, in display degrees. */
-const AUTOPILOT_TARGET = 4;
+/** Slots across the aisle. The forklift travels left to right. */
+const SLOTS = 15;
 
-/** How far one press of the control column moves it. */
-const PUSH = 3;
+/** Where the person stands when they step in. */
+const PERSON_SLOT = 9;
 
-/** The scale's ends. Pitch is clamped here so the marker stays on it. */
-const PITCH_MIN = -9;
-const PITCH_MAX = 9;
-
-/** The automation acts on this beat, whether or not it has anything to undo. */
+/** The forklift advances one slot on this beat. */
 const TICK_MS = 500;
 
-/** How long the anti-pattern runs before it admits what it has been doing. */
-const REVEAL_MS = 15_000;
-
-const clamp = (n: number) => Math.min(PITCH_MAX, Math.max(PITCH_MIN, n));
+/**
+ * How long the anti-pattern waits after the path clears before starting
+ * again by itself. Written for this page: the report is not a source for any
+ * particular delay, only for the fact that it resumed without being asked.
+ */
+const AUTO_RESUME_MS = 2000;
 
 /**
- * The pitch readout: a number and a marker on a fixed scale. Drawn in the
- * same monospace as the printed lines so it reads as part of the instrument,
- * and rendered live rather than printed, because it is the current state
- * rather than another entry in the log.
+ * The aisle, top down: the forklift's slot, the person's if they are in it,
+ * and a legend naming both shapes. Rendered live rather than printed,
+ * because it is the current state and not another entry in the log.
  *
- * It is not a live region. The marker moves far more often than a screen
- * reader could usefully follow, so the announcements are made at the moments
- * that matter instead, through the `role="status"` line each screen owns.
+ * It is not a live region. The forklift moves more often than a screen reader
+ * could usefully follow, so the announcements are made at the moments that
+ * matter instead, through the `role="status"` line each screen owns.
  */
-function PitchGauge({ pitch }: { pitch: number }) {
-  const span = PITCH_MAX - PITCH_MIN;
-  const slot = Math.round(((pitch - PITCH_MIN) / span) * 14);
-  const track = Array.from({ length: 15 }, (_, i) => (i === slot ? "●" : "·")).join("");
-  const sign = pitch > 0 ? "+" : pitch < 0 ? "−" : " ";
-  const degrees = `${sign}${String(Math.abs(pitch)).padStart(2, "0")}°`;
+function Aisle({ slot, personIn }: { slot: number; personIn: boolean }) {
+  const track = Array.from({ length: SLOTS }, (_, i) => {
+    if (i === slot) return "▣";
+    if (personIn && i === PERSON_SLOT) return "●";
+    return "·";
+  }).join("");
 
   return (
     <>
-      <p className="fc-line">{`PITCH  ${degrees}`}</p>
-      <p className="fc-line is-dim">{`DN [${track}] UP`}</p>
+      <p
+        className="fc-line"
+        role="img"
+        aria-label={`Aisle 4. Forklift at slot ${slot + 1} of ${SLOTS}. ${
+          personIn ? `A person is standing at slot ${PERSON_SLOT + 1}.` : "The aisle is clear."
+        }`}
+      >{`AISLE 4  [${track}]`}</p>
+      <p className="fc-line is-dim" aria-hidden="true">
+        {"▣ forklift   ● person"}
+      </p>
     </>
   );
 }
 
 /**
- * The anti-pattern: the automation holds its target and walks the nose back
- * up after every push, printing nothing. The reader can win any single round
- * and still be losing, which is what the count at the end is for.
+ * The anti-pattern: the forklift stops for the person and then, once its path
+ * is clear, starts again on its own. Nothing chose to give it the aisle back.
  */
 function WithoutScreen() {
   const { lines, print, reset } = usePrinter([]);
   const sendFocus = useStepFocus();
   const startRef = useRef<HTMLButtonElement>(null);
-  const pushRef = useRef<HTMLButtonElement>(null);
+  const stepRef = useRef<HTMLButtonElement>(null);
   const resetRef = useRef<HTMLButtonElement>(null);
-  const [stage, setStage] = useState<"idle" | "flying" | "done">("idle");
-  const [pitch, setPitch] = useState(0);
-  const [, setCountered] = useState(0);
+  const [stage, setStage] = useState<"idle" | "moving" | "stopped" | "resumed">("idle");
+  const [slot, setSlot] = useState(0);
+  const [personIn, setPersonIn] = useState(false);
   const [status, setStatus] = useState("");
+  /**
+   * True while a batch of lines is still printing. `usePrinter.print`
+   * schedules one timer per line, so a second batch started mid-print
+   * interleaves its lines with the first. Each handler drops a press that
+   * arrives while this is set — in the handler rather than on `disabled`,
+   * because disabling a control takes it out of the tab order and a keyboard
+   * user tabbing on would land outside the demo.
+   */
+  const [busy, setBusy] = useState(false);
 
   const tick = useRef<ReturnType<typeof setInterval> | null>(null);
-  const reveal = useRef<ReturnType<typeof setTimeout> | null>(null);
-  /** Set by a push, cleared by the automation when it takes the push back. */
-  const owed = useRef(false);
+  const auto = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const stopTimers = useCallback(() => {
     if (tick.current) clearInterval(tick.current);
-    if (reveal.current) clearTimeout(reveal.current);
+    if (auto.current) clearTimeout(auto.current);
     tick.current = null;
-    reveal.current = null;
+    auto.current = null;
   }, []);
 
   useEffect(() => stopTimers, [stopTimers]);
 
+  const drive = useCallback(() => {
+    stopTimers();
+    tick.current = setInterval(() => {
+      setSlot((s) => (s >= SLOTS - 1 ? s : s + 1));
+    }, TICK_MS);
+  }, [stopTimers]);
+
   const run = () => {
-    setStage("flying");
+    setStage("moving");
     print(
       [
-        { key: "w-1", text: "AUTOPILOT · climbing" },
+        { key: "w-1", text: "FORKLIFT · travelling" },
         { key: "w-2", text: "—".repeat(22), tone: "rule" },
       ],
       () => {
-        setStatus("Autopilot climbing. Pitch 0 degrees.");
-        sendFocus(pushRef);
+        setStatus("Forklift travelling along aisle 4. The aisle is clear.");
+        sendFocus(stepRef);
       },
     );
-
-    tick.current = setInterval(() => {
-      setPitch((p) => {
-        if (p === AUTOPILOT_TARGET) return p;
-        const next = p < AUTOPILOT_TARGET ? p + 1 : p - 1;
-        // Only the first step back counts: one push, one counter-action.
-        if (owed.current && next > p) {
-          owed.current = false;
-          setCountered((c) => c + 1);
-        }
-        return next;
-      });
-    }, TICK_MS);
-
-    reveal.current = setTimeout(() => {
-      stopTimers();
-      setCountered((n) => {
-        print(
-          [
-            { key: "w-r0", text: "—".repeat(22), tone: "rule" },
-            { key: "w-r1", text: "The automation countered you", tone: "fault", warn: true },
-            { key: "w-r2", text: `${n} times.`, tone: "fault" },
-            { key: "w-r3", text: "Nothing on the display told you.", tone: "fault" },
-          ],
-          () => {
-            setStage("done");
-            setStatus(
-              `The automation countered you ${n} times. Nothing on the display told you.`,
-            );
-            sendFocus(resetRef);
-          },
-        );
-        return n;
-      });
-    }, REVEAL_MS);
+    drive();
   };
 
-  const pushDown = () => {
-    owed.current = true;
-    setPitch((p) => clamp(p - PUSH));
+  const stepIn = () => {
+    if (busy) return;
+    stopTimers();
+    setPersonIn(true);
+    setStage("stopped");
+    setSlot((s) => Math.min(s, PERSON_SLOT - 1));
+    setStatus("You stepped into the aisle. The forklift stopped.");
+  };
+
+  const stepOut = () => {
+    if (busy) return;
+    setPersonIn(false);
+    setStatus("You stepped out. The aisle is clear.");
+    auto.current = setTimeout(() => {
+      setStage("resumed");
+      drive();
+      setBusy(true);
+      print(
+        [
+          { key: "w-go1", text: "MOVING AGAIN", tone: "fault", warn: true },
+          { key: "w-go2", text: "nobody asked. nobody checked.", tone: "fault" },
+        ],
+        () => {
+          setBusy(false);
+          setStatus(
+            "The forklift started moving again on its own. Nobody asked, and nobody checked the aisle was safe.",
+          );
+          sendFocus(resetRef);
+        },
+      );
+    }, AUTO_RESUME_MS);
   };
 
   const resetAll = () => {
     stopTimers();
-    owed.current = false;
     reset();
     setStage("idle");
-    setPitch(0);
-    setCountered(0);
+    setSlot(0);
+    setPersonIn(false);
+    setBusy(false);
     setStatus("");
     sendFocus(startRef);
   };
 
+  const started = stage !== "idle";
+
   return (
     <div className="console">
-      <p className="console-title">Pitch control</p>
+      <p className="console-title">Driverless forklift · Aisle 4</p>
       <div className="console-screen console-crt">
         <Log lines={lines} minLines={3} />
-        <PitchGauge pitch={pitch} />
+        <Aisle slot={slot} personIn={personIn} />
 
-        {stage === "flying" && (
-          <div className="fc-guesses" role="group" aria-label="Pitch control">
-            <button type="button" className="fc-guess" ref={pushRef} onClick={pushDown}>
-              Push nose down
+        {started && (
+          <div className="fc-guesses" role="group" aria-label="The aisle">
+            <button
+              type="button"
+              className="fc-guess"
+              ref={stepRef}
+              onClick={personIn ? stepOut : stepIn}
+            >
+              {personIn ? "Step out" : "Step into the aisle"}
             </button>
           </div>
         )}
@@ -179,17 +202,18 @@ function WithoutScreen() {
         )}
 
         <p className="console-hint">
-          {stage === "idle" && "The autopilot is flying. You want the nose down."}
-          {stage === "flying" && "Push all you like. Watch where the nose ends up."}
-          {stage === "done" &&
-            "Every correction was reversed. The display showed the nose, never the argument."}
+          {stage === "idle" && "The forklift is working the aisle. You are about to walk into it."}
+          {stage === "moving" && "Step in, then step out."}
+          {stage === "stopped" && "It stopped for you. Now step out and watch."}
+          {stage === "resumed" &&
+            "It treated your stop as a pause. Clearing its sensors was all the permission it needed."}
         </p>
 
         <p className="sr-only" role="status">
           {status}
         </p>
 
-        {stage === "done" && (
+        {started && (
           <button type="button" className="console-reset" ref={resetRef} onClick={resetAll}>
             Reset the demo
           </button>
@@ -200,19 +224,22 @@ function WithoutScreen() {
 }
 
 /**
- * The pattern: the first push ends the automation's claim on the axis and
- * says so. The nose then stays where the reader puts it, and the automation
- * comes back only when asked.
+ * The pattern: the stop is announced and it latches. Clearing the path tells
+ * the operator where to release it, and nothing moves until someone does.
  */
 function WithScreen() {
   const { lines, print, reset } = usePrinter([]);
   const sendFocus = useStepFocus();
   const startRef = useRef<HTMLButtonElement>(null);
-  const pushRef = useRef<HTMLButtonElement>(null);
+  const stepRef = useRef<HTMLButtonElement>(null);
+  const resumeRef = useRef<HTMLButtonElement>(null);
   const resetRef = useRef<HTMLButtonElement>(null);
-  const [stage, setStage] = useState<"idle" | "flying" | "manual">("idle");
-  const [pitch, setPitch] = useState(0);
+  const [stage, setStage] = useState<"idle" | "moving" | "held">("idle");
+  const [slot, setSlot] = useState(0);
+  const [personIn, setPersonIn] = useState(false);
   const [status, setStatus] = useState("");
+  /** See the note on the other screen: one batch of lines at a time. */
+  const [busy, setBusy] = useState(false);
 
   const tick = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -223,65 +250,81 @@ function WithScreen() {
 
   useEffect(() => stopTick, [stopTick]);
 
-  const startAutopilot = useCallback(() => {
+  const drive = useCallback(() => {
     stopTick();
     tick.current = setInterval(() => {
-      setPitch((p) => (p === AUTOPILOT_TARGET ? p : p < AUTOPILOT_TARGET ? p + 1 : p - 1));
+      setSlot((s) => (s >= SLOTS - 1 ? s : s + 1));
     }, TICK_MS);
   }, [stopTick]);
 
   const run = () => {
-    setStage("flying");
+    setStage("moving");
     print(
       [
-        { key: "p-1", text: "AUTOPILOT · climbing" },
+        { key: "p-1", text: "FORKLIFT · travelling" },
         { key: "p-2", text: "—".repeat(22), tone: "rule" },
       ],
       () => {
-        setStatus("Autopilot climbing. Pitch 0 degrees.");
-        sendFocus(pushRef);
+        setStatus("Forklift travelling along aisle 4. The aisle is clear.");
+        sendFocus(stepRef);
       },
     );
-    startAutopilot();
+    drive();
   };
 
-  const pushDown = () => {
-    const first = stage === "flying";
-    if (first) {
-      stopTick();
-      setStage("manual");
-      print([
-        { key: "p-off1", text: "AUTOPILOT OFF", tone: "rule" },
-        { key: "p-off2", text: "· you have pitch control", tone: "rule" },
-      ]);
-    }
-    setPitch((p) => {
-      const next = clamp(p - PUSH);
-      setStatus(
-        first
-          ? `Autopilot off. You have pitch control. Pitch ${next} degrees.`
-          : `Pitch ${next} degrees.`,
-      );
-      return next;
-    });
+  const stepIn = () => {
+    if (busy) return;
+    stopTick();
+    setPersonIn(true);
+    setStage("held");
+    setSlot((s) => Math.min(s, PERSON_SLOT - 1));
+    setBusy(true);
+    print(
+      [
+        { key: "p-hold1", text: "HOLD", tone: "fault", warn: true },
+        { key: "p-hold2", text: "· person in path", tone: "fault" },
+      ],
+      () => {
+        setBusy(false);
+        setStatus("Hold: a person is in the forklift's path. The forklift is held.");
+      },
+    );
+  };
+
+  const stepOut = () => {
+    if (busy) return;
+    setPersonIn(false);
+    const stamp = Date.now();
+    setBusy(true);
+    print(
+      [
+        { key: `p-clear1-${stamp}`, text: "Path clear", tone: "rule" },
+        { key: `p-clear2-${stamp}`, text: "· resume at the vehicle", tone: "rule" },
+      ],
+      () => {
+        setBusy(false);
+        setStatus("Path clear. The forklift is still held. Resume at the vehicle.");
+        sendFocus(resumeRef);
+      },
+    );
   };
 
   const resume = () => {
-    setStage("flying");
+    setStage("moving");
     const stamp = Date.now();
-    print([
-      { key: `p-on1-${stamp}`, text: "Autopilot resumed", tone: "rule" },
-      { key: `p-on2-${stamp}`, text: "at your request.", tone: "rule" },
-    ]);
-    setStatus("Autopilot resumed at your request.");
-    startAutopilot();
+    print([{ key: `p-on-${stamp}`, text: "Resumed at your request.", tone: "rule" }]);
+    setStatus("Resumed at your request. The forklift is travelling again.");
+    drive();
+    sendFocus(stepRef);
   };
 
   const resetAll = () => {
     stopTick();
     reset();
     setStage("idle");
-    setPitch(0);
+    setSlot(0);
+    setPersonIn(false);
+    setBusy(false);
     setStatus("");
     sendFocus(startRef);
   };
@@ -290,23 +333,32 @@ function WithScreen() {
 
   return (
     <div className="console">
-      <p className="console-title">Pitch control</p>
+      <p className="console-title">Driverless forklift · Aisle 4</p>
       <div className="console-screen console-crt">
         <Log lines={lines} minLines={3} />
-        <PitchGauge pitch={pitch} />
+        <Aisle slot={slot} personIn={personIn} />
 
         {started && (
-          <div className="fc-guesses" role="group" aria-label="Pitch control">
-            <button type="button" className="fc-guess" ref={pushRef} onClick={pushDown}>
-              Push nose down
-            </button>
+          <div className="fc-guesses" role="group" aria-label="The aisle">
             <button
               type="button"
               className="fc-guess"
-              onClick={resume}
-              disabled={stage !== "manual"}
+              ref={stepRef}
+              onClick={personIn ? stepOut : stepIn}
             >
-              Resume autopilot
+              {personIn ? "Step out" : "Step into the aisle"}
+            </button>
+            {/* Present and unavailable while anyone is in the path: being
+                unable to press it is the difference from the other screen,
+                which a hidden button could not show. */}
+            <button
+              type="button"
+              className="fc-guess"
+              ref={resumeRef}
+              onClick={resume}
+              disabled={stage !== "held" || personIn}
+            >
+              Resume
             </button>
           </div>
         )}
@@ -318,10 +370,12 @@ function WithScreen() {
         )}
 
         <p className="console-hint">
-          {stage === "idle" && "The same autopilot, on a display that yields."}
-          {stage === "flying" &&
-            "Push once and it stands back. Resuming is yours to ask for."}
-          {stage === "manual" && "The nose stays where you put it. Nothing is pulling back."}
+          {stage === "idle" && "The same forklift, on a machine that holds."}
+          {stage === "moving" && "Step in. It will hold until you hand it back."}
+          {stage === "held" &&
+            (personIn
+              ? "Held while you are in the path. Resume is unavailable."
+              : "The path is clear and it is still held. Resuming is yours to do.")}
         </p>
 
         <p className="sr-only" role="status">

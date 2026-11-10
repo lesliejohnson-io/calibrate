@@ -100,7 +100,7 @@ export default async function PatternPage({ params }: Props) {
           <p className="lede">{p.intent}</p>
         </header>
 
-        {tale && <CautionaryTale tale={tale} numbers={p.citations} />}
+        {tale && <CautionaryTale tale={tale} numbers={p.citations} draft={drafts.tale} />}
 
         {/* The mistake and the answer to it, side by side: the pair is the
             argument, and reading one directly after the other down a single
@@ -110,7 +110,7 @@ export default async function PatternPage({ params }: Props) {
           {p.antiPattern && (
             <section className="duo-col" aria-labelledby="anti-pattern">
               <h2 id="anti-pattern" className="section-head">
-                Anti-pattern: {p.antiPattern}
+                Anti-pattern: {p.antiPattern} <DraftTag when={drafts.antiPattern} />
               </h2>
               {/* Escaped and cited upstream; paragraphs so an anti-pattern
                   with a downstream cost to describe can take two. */}
@@ -136,7 +136,16 @@ export default async function PatternPage({ params }: Props) {
             with no demo yet the boxes were restating it inside a border. */}
         {demo && (
           <section className="section section-demo" aria-label={`${p.name}: without and with`}>
-            {p.demoNote && <p className="section-note section-note-lead">{p.demoNote}</p>}
+            {/* The demo has no heading of its own to hang a tag beside — the
+                section is labelled rather than titled — so the note line
+                above it carries one, and exists for the tag alone on a
+                drafted demo with nothing to qualify. */}
+            {(p.demoNote || drafts.demo) && (
+              <p className="section-note section-note-lead demo-note">
+                <DraftTag when={drafts.demo} />
+                {p.demoNote}
+              </p>
+            )}
             <Comparison
               without={p.without}
               withPattern={p.with}

@@ -37,22 +37,48 @@ interface:
 # Shown above the demo. This one stages a real accident with invented
 # readouts, so it says so rather than leaving the reader to assume the lines
 # are from the recorder.
-demoNote: "Simplified illustration, not real flight data."
+# VERIFY: the demo now stages the Nogales ground control station rather than a
+# flight deck. Nothing in it is a reading from CHI06MA121 — the ALT and
+# AIRSPEED behaviour, the "ENGINE —" placeholder and the wording of the named
+# alert are written for this page. What has to be checked is the one claim the
+# demo rests on: that the condition lever on the payload operator's console
+# becomes the engine fuel control when that console is flying, and that its
+# cutoff position produced no annunciation.
+demoNote: "Simplified illustration, not real ground station data."
 
+# VERIFY against NTSB brief CHI06MA121 and Safety Recommendations A-07-70
+# through -86 before this leaves draft: the time of day ("before dawn") and
+# that this was a border patrol flight; that it was the pilot's console in the
+# ground control station that locked up, and that he transferred control to
+# the payload operator's console rather than to a spare; that on each console
+# the same lever is the camera iris control under the payload operator and the
+# engine condition lever under the pilot; that the position the lever was
+# sitting in corresponded to fuel cutoff; that nothing in the station
+# annunciated the cutoff, so the pilot saw the descent without its cause;
+# "about 10 miles northwest of Nogales International Airport" for the crash
+# site; and that nobody on the ground was hurt.
 cautionaryTale:
-  title: "Lion Air Flight 610"
-  date: "October 29, 2018"
-  place: "Java Sea, off Jakarta"
+  title: "CBP Predator B drone"
+  date: "April 25, 2006"
+  place: "Nogales, Arizona"
   story: >-
-    Minutes after takeoff from Jakarta, the crew of a new Boeing 737 MAX 8 had
-    a stick shaker (the stall warning that shakes the controls) rattling in
-    their hands, airspeed and altitude readings that disagreed, and trim that
-    kept pushing the nose down. The cause was a single faulty angle-of-attack
-    sensor, but the alert designed to name it, AOA DISAGREE, wasn't working on
-    that aircraft. The crew fought the nose-down trim again and again without
-    ever learning what was causing it. About 12 minutes after takeoff, the
-    airplane crashed into the Java Sea, killing all 189 people on board.
-  sourceId: [airlineratings-knkt, leeham-jt610]
+    Before dawn on a border patrol flight, the pilot's console in the ground
+    control station locked up. He switched control to the identical console
+    beside it, the one the camera operator used. On that console, the lever
+    that adjusts the camera's iris becomes the engine's fuel control when the
+    console is flying the aircraft, and it was sitting in the position that
+    meant fuel cutoff. The engine stopped. The pilot saw the
+    drone losing altitude, but nothing told him why. The Predator B came down
+    in the desert about 10 miles northwest of Nogales International Airport.
+    No one was hurt.
+  sourceId: ntsb-chi06ma121
+
+# Which of the sections above the fold are freshly written and unchecked.
+drafts:
+  tale: true
+  antiPattern: true
+  demo: true
+  examples: true
 
 therefore: >-
   Name the fault itself, not just its symptoms, and record it so it reaches
@@ -60,20 +86,13 @@ therefore: >-
 
 without:
   steps: ["Fault occurs", "Symptoms only", "Wrong diagnosis"]
-  caption: |
-    The crew had symptoms but no diagnosis. A stick shaker, disagreeing
-    instruments and runaway trim all pointed in different directions, and the
-    one alert that could have tied them together was silent. The captain on
-    the previous day's flight had blamed the same behavior on the speed trim
-    system, a different system entirely.[cite:leeham-jt610] When effects
-    arrive without their cause, people reach for whatever system best explains
-    what they can see.
-
-    The silence cost more than one flight. Without the alert, the crew
-    couldn't document the faulty sensor, so it never reached
-    maintenance.[cite:airlineratings-knkt] A fault that can't be named can't
-    be reported, a fault that can't be reported can't be fixed, and the next
-    crew meets it too.
+  # VERIFY against NTSB brief CHI06MA121 and A-07-70 through -86: that the
+  # ground control station presented altitude and airspeed but annunciated
+  # nothing about the fuel condition lever or the cutoff; and that the pilot
+  # did not identify the lever as the cause during the descent. "Falling
+  # altitude, decaying speed" is this page's own shorthand for what the
+  # station showed, not a quotation from the brief.
+  caption: "The ground station showed every symptom of an engine failure (falling altitude, decaying speed) but never named the cause: one lever, on one console, in the cutoff position. The pilot had to infer it, and didn't."
 
 with:
   steps: ["Fault occurs", "Cause named", "Response to hand", "Fault recorded"]
@@ -85,9 +104,11 @@ related:
     note: "Degradation is the step down; this is the part that says which fault caused it. A fallback nobody can name is hard to work with."
   - slug: learning-loop
     type: complements
-    note: "An unnamed fault cannot feed back. Without the alert, the JT610 crew could not document the faulty sensor, so it was not available to help maintenance."
+    note: "An unnamed fault cannot feed back. Without the alert, the JT610 crew could not document the faulty sensor, so it was not available to help maintenance. JT610 is now an In the field entry on this page rather than its opening."
 
 review:
+  - "Opening story replaced this pass: the CBP Predator B at Nogales in, Lion Air 610 out. Nothing in the new tale, the new anti-pattern or the rethemed demo has been read against CHI06MA121 or the A-07-70/-86 recommendation letter — all three are drafted from the brief, all three carry `drafts:` flags, and the VERIFY comments in this frontmatter list what to check."
+  - "JT610 is now an In the field entry rather than the opening, cut to one sentence and keeping both secondary sources. The flags below were written about it as the tale and the anti-pattern. The ones about the tale's timeline and crash site no longer describe anything on the page; the one about “a different system entirely” described a sentence the new anti-pattern removed, and the claim is gone with it. They are kept as the record of what was checked, not as live flags."
   - "Story rests on secondary sources; cite the KNKT final report when available. Every JT610 claim on this page comes from the AirlineRatings write-up of that report or from Leeham's analysis, not from the report itself."
   - "Tale, two details neither cited source carries. “About 12 minutes after takeoff” and “Java Sea, off Jakarta” are not in the AirlineRatings or Leeham pieces — AirlineRatings gives the date and the 189 dead but no timeline or crash site, and the Leeham article is about the flight-deck sequence. Both are almost certainly right and will be in the KNKT report; they are unsourced on this page until it is pulled. “A new Boeing 737 MAX 8” is likewise not in either source, which say only “Boeing 737 MAX.” Text left as supplied."
   - "Anti-pattern, one claim a cited source contradicts. “The speed trim system, a different system entirely” is not how the sources describe it: AirlineRatings says “MCAS was an extension of the existing speed trim system,” and Leeham says MCAS's “intermittent trimming, similar to Speed Trim, caused the crew of JT043 to think it was the cause,” since “the only system they know with this behavior was Speed Trim.” The captain's guess was closer to right than “a different system entirely” allows — which arguably strengthens the pattern, because it shows a competent diagnosis still failing without the alert. Text left as supplied."
@@ -99,6 +120,13 @@ openQuestions:
   - "How specific should the named cause be when the system can't tell which of several faults it's seeing? Naming the wrong cause confidently is worse than showing the symptoms, and the honest middle ground, a short list of candidates, is harder to act on under time pressure."
 
 sources:
+  - id: ntsb-chi06ma121
+    title: "Brief of Accident CHI06MA121 (Predator B, Nogales, Arizona, April 25, 2006), and Safety Recommendations A-07-70 through A-07-86"
+    author: "National Transportation Safety Board"
+    year: 2007
+    url: "https://www.ntsb.gov/safety/safety-recs/RecLetters/A07_70_86.pdf"
+    type: incident-report
+    note: "Observed, and the source for the opening story. The brief was adopted October 31, 2007; the recommendation letter covering unmanned aircraft ground control stations was issued alongside it. Not yet read against this page: every figure in the tale and the anti-pattern above is drafted from the brief supplied with the rewrite, and the VERIFY comments in this file's frontmatter list what has to be checked. The reason this incident replaced a flight-deck one is that the cause here was a control's meaning changing underneath the operator — the strongest possible case of symptoms arriving without a nameable cause."
   - id: airlineratings-knkt
     title: "Lion Air MAX report finds Boeing, airline, pilots contributed to tragedy"
     author: "AirlineRatings"
@@ -145,7 +173,13 @@ sources:
 
 ## In the field
 
-**Observed · Aviation.** [Lion Air 610](#tale): the crew had the stick shaker, the disagreeing instruments and the runaway trim, and no alert naming the sensor behind them.[cite:airlineratings-knkt][cite:leeham-jt610]
+<!-- VERIFY: the Lion Air 610 entry below is this page's displaced opening
+     story, cut to one sentence and keeping both of its sources. What to check
+     against the KNKT final report, when it is pulled, is what this file's
+     review list already records: that the AOA DISAGREE alert was inoperative
+     on that airframe, and that the stick shaker, the IAS/ALT disagreement and
+     the nose-down trim were all present with no alert naming the sensor. -->
+**Observed · Aviation.** Lion Air 610. The crew had the stick shaker, disagreeing instruments and runaway trim, but no alert named the faulty sensor behind them.[cite:airlineratings-knkt][cite:leeham-jt610]
 
 **Observed · Aviation.** The 777's crew alerting pairs each message with a checklist indicator: the icon sits beside the message while its checklist is outstanding and clears once it is done, so the alert carries its response rather than just its name.[cite:mit-16422]
 

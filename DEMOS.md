@@ -32,7 +32,7 @@ the build fails. A pattern with no demo yet carries
 
 ## Built
 
-Seven of these are **printed displays**: a fixed-width readout that prints one
+Eight of these are **printed displays**: a fixed-width readout that prints one
 line per 120ms, all at once under `prefers-reduced-motion`, in green on black
 to read as a flight deck instrument rather than as part of the page. They
 share one engine, `components/illustrations/printout.tsx`.
@@ -93,26 +93,32 @@ pattern's `review:` list.
 
 ### 10 Explainable Fault — `explainable-fault`
 
-A printed display. The reader triggers the fault on each side.
+A printed display, titled `Ground control station · Console 2`. The reader
+triggers the fault on each side. Rethemed from a 737 flight deck to the
+Nogales ground control station when the pattern's opening story changed; the
+component, the controls and the shape of both screens are unchanged.
 
-- **Without:** prints `STICK SHAKER`, `IAS DISAGREE`, `ALT DISAGREE`,
-  `STAB TRIM MOVING` one after another, with no cause. Then it asks
-  "What's wrong?" and offers Speed trim, Autopilot, Pitot heat, Hydraulics.
-  Every answer prints the same verdict: "You're guessing. So was the crew."
-  Speed trim is listed first because it is the system the previous day's
-  captain actually named — the guess was competent, not careless.
-- **With:** the same four readings print underneath the condition that
-  produced them — `AOA DISAGREE`, with the plain-language gloss — then
-  `▣ CHECKLIST  AOA DISAGREE`, then `FAULT LOGGED → MAINTENANCE`.
+- **Without:** prints `ALT FALLING`, `AIRSPEED FALLING`, `ENGINE —` one after
+  another, with no cause. Then it asks "What's wrong?" and offers Fuel, Data
+  link, Engine, Generator. Every answer prints the same verdict: "You're
+  guessing. So was the pilot." Fuel is listed first because it is the right
+  answer and still unreachable from this screen — the demonstration is that a
+  competent guess has nothing to settle it against.
+- **With:** the same three readings print underneath the condition that
+  produced them — `ENGINE FUEL CUTOFF`, with the lever named and the action to
+  take — then `LOGGED · SENT TO MAINTENANCE`.
 
-Nothing is added to what the aircraft knew: the sensors had already
-disagreed. The checklist label is named for the condition rather than quoting
-a real 737 checklist, which none of the pattern's sources give — see its
-`review:` list.
+Nothing is added to what the station knew: the lever position was already
+readable by the machine. The only difference is that the display says so.
 
-The symptom lines are written for the page rather than taken from the
-recorder, and the accident is real, so this demo carries
-`demoNote: "Simplified illustration, not real flight data."`
+The brief asked for the named alert to lead with `■`. It leads with the `⚠`
+the printed displays already use for a fault line (`.fc-line.is-fault`),
+because `■` is the facet vocabulary's fault shape and these displays have
+their own. Worth settling which one a demo uses.
+
+The readouts are written for the page rather than taken from the brief of
+accident, and the accident is real, so this demo carries
+`demoNote: "Simplified illustration, not real ground station data."`
 
 ### 05 Shared Mental Model — `autothrottle`
 
@@ -269,31 +275,39 @@ carries `demoNote: "Simplified illustration."`
 
 ### 12 Return of Control — `return-of-control`
 
-A printed display with a live pitch gauge under it: a number and a marker on
-a fixed scale, rendered rather than printed, because it is the current state
-and not another entry in the log. Both sides have a Play button and a "Push
-nose down" button; the automation wants the nose up.
+A printed display, titled `Driverless forklift · Aisle 4`, with a top-down
+aisle under it: fifteen slots, the forklift a `▣` and the person a `●`, with a
+legend line naming both shapes. Rethemed from a pitch gauge when the pattern's
+opening story changed; the panel style, Play and Reset, and the captions are
+unchanged.
 
-- **Without:** every push moves the nose down, and the automation walks it
-  back to its target a beat later, printing nothing. The reader can win any
-  single round and still be losing. After fifteen seconds the screen says
-  what it has been doing: "The automation countered you [N] times. / Nothing
-  on the display told you."
-- **With:** the first push prints `AUTOPILOT OFF · you have pitch control` and
-  the automation stops acting. The nose stays where the reader puts it.
-  "Resume autopilot" is a separate, deliberate press, and prints "Autopilot
-  resumed at your request."
+The aisle is drawn in characters inside the display rather than as positioned
+elements, so it needs no animation and no stylesheet of its own. Both sides
+have a Play button and one control that toggles between "Step into the aisle"
+and "Step out".
 
-The gauge is not a live region. The marker moves far more often than a screen
-reader could follow, so the announcements are made at the moments that matter
-through the `role="status"` line each screen owns.
+- **Without:** the forklift stops when the person steps in. When they step
+  out, it waits two seconds and moves off by itself, printing
+  `⚠ MOVING AGAIN / nobody asked. nobody checked.` Clearing its sensors was
+  all the permission it needed.
+- **With:** stepping in prints `⚠ HOLD · person in path` and the forklift
+  latches. Stepping out prints `Path clear · resume at the vehicle` and the
+  forklift stays held. A "Resume" button is present throughout and unavailable
+  while anyone is in the path — being unable to press it is the difference
+  from the other screen, which a hidden button could not show.
 
-No figure here comes from the pattern's sources, which describe an approach
-to Nagoya in 1994 and two 737 MAX accidents: the scale, the degrees, the
-fifteen-second window and the counter are written for this page. What is
-taken from them is the shape of the failure — a correction reversed without
-anything saying so. It carries `demoNote: "Simplified illustration, not real
-flight data."`
+The aisle is not a live region. The forklift moves far more often than a
+screen reader could follow, so the announcements are made at the moments that
+matter through the `role="status"` line each screen owns; the aisle itself
+carries a `role="img"` label with the forklift's slot and whether anyone is in
+it.
+
+No figure here comes from the pattern's source, which describes a water
+bottling plant rather than this aisle: the fifteen slots, the two-second delay
+and the wording are written for this page. What is taken from it is the shape
+of the failure — a machine that treats a stop as a pause and starts again on
+its own once its sensors clear. It carries
+`demoNote: "Simplified illustration."`
 
 ### 13 Operator-to-Operator Handover — `shift-handover`
 
@@ -416,6 +430,39 @@ The `→` in a log entry is the second arrow inside a printed display on the
 site, after the one in Operator-to-Operator Handover, and carries the same
 caveat: `.fc-line` is a fixed monospace stack, so the character can fall back
 if a font in the stack lacks U+2192.
+
+### 09 Learning Loop — `learning-loop`
+
+A printed display titled `Bow doors`, with a bridge status card above the
+readout — `Ferry · Bridge`, a sailing counter and a door status row — and, on
+the patterned side, the report's status track below it. Both sides have
+"Report it" and "Next sailing". The reader plays a master who finds the bow
+doors open after departure.
+
+- **Without:** the door row reads "no indicator". "Report it" adds
+  `Request: fit a door indicator on the bridge · Filed` to a Reports list and
+  nothing else changes; it can be pressed again and again, and each press adds
+  another identical record. "Next sailing" meets the same event. After three
+  sailings the display says what it has been doing: "Three reports. Still no
+  indicator. Nobody who could fit one saw them."
+- **With:** reporting is one tap, labelled "no blame", and the report then has
+  a status track — ○ Received, ○ Routed to the fleet's technical team,
+  ○ Change made. Each "Next sailing" advances it one stage: "Routed · 3 other
+  masters reported this", then "Change made · door indicators fitted on the
+  bridge". On the sailing after that the door row reads `● CLOSED` before
+  departure and the reader is told "Fitted because of your report."
+
+The track's stages carry ● done and ○ pending plus the words, with "done" and
+"pending" written out for a screen reader, so a stage never rests on colour or
+on position. Nothing in the demo animates: the bridge card, the track and the
+Reports list are state, and only the line-by-line printing is staggered, which
+`usePrinter` already drops under `prefers-reduced-motion`.
+
+Nothing here comes from the Sheen Report, which describes a ferry rather than
+this console: the sailing counter, the three sailings and the "3 other
+masters" figure are written for this page. What is taken from it is the shape
+of the failure — a report filed in writing, with the fix named in it, that
+stopped at management. It carries `demoNote: "Simplified illustration."`
 
 ## To build
 

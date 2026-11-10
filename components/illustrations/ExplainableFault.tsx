@@ -5,34 +5,44 @@ import { useId, useRef, useState } from "react";
 import { Log, usePrinter, useStepFocus, type Line } from "./printout";
 
 /**
- * The four symptoms Lion Air Flight 610's crew met, in the order the
- * secondary reporting describes them: the stick shaker, airspeed and altitude
- * disagreement, and stabiliser trim running nose-down. The anti-pattern
- * screen prints exactly these and stops; the patterned screen prints the same
- * four under the condition that produced them.
+ * The Nogales ground control station at the moment the engine stops. The
+ * pilot's console has locked up, control has moved to the console beside it,
+ * and on that console the lever under the operator's hand is the engine's
+ * fuel control rather than the camera iris — sitting in the position that
+ * means cutoff.
  *
- * The AOA DISAGREE alert was not working on that aircraft, which is why the
- * left-hand screen is the one that actually flew.
+ * The three readings are what a station would show for an engine that has
+ * stopped: altitude falling, airspeed decaying, and no engine indication at
+ * all. The anti-pattern screen prints exactly these and stops, which is what
+ * the pilot had. The patterned screen prints the same three under the
+ * condition that produced them, and names the lever.
+ *
+ * Nothing here is a reading from CHI06MA121: the readouts and the wording of
+ * the alert are written for this page, which is why the pattern carries
+ * `demoNote: "Simplified illustration, not real ground station data."`
+ *
+ * Lines are hand-split to stay inside the column: `.fc-line` is
+ * `white-space: pre`, so a long line runs off the panel instead of wrapping.
  */
 const SYMPTOMS: Omit<Line, "key">[] = [
-  { text: "STICK SHAKER", tone: "fault", warn: true },
-  { text: "IAS DISAGREE", tone: "fault", warn: true },
-  { text: "ALT DISAGREE", tone: "fault", warn: true },
-  { text: "STAB TRIM MOVING", tone: "fault", warn: true },
+  { text: "ALT        FALLING", tone: "fault", warn: true },
+  { text: "AIRSPEED   FALLING", tone: "fault", warn: true },
+  { text: "ENGINE     —", tone: "fault", warn: true },
 ];
 
 const keyed = (prefix: string): Line[] =>
   SYMPTOMS.map((s, i) => ({ ...s, key: `${prefix}-${i}` }));
 
 /**
- * The four systems a crew could reasonably reach for. Speed trim is first
- * because it is the one the previous day's captain actually named — the
- * demo's point is that the guess was a competent guess, not a careless one.
+ * The four systems a pilot could reasonably reach for. Fuel is first because
+ * it is the right answer and still unreachable from this screen: the demo's
+ * point is that a competent guess has nothing on the display to settle it
+ * against.
  */
-const GUESSES = ["Speed trim", "Autopilot", "Pitot heat", "Hydraulics"] as const;
+const GUESSES = ["Fuel", "Data link", "Engine", "Generator"] as const;
 
 /**
- * The anti-pattern: four true readings, no cause, and a question the display
+ * The anti-pattern: three true readings, no cause, and a question the display
  * has left to the operator. Every answer is treated the same way, because the
  * demo is not a quiz — there is nothing on this screen that could settle it.
  */
@@ -51,7 +61,7 @@ function WithoutScreen() {
     print(keyed("w"), () => {
       setStage("asking");
       setStatus(
-        "Stick shaker. Airspeed disagree. Altitude disagree. Stabiliser trim moving. No cause given. What's wrong?",
+        "Altitude falling. Airspeed falling. No engine indication. No cause given. What's wrong?",
       );
       sendFocus(firstGuessRef);
     });
@@ -62,11 +72,11 @@ function WithoutScreen() {
     print(
       [
         { key: "w-pick", text: `> ${choice.toUpperCase()}`, tone: "dim" },
-        { key: "w-verdict", text: "You're guessing. So was the crew.", tone: "rule" },
+        { key: "w-verdict", text: "You're guessing. So was the pilot.", tone: "rule" },
       ],
       () => {
         setStage("done");
-        setStatus(`You chose ${choice}. You're guessing. So was the crew.`);
+        setStatus(`You chose ${choice}. You're guessing. So was the pilot.`);
         sendFocus(resetRef);
       },
     );
@@ -81,7 +91,7 @@ function WithoutScreen() {
 
   return (
     <div className="console">
-      <p className="console-title">Flight deck alerts</p>
+      <p className="console-title">Ground control station · Console 2</p>
       <div className="console-screen console-crt">
         <Log lines={lines} minLines={9} />
 
@@ -113,11 +123,11 @@ function WithoutScreen() {
         )}
 
         <p className="console-hint">
-          {stage === "idle" && "Press to see what the crew saw."}
-          {stage === "printing" && " "}
-          {stage === "asking" && "Four true readings. Nothing names the cause."}
+          {stage === "idle" && "Press to see what the pilot saw."}
+          {stage === "printing" && " "}
+          {stage === "asking" && "Three true readings. Nothing names the cause."}
           {stage === "done" &&
-            "Nothing on this display could have settled it. The alert that would have was inoperative."}
+            "Nothing on this display could have settled it. The lever that caused it is on this console, unannounced."}
         </p>
 
         <p className="sr-only" role="status">
@@ -135,10 +145,10 @@ function WithoutScreen() {
 }
 
 /**
- * The pattern: the same four readings, printed underneath the condition that
- * explains them, then the checklist, then the record. Nothing is added to
- * what the aircraft knew — the sensors had already disagreed. The only
- * difference is that the display says so.
+ * The pattern: the same three readings, printed underneath the condition that
+ * explains them, then the thing to do about it, then the record. Nothing is
+ * added to what the station knew — the lever position was already readable by
+ * the machine. The only difference is that the display says so.
  */
 function WithScreen() {
   const { lines, print, reset } = usePrinter([]);
@@ -152,24 +162,19 @@ function WithScreen() {
     setStage("printing");
     print(
       [
-        { key: "c-head", text: "AOA DISAGREE", tone: "fault", warn: true },
-        {
-          key: "c-1",
-          text: "left and right angle-of-attack",
-          tone: "dim",
-        },
-        { key: "c-2", text: "sensors disagree; left-side", tone: "dim" },
-        { key: "c-3", text: "airspeed and altitude unreliable", tone: "dim" },
+        { key: "c-head", text: "ENGINE FUEL CUTOFF", tone: "fault", warn: true },
+        { key: "c-1", text: "condition lever on this", tone: "dim" },
+        { key: "c-2", text: "console is at CUTOFF", tone: "dim" },
+        { key: "c-3", text: "move to RUN", tone: "dim" },
         ...keyed("s"),
-        { key: "c-list", text: "▣ CHECKLIST  AOA DISAGREE" },
-        { key: "c-log", text: "FAULT LOGGED → MAINTENANCE", tone: "rule" },
+        { key: "c-log", text: "LOGGED · SENT TO MAINTENANCE", tone: "rule" },
       ],
       () => {
         setStage("done");
         setStatus(
-          "AOA DISAGREE: left and right angle-of-attack sensors disagree; left-side airspeed and altitude unreliable. " +
-            "Symptoms: stick shaker, airspeed disagree, altitude disagree, stabiliser trim moving. " +
-            "Checklist: AOA DISAGREE. Fault logged to maintenance.",
+          "Engine fuel cutoff: the condition lever on this console is at CUTOFF. Move it to RUN. " +
+            "Symptoms: altitude falling, airspeed falling, no engine indication. " +
+            "Logged and sent to maintenance.",
         );
         sendFocus(resetRef);
       },
@@ -185,7 +190,7 @@ function WithScreen() {
 
   return (
     <div className="console">
-      <p className="console-title">Flight deck alerts</p>
+      <p className="console-title">Ground control station · Console 2</p>
       <div className="console-screen console-crt">
         <Log lines={lines} minLines={9} />
 
@@ -197,9 +202,9 @@ function WithScreen() {
 
         <p className="console-hint">
           {stage === "idle" && "The same fault, on a display that names it."}
-          {stage === "printing" && " "}
+          {stage === "printing" && " "}
           {stage === "done" &&
-            "Same four readings, one named condition, and a procedure. Because it has a name, it can be written down."}
+            "Same three readings, one named condition, and the control to move. Because it has a name, it can be written down."}
         </p>
 
         <p className="sr-only" role="status">

@@ -39,7 +39,7 @@ interface:
 
 cautionaryTale:
   title: "Asiana Airlines Flight 214 at San Francisco"
-  date: "6 July 2013"
+  date: "July 6, 2013"
   place: "San Francisco, California"
   story: >-
     On a clear-weather approach to San Francisco, the crew of a Boeing 777
@@ -66,6 +66,7 @@ with:
   caption: "Each side can anticipate the other, so they share a workspace safely."
 
 review:
+  - "Dateline reformatted this pass, from “6 July 2013” to “July 6, 2013”, so it matches every other opening on the site. The tale's footnote also appears for the first time: the NTSB report was always named in `cautionaryTale.sourceId`, but tale citations were only numbered when some other sentence on the page happened to cite the same source, and nothing else here cited it. That is now fixed in `lib/patterns.ts` rather than by adding a `[cite:]` somewhere, so every tale on the site carries its footnote because the tale names the source."
   - "Tale, one sentence changed. The supplied copy said “nothing on the flight deck made that obvious”. NTSB/AAR-14/01 1.6.3.3 says the A/T mode is annunciated on the FMA at the top of each PFD, in green and boxed for ten seconds when it becomes active; 1.1 says none of the three crewmembers recalled seeing it. It was shown and not registered, which is the sharper version of this pattern. Rewritten to say so."
   - "Anti-pattern name “Divergent Models” is drafted. This pattern has no research entry, so nothing named its failure. Note research/during.md reserves “Silent Mode Switch” for a separate, unwritten Mode Awareness pattern."
   - "Asiana 214 is earmarked in research/during.md as the incident for that unwritten Mode Awareness pattern. Using it here spends it; decide whether Mode Awareness still gets written and what it opens with."

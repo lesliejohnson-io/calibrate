@@ -1,5 +1,6 @@
 import { taleSourceIds, type Frontmatter } from "@/lib/schema";
 import { sourceAnchor } from "@/lib/citations";
+import { DraftTag } from "@/components/DraftTag";
 
 type Tale = NonNullable<Frontmatter["cautionaryTale"]>;
 
@@ -12,14 +13,21 @@ type Tale = NonNullable<Frontmatter["cautionaryTale"]>;
  * between them. The citation is written here rather than carried in the story
  * text, because the tale rests on the same one or two sources throughout: a
  * per-sentence `[cite:]` would repeat the same number three times.
+ *
+ * `draft` puts the DRAFT tag beside the title. An opening incident is the
+ * most authoritative-looking prose on a pattern page — a dated, cited
+ * paragraph about something that really happened — so a freshly written one
+ * has to be able to say it has not been checked against its source yet.
  */
 export function CautionaryTale({
   tale,
   numbers,
+  draft,
 }: {
   tale: Tale;
   /** Each source's position in the Sources list, which is its footnote. */
   numbers: Record<string, number | undefined>;
+  draft?: boolean;
 }) {
   const cited = taleSourceIds(tale)
     .map((id) => ({ id, n: numbers[id] }))
@@ -28,7 +36,7 @@ export function CautionaryTale({
   return (
     <section className="section tale" aria-labelledby="tale">
       <h2 id="tale" className="section-head tale-head">
-        {tale.title}
+        {tale.title} <DraftTag when={draft} />
       </h2>
       <p className="tale-dateline">
         {tale.date} · {tale.place}

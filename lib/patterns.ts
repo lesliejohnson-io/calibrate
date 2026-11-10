@@ -4,7 +4,7 @@ import matter from "gray-matter";
 import { getIllustration } from "./illustrations";
 import { marked } from "marked";
 import { formatIssues, frontmatterSchema, type Frontmatter } from "./schema";
-import { applyCitations, sourceAnchor, sourceGroups } from "./citations";
+import { applyCitations, sourceAnchor, sourceGroups, sourceNumbers } from "./citations";
 import { taleSourceIds } from "./schema";
 
 export { sourceAnchor, sourceGroups };
@@ -222,7 +222,17 @@ function readPattern(file: string): Pattern {
   // The tale's source is validated the same way a [cite:] is: naming a source
   // that is not on the page fails the build rather than rendering a tale whose
   // citation links nowhere.
+  //
+  // It is also *numbered* the same way. The tale's citation is written in
+  // frontmatter rather than as a `[cite:]`, so it never passed through
+  // applyCitations and its number was only in `citations` when some other
+  // sentence on the page happened to cite the same source. Where none did,
+  // the footnote silently disappeared and the opening paragraph read as
+  // unsourced — which is what happened on Shared Mental Model. Registering
+  // the ids here means a tale's citation is present because the tale names
+  // it, not because a design consideration two screens down does.
   const tale = parsed.data.cautionaryTale;
+  const numbers = sourceNumbers(parsed.data.sources);
   for (const id of tale ? taleSourceIds(tale) : []) {
     if (!parsed.data.sources.some((source) => source.id === id)) {
       throw new Error(
@@ -230,6 +240,7 @@ function readPattern(file: string): Pattern {
           `which is not the id of any source in this file.`,
       );
     }
+    citations[id] = numbers[id];
   }
 
   return {
