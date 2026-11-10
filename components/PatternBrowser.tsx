@@ -38,8 +38,8 @@ export function PatternBrowser({
   /** The page's own masthead, which sits above the controls in the column. */
   children?: React.ReactNode;
 }) {
-  /* The filter lives in the layout, because the navigation drawer carries the
-     same one on pages this component never renders on. */
+  /* The state lives in the layout's provider rather than here, so a selection
+     survives a trip into a pattern page and back. */
   const { state, update } = useBrowse();
   const searchRef = useRef<HTMLInputElement>(null);
 

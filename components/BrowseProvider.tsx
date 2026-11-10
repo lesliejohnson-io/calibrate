@@ -10,9 +10,9 @@ import {
 } from "@/lib/browse";
 
 /**
- * One filter, two controls. The domain popover sits in the index's controls
- * band and the same filter sits in the navigation drawer, which opens over
- * every page on the site -- so the state cannot live in either of them.
+ * The filter state, held above the index. The only control is the index's
+ * controls band, but the state outlives it: a reader can tick a domain,
+ * follow a card into a pattern page and come back to the selection intact.
  *
  * The URL is still the record: a filtered view is a link you can send. But
  * only the index writes to it. Stamping `?domain=` onto a pattern page would
@@ -25,14 +25,10 @@ import {
  * index.
  */
 
-export const NARROW = "(max-width: 720px)";
-
 type BrowseValue = {
   state: BrowseState;
   update: (next: BrowseState) => void;
   facets: Facets;
-  /** Viewport below the mobile breakpoint. `false` until mounted. */
-  narrow: boolean;
 };
 
 const BrowseContext = createContext<BrowseValue | null>(null);
@@ -45,7 +41,6 @@ export function BrowseProvider({
   children: React.ReactNode;
 }) {
   const [state, setState] = useState<BrowseState>(DEFAULT_STATE);
-  const [narrow, setNarrow] = useState(false);
 
   // Adopt whatever the URL says once mounted, and follow back/forward. The
   // server renders the default state, so the whole library is in the HTML
@@ -57,29 +52,6 @@ export function BrowseProvider({
     return () => window.removeEventListener("popstate", sync);
   }, []);
 
-  useEffect(() => {
-    const mql = window.matchMedia(NARROW);
-    const read = () => setNarrow(mql.matches);
-    read();
-    mql.addEventListener("change", read);
-    return () => mql.removeEventListener("change", read);
-  }, []);
-
-  /*
-   * There is no search box below the breakpoint, so a `?q=` in the URL would
-   * filter the list by something the reader can neither see nor undo. It is
-   * dropped on arrival, and dropped again if the window is narrowed into that
-   * state with a query already running.
-   */
-  useEffect(() => {
-    if (!narrow || !state.query) return;
-    setState((s) => ({ ...s, query: "" }));
-    if (window.location.pathname === "/") {
-      const url = `${window.location.pathname}${stateToQuery({ ...state, query: "" })}${window.location.hash}`;
-      window.history.replaceState(null, "", url);
-    }
-  }, [narrow, state]);
-
   const update = useCallback((next: BrowseState) => {
     setState(next);
     if (window.location.pathname !== "/") return;
@@ -87,10 +59,7 @@ export function BrowseProvider({
     window.history.replaceState(null, "", url);
   }, []);
 
-  const value = useMemo(
-    () => ({ state, update, facets, narrow }),
-    [state, update, facets, narrow],
-  );
+  const value = useMemo(() => ({ state, update, facets }), [state, update, facets]);
 
   return <BrowseContext.Provider value={value}>{children}</BrowseContext.Provider>;
 }

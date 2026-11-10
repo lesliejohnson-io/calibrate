@@ -2,11 +2,8 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { countMatches, stateToQuery, type Domain } from "@/lib/browse";
-import { humanize } from "@/lib/format";
+import { usePathname } from "next/navigation";
 import { MOMENTS } from "@/lib/schema";
-import { useBrowse } from "./BrowseProvider";
 import { SOCIAL_LINKS, SocialIcon } from "./SocialLinks";
 import { resolvedTheme, toggleTheme, type Theme } from "./ThemeToggle";
 
@@ -14,10 +11,9 @@ import { resolvedTheme, toggleTheme, type Theme } from "./ThemeToggle";
  * The small-screen menu: a hamburger in the header and a drawer behind it.
  *
  * Below the breakpoint the header has room for the mark and one control, so
- * everything else -- the links, the theme switch and the whole domain filter
- * -- moves in here. The filter is the same filter the index's popover drives,
- * read from the same provider, so opening the drawer on a filtered index
- * shows the boxes already ticked.
+ * the links and the theme switch move in here. The drawer is navigation only:
+ * the domain filter stays in the index's controls band at every width, where
+ * it sits beside the thing it narrows.
  *
  * The drawer stays in the DOM when it is shut, because a transform cannot
  * animate from a thing that is not there. `inert` is what makes that safe: a
@@ -38,13 +34,11 @@ const MOMENT_SHORT: Record<(typeof MOMENTS)[number], string> = {
 };
 
 const FOCUSABLE =
-  'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 export function NavDrawer() {
-  const { state, update, facets } = useBrowse();
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
   const drawerId = useId();
 
   const hamburgerRef = useRef<HTMLButtonElement>(null);
@@ -57,8 +51,8 @@ export function NavDrawer() {
   }, []);
 
   // Focus the close button on open, and hand focus back to the hamburger on
-  // close. Every exit -- the X, the scrim, Escape, a link, the Show button --
-  // goes through `close`, so there is one path and one place it lands.
+  // close. Every exit -- the X, the scrim, Escape, a link -- goes through
+  // `close`, so there is one path and one place it lands.
   useEffect(() => {
     if (!open) return;
     closeRef.current?.focus();
@@ -99,24 +93,6 @@ export function NavDrawer() {
       event.preventDefault();
       last.focus();
     }
-  };
-
-  const toggleDomain = (domain: Domain) => {
-    const has = state.domains.includes(domain);
-    update({
-      ...state,
-      domains: has ? state.domains.filter((d) => d !== domain) : [...state.domains, domain],
-    });
-  };
-
-  const matches = countMatches(facets, state.domains);
-  const filtered = state.domains.length > 0;
-
-  /** Closes, and goes to the index with the selection if we are not on it. */
-  const show = () => {
-    const target = `/${stateToQuery(state)}`;
-    close();
-    if (pathname !== "/") router.push(target);
   };
 
   const current = (href: string) =>
@@ -186,55 +162,6 @@ export function NavDrawer() {
             </button>
           </div>
 
-          <div className="drawer-filter">
-            <p className="mono-label drawer-label" id="drawer-domains">
-              Filter by domain
-            </p>
-            <ul className="drawer-domains" aria-labelledby="drawer-domains">
-              {facets.domains.map((domain) => (
-                <li key={domain}>
-                  <label className="drawer-option">
-                    <input
-                      type="checkbox"
-                      checked={state.domains.includes(domain)}
-                      onChange={() => toggleDomain(domain)}
-                    />
-                    <span className="drawer-option-name">{humanize(domain)}</span>
-                    <span className="drawer-option-count">{facets.counts[domain] ?? 0}</span>
-                  </label>
-                </li>
-              ))}
-            </ul>
-
-            <p className="drawer-result">
-              <span aria-live="polite">
-                {matches === 0
-                  ? "No patterns match"
-                  : `${matches} ${matches === 1 ? "pattern" : "patterns"} match`}
-              </span>
-              {filtered && (
-                <button
-                  type="button"
-                  className="drawer-clear"
-                  onClick={() => update({ ...state, domains: [] })}
-                >
-                  Clear
-                </button>
-              )}
-            </p>
-
-            <button
-              type="button"
-              className="drawer-show"
-              onClick={show}
-              disabled={matches === 0}
-            >
-              {filtered
-                ? `Show ${matches} ${matches === 1 ? "pattern" : "patterns"}`
-                : `Show all ${facets.total} patterns`}
-            </button>
-          </div>
-
           <nav className="drawer-nav" aria-label="Site">
             <Link
               href="/"
@@ -273,25 +200,25 @@ export function NavDrawer() {
           </nav>
 
           <DrawerTheme />
-        </div>
 
-        <div className="drawer-foot">
-          <p className="drawer-name">Leslie Johnson</p>
-          <ul className="drawer-socials">
-            {SOCIAL_LINKS.map((link) => (
-              <li key={link.name}>
-                <a
-                  href={link.href}
-                  aria-label={link.label}
-                  {...(link.external
-                    ? { target: "_blank", rel: "noopener noreferrer" }
-                    : {})}
-                >
-                  <SocialIcon link={link} size={18} />
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="drawer-foot">
+            <p className="drawer-name">Leslie Johnson</p>
+            <ul className="drawer-socials">
+              {SOCIAL_LINKS.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    aria-label={link.label}
+                    {...(link.external
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                  >
+                    <SocialIcon link={link} size={18} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </>

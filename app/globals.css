@@ -562,8 +562,8 @@ code {
 /*
  * Below the breakpoint the header carries the mark and one button. The links
  * and the theme switch are not dropped, they move: everything the nav holds
- * is in the drawer, along with the domain filter, which has nowhere else to
- * go once the controls band is gone.
+ * is in the drawer. The domain filter is not in here -- it stays in the
+ * index's controls band, beside the list it narrows.
  *
  * The drawer is dark in both themes on purpose. It is a layer over the page
  * rather than part of it, and a panel that changed colour with the site would
@@ -601,20 +601,16 @@ code {
 .hamburger:focus-visible,
 .drawer-close:focus-visible,
 .drawer-theme:focus-visible,
-.drawer-show:focus-visible,
-.drawer-clear:focus-visible,
 .drawer-brand:focus-visible,
 .drawer-link:focus-visible,
 .drawer-moment:focus-visible,
-.drawer-option:focus-within,
 .drawer-socials a:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
 /* Inside the drawer the page's focus colour would vanish into the panel. */
-.drawer :is(button, a, label):focus-visible,
-.drawer .drawer-option:focus-within {
+.drawer :is(button, a, label):focus-visible {
   outline-color: #ffffff;
 }
 
@@ -694,8 +690,8 @@ code {
   }
 }
 
-/* The nav scrolls, the footer does not: the contact row is the one thing in
-   here that should be in the same place every time. */
+/* Everything in the drawer scrolls together, footer included: pinning the
+   contact row cost the bottom of the nav on a short screen. */
 .drawer-scroll {
   flex: 1 1 auto;
   overflow-y: auto;
@@ -736,98 +732,6 @@ code {
   background: transparent;
   color: #ffffff;
   cursor: pointer;
-}
-
-/* 9.6:1 on #0A0A0A. */
-.drawer-label {
-  margin-top: 14px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.drawer-domains {
-  list-style: none;
-  margin: 8px 0 0;
-  padding: 0;
-}
-
-.drawer-option {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  height: 40px;
-  font-size: var(--fs-base);
-  color: #ffffff;
-  cursor: pointer;
-}
-
-.drawer-option input {
-  flex: none;
-  width: 16px;
-  height: 16px;
-  margin: 0;
-  accent-color: #ffffff;
-  cursor: pointer;
-}
-
-.drawer-option-name {
-  flex: 1 1 auto;
-}
-
-.drawer-option-count {
-  flex: none;
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: var(--fs-xs);
-  letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.7);
-  font-variant-numeric: tabular-nums;
-}
-
-.drawer-result {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 12px 0 0;
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: var(--fs-xs);
-  line-height: 17px;
-  letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.drawer-clear {
-  flex: none;
-  font: inherit;
-  color: #ffffff;
-  background: none;
-  border: 0;
-  padding: 0;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  cursor: pointer;
-}
-
-.drawer-show {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 44px;
-  margin-top: 12px;
-  padding: 0 12px;
-  font: inherit;
-  font-size: var(--fs-base);
-  font-weight: 500;
-  color: #0a0a0a;
-  background: #ffffff;
-  border: 0;
-  border-radius: var(--radius);
-  cursor: pointer;
-}
-
-.drawer-show[disabled] {
-  opacity: 0.45;
-  cursor: default;
 }
 
 .drawer-nav {
@@ -894,9 +798,9 @@ code {
 
 /* ---------- Drawer footer ---------- */
 .drawer-foot {
-  flex: none;
-  padding: 14px 24px 16px;
-  background: #141414;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .drawer-name {
@@ -1812,8 +1716,8 @@ a.station-body:hover .station-count {
 /* Narrow enough that a 240px card floating off a right-aligned button would
    crowd the edge: it becomes a panel the width of the controls instead.
    Dropping `position: relative` from the button's wrapper is what makes that
-   possible -- the popover then measures itself against the sticky band rather
-   than against the button, which is only as wide as the word Domain. */
+   possible -- the popover then measures itself against the controls band
+   rather than against the button, which is only as wide as the word Domain. */
 @media (max-width: 720px) {
   .domain-filter {
     position: static;
@@ -1905,19 +1809,21 @@ a.station-body:hover .station-count {
   outline-offset: 2px;
 }
 
-/* Below the breakpoint there is no search box and no domain button: the
-   filter is in the drawer, and a search field nobody can reach from the
-   header would be a control with no home. The chips stay, because a reader
-   has to be able to see why the list is short and undo it. */
+/* The band keeps its search box and domain button at every width -- the
+   drawer is navigation only -- but it stops holding the top of the viewport,
+   because a sticky bar on a short screen costs more of the list than
+   scrolling back up to it does. `position: relative` is what the popover
+   measures itself against below, so the panel spans the band rather than the
+   whole screen. */
 @media (max-width: 720px) {
   .controls {
-    position: static;
+    position: relative;
     margin: 24px 0 32px;
     padding: 0;
   }
 
   .controls-row {
-    display: none;
+    gap: 8px;
   }
 }
 
