@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MOMENTS } from "@/lib/schema";
 import { SOCIAL_LINKS, SocialIcon } from "./SocialLinks";
-import { setThemeChoice, storedChoice, type ThemeChoice } from "./ThemeToggle";
+import { setThemeChoice, storedChoice, ThemeIcon, type ThemeChoice } from "./ThemeToggle";
 
 /**
  * The small-screen menu: a hamburger in the header and a drawer behind it.
@@ -245,6 +245,11 @@ export function NavDrawer() {
  * Roving tabindex, per the radiogroup pattern: the group is one tab stop and
  * the arrows move within it. Until the choice is known nothing is checked, so
  * the first option carries the tabindex to keep the group reachable.
+ *
+ * The options are the same three marks the header menu uses -- half circle,
+ * sun, moon -- rather than the words. Three words in a 280px panel pushed the
+ * control onto its own line under the label; three marks fit beside it, and
+ * each still carries its word as an accessible name.
  */
 function DrawerAppearance() {
   const [choice, setChoice] = useState<ThemeChoice | null>(null);
@@ -295,10 +300,13 @@ function DrawerAppearance() {
               className="drawer-segment"
               role="radio"
               aria-checked={checked}
+              // The mark carries the meaning on screen; the name carries it
+              // everywhere else, so each option still announces as a word.
+              aria-label={option.label}
               tabIndex={checked || (choice === null && index === 0) ? 0 : -1}
               onClick={() => pick(option.value)}
             >
-              {option.label}
+              <ThemeIcon choice={option.value} size={18} />
             </button>
           );
         })}

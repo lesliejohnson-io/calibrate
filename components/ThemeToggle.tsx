@@ -61,6 +61,66 @@ export function setThemeChoice(choice: ThemeChoice): void {
   }
 }
 
+/**
+ * The three marks, in one place: a half-filled circle for System, a sun for
+ * Light, a moon for Dark. The header renders all three and lets CSS pick; the
+ * drawer renders one per option, side by side. Same shapes either way, which
+ * is the point of them living here rather than being drawn twice.
+ */
+export function ThemeIcon({
+  choice,
+  className,
+  size = 17,
+}: {
+  choice: ThemeChoice;
+  className?: string;
+  size?: number;
+}) {
+  const shared = {
+    className,
+    viewBox: "0 0 20 20",
+    width: size,
+    height: size,
+    "aria-hidden": true,
+    focusable: "false" as const,
+  };
+
+  if (choice === "system") {
+    return (
+      <svg {...shared}>
+        <path d="M10 3A7 7 0 0 0 10 17Z" fill="currentColor" />
+        <circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" strokeWidth="1.4" />
+      </svg>
+    );
+  }
+
+  if (choice === "light") {
+    return (
+      <svg {...shared}>
+        <circle cx="10" cy="10" r="3.6" fill="none" stroke="currentColor" strokeWidth="1.4" />
+        <path
+          d="M10 1.6v2.1M10 16.3v2.1M18.4 10h-2.1M3.7 10H1.6M15.94 4.06l-1.48 1.48M5.54 14.46l-1.48 1.48M15.94 15.94l-1.48-1.48M5.54 5.54 4.06 4.06"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  }
+
+  return (
+    <svg {...shared}>
+      <path
+        d="M16.5 12.4A7 7 0 0 1 7.6 3.5a7 7 0 1 0 8.9 8.9Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function ThemeToggle() {
   const [choice, setChoice] = useState<ThemeChoice | null>(null);
   const [open, setOpen] = useState(false);
@@ -145,49 +205,9 @@ export function ThemeToggle() {
         aria-label={current ? `Appearance: ${current}` : "Appearance"}
         onClick={() => setOpen((was) => !was)}
       >
-        <svg
-          className="theme-icon icon-system"
-          viewBox="0 0 20 20"
-          width="17"
-          height="17"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path d="M10 3A7 7 0 0 0 10 17Z" fill="currentColor" />
-          <circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" strokeWidth="1.4" />
-        </svg>
-        <svg
-          className="theme-icon icon-sun"
-          viewBox="0 0 20 20"
-          width="17"
-          height="17"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <circle cx="10" cy="10" r="3.6" fill="none" stroke="currentColor" strokeWidth="1.4" />
-          <path
-            d="M10 1.6v2.1M10 16.3v2.1M18.4 10h-2.1M3.7 10H1.6M15.94 4.06l-1.48 1.48M5.54 14.46l-1.48 1.48M15.94 15.94l-1.48-1.48M5.54 5.54 4.06 4.06"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-          />
-        </svg>
-        <svg
-          className="theme-icon icon-moon"
-          viewBox="0 0 20 20"
-          width="17"
-          height="17"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path
-            d="M16.5 12.4A7 7 0 0 1 7.6 3.5a7 7 0 1 0 8.9 8.9Z"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.4"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <ThemeIcon choice="system" className="theme-icon icon-system" />
+        <ThemeIcon choice="light" className="theme-icon icon-sun" />
+        <ThemeIcon choice="dark" className="theme-icon icon-moon" />
       </button>
 
       {open && (

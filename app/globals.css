@@ -847,8 +847,14 @@ code {
 /*
  * A setting, not a destination. The label is smaller and quieter than the
  * 20px nav links above it so the row reads as something you adjust on the
- * way past rather than another place to go, and the segmented control sits
- * opposite it the way a setting's control does in a list.
+ * way past rather than another place to go.
+ *
+ * The options are marks rather than words, which is what lets this sit on
+ * one line. The panel is 280px wide, so 232px of content: three words wanted
+ * 288 and had to stack under the label, three icons want about 126 and fit
+ * beside it with room to spare. `flex-wrap` stays as the floor -- if the
+ * label ever grows past what is left, it drops the control to its own line
+ * rather than pushing it through the edge of the panel.
  *
  * Every colour here is on #0A0A0A: the label and the unselected options are
  * white at 0.7 and 0.75, which clear 4.5:1, and the selected option inverts
@@ -882,16 +888,19 @@ code {
   border-radius: 999px;
 }
 
-/* 10.4:1 on #0A0A0A unselected; the checked option inverts instead. */
+/*
+ * 10.4:1 on #0A0A0A unselected; the checked option inverts instead. The mark
+ * is 18px in a 40x44 target -- narrower than the 44 square a lone icon button
+ * would get, because three of them have to sit beside the label, and still
+ * well past the 24px floor with the full 44 of height behind it.
+ */
 .drawer-segment {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-width: 40px;
   min-height: 44px;
-  padding: 0 12px;
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 14px;
-  line-height: 1.2;
+  padding: 0;
   color: rgba(255, 255, 255, 0.75);
   background: transparent;
   border: 0;
