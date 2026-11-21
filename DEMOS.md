@@ -469,6 +469,29 @@ stopped at management. It carries `demoNote: "Simplified illustration."`
 Concepts go here as they are decided. Until a pattern has one, its `review:`
 list should say so rather than this file carrying a placeholder.
 
+### 16 Mode Awareness — not built
+
+A printed display, titled `Flight control unit · Vertical`. The reader is
+told the briefed descent is a 3.3° path, types `3.3` and presses Enter. It
+must not repeat Shared Mental Model's `autothrottle` demo: that one is about
+a mode the machine changed; this one is about a value that reads correctly in
+the wrong mode.
+
+- **Without:** the window prints `-33` in large type, with `V/S` beside it
+  in small type, then `DESCENT ESTABLISHED`. The reader can carry on. A few
+  lines later it prints the result: `⚠ V/S 3300 FT/MN · PLANNED ABOUT 800`.
+  The demonstration is that `-33` looked like what they typed.
+- **With:** the same entry prints `V/S −3300 FT/MN`, the unit written out and
+  the mode as large as the value, and the target appears again beside the
+  actual vertical speed. Two choices follow: keep V/S, or switch to FPA, where
+  the window reads `FPA −3.3°`. Keeping V/S still flies at 3300: the display
+  tells, it doesn't veto.
+
+Every figure is from the BEA report: 3.3°, 3300 ft/mn, about 800 ft/mn. The
+report writes ft/mn, so the display does too. The window layout is written for
+the page, not copied from the A320 panel, so it should carry
+`demoNote: "Simplified illustration, not real flight data."`
+
 <!-- Paste the demo list here. One heading per pattern, in the shape of the
      built ones above: what the reader does, what the Without side does, what
      the With side does, and any figure that has to come from a source. -->

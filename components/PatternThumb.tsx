@@ -15,7 +15,7 @@
  * the stroke width change.
  *
  * Marks are drawn in `currentColor` rather than a literal white, so a
- * thumbnail follows --thumb-ink and the theme toggle keeps working.
+ * thumbnail follows --thumb-ink if that token ever changes.
  */
 
 type Size = "card" | "small";

@@ -11,7 +11,6 @@ import {
   type Domain,
   type PatternCardData,
 } from "@/lib/browse";
-import { humanize } from "@/lib/format";
 import { MOMENTS, type Moment } from "@/lib/schema";
 import { useBrowse } from "./BrowseProvider";
 import { DomainFilter } from "./DomainFilter";
@@ -27,8 +26,9 @@ import { PatternCard } from "./PatternCard";
  * library is in the HTML without JavaScript.
  *
  * The grouping is fixed: the five moments, in the order the loop runs. The
- * controls are one row -- search, then the domain filter -- because filtering
- * is not the point of the page and should not be the first thing on it.
+ * controls are the search field with its label above it, then a row of
+ * domain chips under it. Search matches names, intents and aliases only;
+ * the label says so plainly until symptom phrases exist to match against.
  */
 export function PatternBrowser({
   cards,
@@ -88,11 +88,11 @@ export function PatternBrowser({
         {children}
 
         <div className="controls">
+          <label className="search-label" htmlFor="pattern-search">
+            Search patterns
+          </label>
           <div className="controls-row">
             <div className="search">
-              <label className="sr-only" htmlFor="pattern-search">
-                Search patterns
-              </label>
               <svg className="search-icon" viewBox="0 0 16 16" aria-hidden="true">
                 <circle cx="7" cy="7" r="4.75" fill="none" stroke="currentColor" strokeWidth="1.5" />
                 <path d="M10.5 10.5 14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -101,7 +101,6 @@ export function PatternBrowser({
                 id="pattern-search"
                 ref={searchRef}
                 type="search"
-                placeholder="Search patterns"
                 value={state.query}
                 onChange={(e) => update({ ...state, query: e.target.value })}
                 /* Escape empties the box, the way it does in a find bar. The
@@ -132,48 +131,17 @@ export function PatternBrowser({
                 </button>
               )}
             </div>
-
-            {/* Seeds have no control of their own: ?status=all still reveals
-                them, which is all the About page promises. */}
-            <DomainFilter
-              domains={domains}
-              counts={counts}
-              selected={state.domains}
-              onToggle={toggleDomain}
-              onClear={clearDomains}
-            />
           </div>
 
-          {/* What is on, spelled out and removable one at a time. The button
-              says how many; these say which. */}
-          {state.domains.length > 0 && (
-            <div className="active-filters" role="group" aria-label="Active domain filters">
-              {state.domains.map((domain) => (
-                <span key={domain} className="active-chip">
-                  {humanize(domain)}
-                  <button
-                    type="button"
-                    className="active-chip-x"
-                    aria-label={`Remove ${humanize(domain)} filter`}
-                    onClick={() => toggleDomain(domain)}
-                  >
-                    <svg viewBox="0 0 10 10" aria-hidden="true">
-                      <path
-                        d="M2 2 8 8M8 2 2 8"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  </button>
-                </span>
-              ))}
-              <button type="button" className="clear-filters-inline" onClick={clearDomains}>
-                Clear all
-              </button>
-            </div>
-          )}
+          {/* Seeds have no control of their own: ?status=all still reveals
+              them, which is all the About page promises. */}
+          <DomainFilter
+            domains={domains}
+            counts={counts}
+            selected={state.domains}
+            onToggle={toggleDomain}
+            onClear={clearDomains}
+          />
         </div>
 
         <div id="pattern-results" className="index-results">

@@ -10,9 +10,12 @@ type Tale = NonNullable<Frontmatter["cautionaryTale"]>;
  *
  * The dateline is a real heading rather than an eyebrow, so the page's
  * outline runs tale → anti-pattern → pattern and a screen reader can jump
- * between them. The citation is written here rather than carried in the story
- * text, because the tale rests on the same one or two sources throughout: a
- * per-sentence `[cite:]` would repeat the same number three times.
+ * between them. Most tales rest on one or two sources throughout, so their
+ * citation is a single footnote group after the story, built from
+ * `sourceId`. A tale that draws different claims from different sources can
+ * instead place `[cite:]` markers in the story itself, and then the group is
+ * left off: each claim already carries its own number. Paragraph breaks (a
+ * blank line in the YAML) render as separate paragraphs either way.
  *
  * `timeline` and `kicker` are both optional, and a tale without them renders
  * exactly as it did before they existed. The timeline is the
@@ -33,10 +36,16 @@ type Tale = NonNullable<Frontmatter["cautionaryTale"]>;
  */
 export function CautionaryTale({
   tale,
+  paragraphs,
+  citesInline,
   numbers,
   draft,
 }: {
   tale: Tale;
+  /** The story, escaped and with `[cite:]` resolved, one entry per paragraph. */
+  paragraphs: string[];
+  /** The story places its own footnotes, so no group goes after it. */
+  citesInline: boolean;
   /** Each source's position in the Sources list, which is its footnote. */
   numbers: Record<string, number | undefined>;
   draft?: boolean;
@@ -53,25 +62,30 @@ export function CautionaryTale({
       <p className="tale-dateline">
         {tale.date} · {tale.place}
       </p>
-      <p className="tale-story">
-        {tale.story}
-        {cited.length > 0 && (
-          <sup className="cite">
-            {cited.map((c, i) => (
-              <span key={c.id}>
-                {i > 0 && ","}
-                <a
-                  href={`#${sourceAnchor(c.id)}`}
-                  aria-label={`Source ${c.n}`}
-                  title={`Source ${c.n}`}
-                >
-                  {c.n}
-                </a>
-              </span>
-            ))}
-          </sup>
-        )}
-      </p>
+      {paragraphs.map((html, i) => {
+        const last = i === paragraphs.length - 1;
+        return (
+          <p key={i} className="tale-story">
+            <span dangerouslySetInnerHTML={{ __html: html }} />
+            {last && !citesInline && cited.length > 0 && (
+              <sup className="cite">
+                {cited.map((c, k) => (
+                  <span key={c.id}>
+                    {k > 0 && ","}
+                    <a
+                      href={`#${sourceAnchor(c.id)}`}
+                      aria-label={`Source ${c.n}`}
+                      title={`Source ${c.n}`}
+                    >
+                      {c.n}
+                    </a>
+                  </span>
+                ))}
+              </sup>
+            )}
+          </p>
+        );
+      })}
 
       {tale.timeline && tale.timeline.length > 0 && (
         <ol

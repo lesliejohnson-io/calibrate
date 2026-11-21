@@ -56,15 +56,31 @@ export const DEFAULT_STATE: BrowseState = {
 
 const isDomain = (v: string): v is Domain => (DOMAINS as readonly string[]).includes(v);
 
+/**
+ * Old domain names, still accepted in `?domain=` so links made before the
+ * rename keep their filter. They map to the current name on read; the URL
+ * itself keeps the old name until the reader next changes a filter, when the
+ * page writes the current one.
+ */
+const DOMAIN_ALIASES: Record<string, Domain> = {
+  automotive: "driving",
+  medical: "clinical",
+};
+
 /** Reads state out of a query string, ignoring anything unrecognized. */
 export function parseState(search: string): BrowseState {
   const params = new URLSearchParams(search);
 
   return {
-    domains: (params.get("domain") ?? "")
-      .split(",")
-      .map((d) => d.trim())
-      .filter(isDomain),
+    domains: [
+      ...new Set(
+        (params.get("domain") ?? "")
+          .split(",")
+          .map((d) => d.trim())
+          .map((d) => DOMAIN_ALIASES[d] ?? d)
+          .filter(isDomain),
+      ),
+    ],
     showSeeds: params.get("status") === "all",
     query: params.get("q")?.trim() ?? "",
   };

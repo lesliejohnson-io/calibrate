@@ -11,7 +11,7 @@ trustJobs: [know]
 risk: critical
 reversibility: irreversible
 autonomy: [1, 4]
-domains: [industrial, medical]
+domains: [industrial, clinical]
 
 status: draft
 updated: "2026-11-07"
@@ -81,22 +81,6 @@ related:
     type: complements
     note: "A handover is a state change with two actors, and worth recording as one. Who accepted the machine, and in what condition, is exactly the question asked afterwards."
 
-review:
-  - "Cite the Cullen Report (1990) itself when available."
-  - "Anti-pattern, “no clear procedure for shift handovers at all” is in tension with the IChemE bulletin. That sentence is cited to a trade-news summary of Cullen. LPB 261 describes a procedure that did exist and was not kept to: “The Occidental procedure required maintenance and operations to meet, inspect the work site and sign off permits together. However, the operators were busy with their own handovers at the same time, and the practice developed where maintenance would” leave the paperwork instead. “Routinely not followed” is well supported; “no clear procedure at all” needs the Cullen Report itself to stand. Text left as supplied."
-  - "Tale, the sources say condensate, not gas. JESIP calls it “a massive leakage of gas condensate”; LPB 261 has “condensate leaked from the blind flange … The escaping condensate ignited.” The story says “Gas escaped through the temporary cover”. Text left as supplied."
-  - "Tale, two details the sources add that the story leaves out, neither contradicting it. The blind flange “was not, however, leak-tested or pressure-tested” and was “not fully tightened up” — which is why it leaked. And LPB 261 notes the restart was not unreasonable on what the night shift knew: maintenance on pump A “had not yet started and the problem with pump A was not especially serious”."
-  - "Tale, “that day” is the day shift reading, which the sources support indirectly. LPB 261 dates the isolation to “the evening of 06 July 1988” and records that the associated permits “had been suspended overnight”. The valve work being done and left unfinished before the night shift came on is the sense both sources carry."
-  - "I-PASS, “no increase in handoff duration” is slightly stronger than the paper. Starmer et al. report “no significant changes … in the duration of oral handoffs (2.4 and 2.5 minutes per patient, respectively; P=0.55)”. The mean rose a tenth of a minute and the difference was not significant, so “no significant change” is the exact claim. The In the field entry avoids the phrase; the source note states the figures."
-  - "Starmer et al. was read from a mirror. The URL in the brief, the Washington University Digital Commons deposit, serves HTML rather than the PDF to a non-browser client; the same deposited document was read in full from the Lehigh Valley Health Network repository copy. The citation points at the Washington University record, which is the canonical deposit. Europe PMC confirms the paper is not open access there (PMID 25372088), so there is no PMC copy to prefer."
-  - "Tale heading reordered into the page’s own shape. The brief gives one line, “July 6, 1988 · Piper Alpha oil platform · North Sea”; the CautionaryTale component takes a title and renders “date · place” beneath it, so the page shows “Piper Alpha oil platform” with “July 6, 1988 · North Sea” under it, the same as every other converted page. No words changed."
-  - "Design considerations, six words added to the last item. The brief’s text ends “is exactly the question asked afterwards” and then asks for a link to Provenance Log; a bare trailing link reads badly, so the sentence now ends “… asked afterwards, which is what Provenance Log is for”, with the link on the pattern name. Nothing else in the item changed."
-  - "Two source notes rewritten outside the brief, both to replace a paraphrase with the verified wording. `icheme-lpb261` said “carried in the research for the sequence” and now quotes the bulletin; `starmer-2014` said “cited here via the AHRQ PSNet record rather than the NEJM paper itself”, which stopped being true when the URL changed, and now quotes the paper and gives the duration figures. Neither note is body text."
-  - "Front matter, two fields changed outside the brief. `domains` gained `medical`, because In the field now carries the I-PASS entry and the filters read that list; `updated` moved to 2026-11-07."
-  - "Demo prints an arrow glyph. “day shift → night shift” is the brief’s wording and the only arrow inside a printed display anywhere on the site; `.fc-line` is a fixed monospace stack, so if a font in it lacks U+2192 that one character falls back. Checked in Chrome on Windows and it renders; worth a second look on another platform."
-  - "Mechanism steps: drafted. Steps 2 and 4 carry sourced notes; the five-step shape, the titles and details are mine."
-  - "Demo invents its data. The sources describe a platform control room in 1988; the two-pump console, the field names and the equipment list are written for this page. What is taken from them is the shape of the failure — two true facts held apart, and a handover that relied on someone joining them up."
-
 openQuestions:
   - "What should an incoming fleet operator see about robots that are paused, in maintenance, or running with a sensor disabled? Piper Alpha says the disabled ones should be the loudest thing on the screen, but few handover views seem to be built that way."
   - "Does saying it back still work in software? I-PASS works partly because one person says it out loud to another. A checkbox that does the same job is exactly the kind of step that gets cleared from habit."
@@ -148,7 +132,7 @@ sources:
 
 **Observed · Industrial.** [Piper Alpha](#tale): the permit for the pump and the permit for its safety valve were separate and uncross-referenced, so the night shift restarted a pump whose valve had been removed.[cite:icheme-lpb261][cite:jesip-piper-alpha]
 
-**Observed · Medical.** I-PASS, a structured handoff program used across nine hospitals, where medical errors fell 23% and preventable adverse events 30%.[cite:starmer-2014]
+**Observed · Clinical.** I-PASS, a structured handoff program used across nine hospitals, where medical errors fell 23% and preventable adverse events 30%.[cite:starmer-2014]
 
 ## Notes
 

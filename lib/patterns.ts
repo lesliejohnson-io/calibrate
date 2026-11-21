@@ -109,6 +109,18 @@ export type Pattern = Frontmatter & {
    * the page shows under the "Anti-pattern:" heading.
    */
   antiPatternHtml: string;
+  /**
+   * The cautionary tale's story ready to render: HTML-escaped, `[cite:]`
+   * resolved, one string per paragraph. Empty when the pattern has no tale.
+   */
+  taleParagraphs: string[];
+  /**
+   * Whether the story places its own footnotes with `[cite:]`. When it does,
+   * the tale shows no footnote group after the story -- every source is
+   * already cited where its claim is -- and every inline-cited source must
+   * also be named in `cautionaryTale.sourceId`.
+   */
+  taleCitesInline: boolean;
 };
 
 const HTML_ESCAPES: Record<string, string> = {
@@ -119,6 +131,19 @@ const HTML_ESCAPES: Record<string, string> = {
 };
 
 const escapeHtml = (s: string) => s.replace(/[&<>"]/g, (c) => HTML_ESCAPES[c]);
+
+/**
+ * A tale's story as paragraphs. Tales are written as folded YAML (`>-`),
+ * where a blank line survives as a single newline and every other line break
+ * is folded to a space, so any newline left in the string is a paragraph
+ * break.
+ */
+function taleParagraphs(html: string): string[] {
+  return html
+    .split(/\n+/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+}
 
 /** One `<p class="prose-lead">` per blank-line-separated paragraph. */
 function paragraphs(html: string): string {
@@ -216,7 +241,10 @@ function readPattern(file: string): Pattern {
     splitBody(content),
     parsed.data.sources,
     rel,
-    { antiPattern: escapeHtml(parsed.data.without.caption) },
+    {
+      antiPattern: escapeHtml(parsed.data.without.caption),
+      taleStory: escapeHtml(parsed.data.cautionaryTale?.story ?? ""),
+    },
   );
 
   // The tale's source is validated the same way a [cite:] is: naming a source
@@ -243,6 +271,22 @@ function readPattern(file: string): Pattern {
     citations[id] = numbers[id];
   }
 
+  // A story that cites inline has to cite only sources the tale names, so
+  // `sourceId` stays the complete list of what the opening rests on.
+  const taleCitesInline = Boolean(tale?.story.includes("[cite:"));
+  if (tale && taleCitesInline) {
+    const named = new Set(taleSourceIds(tale));
+    const stray = [...tale.story.matchAll(/\[cite:([a-z0-9][a-z0-9-]*)\]/g)]
+      .map((m) => m[1])
+      .filter((id) => !named.has(id));
+    if (stray.length > 0) {
+      throw new Error(
+        `${rel}: cautionaryTale.story cites ${[...new Set(stray)].map((id) => `"${id}"`).join(", ")}, ` +
+          `which ${stray.length === 1 ? "is" : "are"} not named in cautionaryTale.sourceId.`,
+      );
+    }
+  }
+
   return {
     ...parsed.data,
     slug: file.replace(/\.md$/, "").replace(/^\d+-/, ""),
@@ -250,6 +294,8 @@ function readPattern(file: string): Pattern {
     file: rel,
     citations,
     antiPatternHtml: paragraphs(extras.antiPattern),
+    taleParagraphs: tale ? taleParagraphs(extras.taleStory) : [],
+    taleCitesInline,
   };
 }
 

@@ -11,7 +11,7 @@ trustJobs: [recover, know]
 risk: critical
 reversibility: costly
 autonomy: [3, 5]
-domains: [automotive, drone, industrial]
+domains: [driving, drone, industrial]
 
 status: draft
 updated: "2026-11-06"
@@ -92,17 +92,6 @@ related:
     type: precedes
     note: "When the ladder runs out of fallbacks, the system escalates by handing control back."
 
-review:
-  - "Opening story replaced this pass: Royal Majesty in, AF447 out. Nothing in the new tale or the new anti-pattern has been read against NTSB/MAR-97/01 — both are drafted from the brief, both carry `drafts:` flags, and the VERIFY comments in the frontmatter list every figure to check. Pull the report before either loses its DRAFT tag."
-  - "AF447 is now an In the field entry rather than the opening, cut to one sentence. The three flags below were written about it as the tale and the anti-pattern; they still apply to the surviving sentence, which makes the same claim in shorter form, and are kept because the claim is the one worth knowing about."
-  - "Tale, one claim the BEA report does not carry as written. “Never worked out which protections were gone”: the report records the PNF calling out “alternate law protections” at 2 h 10 min 16 and reading the reconfiguration to alternate law off the ECAM between 2 h 10 min 18 and 2 h 10 min 25. The BEA's own conclusion is hedged — “although the PNF had called out the reconfiguration to alternate law when reading the ECAM, and even though the indicators of the loss of protection should have been displayed on the PFD (SPD LIM and an amber cross in roll and yaw), it is possible that the PF was not fully aware of this reconfiguration and of what it implied”. Text left as supplied."
-  - "Anti-pattern, same point in stronger form. “Nothing told them what it could still be trusted with” is contradicted in the narrow sense: the ECAM announced the reconfiguration and the PFD should have shown the loss of protection. What the report does support is that no message identified the origin of the failure — “No failure message is provided that identifies the origin of these other failures: in particular, the rejection of the ADR's and of the speed measurements” — and that it is possible the pilot flying did not grasp what the new law implied. Shown and not registered, as on Shared Mental Model. Text left as supplied."
-  - "Tale, two smaller hedges in the source. The report says the speed indications were incorrect “likely following the obstruction of the Pitot probes by ice crystals”; the tale states it flatly. And “handed control without warning” is the crew's experience rather than the report's wording: the autopilot disconnection was itself annunciated, and the report says the crew “detected a problem with this disconnection”."
-  - "Verified against the BEA final report this pass: the A330-203 on AF 447, Rio de Janeiro Galeão to Paris Charles de Gaulle; autopilot disconnection and “a reconfiguration to alternate law”; “In alternate or direct law, the angle-of-attack protections are no longer available but a stall warning is triggered”; a maximum altitude of “about 38,000 ft”; impact at 2 h 14 min 28, more than three minutes after the apogee; and 228 fatalities (12 crew, 216 passengers). Note that the stall warning itself kept sounding — what was lost was the protection, not the warning."
-  - "Verified against UN R157 this pass: 5.1.5, “If the driver fails to resume control of the DDT during the transition phase, the system shall perform a minimum risk manoeuvre”, and the 2.7 definition, “a procedure aimed at minimising risks in traffic, which is automatically performed by the system after a transition demand without driver response or in the case of a severe ALKS or vehicle failure”. Whether a separate operative paragraph makes the manoeuvre mandatory for a severe failure, rather than permitted, was not read: section 5.4 could not be pulled verbatim."
-  - "Demo is a simplified illustration. The fault codes, the mode labels and the four-rung ladder are written for this page, not taken from any aircraft. The spec put “Landing in place. No operator response needed.” at the bottom rung; it prints on LAND IN PLACE, because the bottom rung is STOP, which is where the drone sits once it is down."
-  - "Mechanism steps: unchanged apart from the two notes, which were rewritten to read as sentences."
-
 openQuestions:
   - "How many rungs are too many? Each extra fallback state is one more mode the operator has to recognize, which risks the very confusion Shared Mental Model is about."
   - "Who decides when to step back up? Restoring capability automatically is convenient, but it changes the machine's behavior under the operator's hands."
@@ -161,4 +150,4 @@ sources:
      not on a finding that nothing was shown. -->
 **Observed · Aviation.** Air France 447: the flight controls stepped down to a mode without stall protection, and the crew never established what the new mode could still be trusted with.[cite:bea-af447]
 
-**Observed · Automotive.** UN R157 requires an automated lane keeping system to perform a minimum risk manoeuvre when the driver does not resume control after a transition demand — the floor of the ladder, written into a regulation.[cite:un-r157]
+**Observed · Driving.** UN R157 requires an automated lane keeping system to perform a minimum risk manoeuvre when the driver does not resume control after a transition demand — the floor of the ladder, written into a regulation.[cite:un-r157]

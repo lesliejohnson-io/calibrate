@@ -5,13 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MOMENTS } from "@/lib/schema";
 import { SOCIAL_LINKS, SocialIcon } from "./SocialLinks";
-import { setThemeChoice, storedChoice, ThemeIcon, type ThemeChoice } from "./ThemeToggle";
 
 /**
  * The small-screen menu: a hamburger in the header and a drawer behind it.
  *
  * Below the breakpoint the header has room for the mark and one control, so
- * the links and the theme switch move in here. The drawer is navigation only:
+ * the links move in here. The drawer is navigation only:
  * the domain filter stays in the index's controls band at every width, where
  * it sits beside the thing it narrows.
  *
@@ -23,13 +22,6 @@ import { setThemeChoice, storedChoice, ThemeIcon, type ThemeChoice } from "./The
  * Short labels, by the brief: the moment named "After and over time"
  * everywhere else on the site is "After" in here.
  */
-
-/** The appearance options, in the order the arrow keys walk them. */
-const CHOICES: { value: ThemeChoice; label: string }[] = [
-  { value: "system", label: "System" },
-  { value: "light", label: "Light" },
-  { value: "dark", label: "Dark" },
-];
 
 /** The moments, in loop order, with the names the drawer uses. */
 const MOMENT_SHORT: Record<(typeof MOMENTS)[number], string> = {
@@ -206,8 +198,6 @@ export function NavDrawer() {
             </Link>
           </nav>
 
-          <DrawerAppearance />
-
           <div className="drawer-foot">
             <p className="drawer-name">Leslie Johnson</p>
             <ul className="drawer-socials">
@@ -229,88 +219,5 @@ export function NavDrawer() {
         </div>
       </div>
     </>
-  );
-}
-
-/**
- * Appearance, as a setting rather than a switch.
- *
- * The header's icon toggle flips between two states and can decide which
- * icon to show in CSS, so it needs no state at all. This one cannot: there
- * are three options, and "System" is the absence of a stored choice, which no
- * stylesheet can see. So it reads the choice in an effect and renders nothing
- * checked until then -- a radio group whose server markup guessed wrong would
- * announce the wrong setting for as long as hydration took.
- *
- * Roving tabindex, per the radiogroup pattern: the group is one tab stop and
- * the arrows move within it. Until the choice is known nothing is checked, so
- * the first option carries the tabindex to keep the group reachable.
- *
- * The options are the same three marks the header menu uses -- half circle,
- * sun, moon -- rather than the words. Three words in a 280px panel pushed the
- * control onto its own line under the label; three marks fit beside it, and
- * each still carries its word as an accessible name.
- */
-function DrawerAppearance() {
-  const [choice, setChoice] = useState<ThemeChoice | null>(null);
-  const labelId = useId();
-  const groupRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => setChoice(storedChoice()), []);
-
-  const pick = (next: ThemeChoice) => {
-    setThemeChoice(next);
-    setChoice(next);
-  };
-
-  // Left and Right move to the next option and select it, wrapping at both
-  // ends. Selection follows focus, which is the right call here because every
-  // option is instant and reversible -- there is nothing to commit.
-  const onKeyDown = (event: React.KeyboardEvent) => {
-    const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
-    if (step === 0) return;
-    event.preventDefault();
-
-    const from = CHOICES.findIndex((c) => c.value === choice);
-    const next = CHOICES[(((from === -1 ? 0 : from) + step) + CHOICES.length) % CHOICES.length];
-    pick(next.value);
-    groupRef.current
-      ?.querySelectorAll<HTMLButtonElement>("button")
-      [CHOICES.indexOf(next)]?.focus();
-  };
-
-  return (
-    <div className="drawer-appearance">
-      <p className="drawer-appearance-label" id={labelId}>
-        Appearance
-      </p>
-      <div
-        className="drawer-segmented"
-        ref={groupRef}
-        role="radiogroup"
-        aria-labelledby={labelId}
-        onKeyDown={onKeyDown}
-      >
-        {CHOICES.map((option, index) => {
-          const checked = choice === option.value;
-          return (
-            <button
-              key={option.value}
-              type="button"
-              className="drawer-segment"
-              role="radio"
-              aria-checked={checked}
-              // The mark carries the meaning on screen; the name carries it
-              // everywhere else, so each option still announces as a word.
-              aria-label={option.label}
-              tabIndex={checked || (choice === null && index === 0) ? 0 : -1}
-              onClick={() => pick(option.value)}
-            >
-              <ThemeIcon choice={option.value} size={18} />
-            </button>
-          );
-        })}
-      </div>
-    </div>
   );
 }

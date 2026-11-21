@@ -98,15 +98,6 @@ sources:
     type: talk
     note: "Observed. Course material on alerting design, and the source for the 777 EICAS checklist icon that links a message to the procedure it needs."
 
-review:
-  - "Tale, two claims that its sources do not carry. The Commission's report says “a cascade of alarms that numbered 100 within minutes”, not more than a hundred; the tale says “more than a hundred”. And the 1979 report nowhere states how much of the core melted — it describes melting as the risk, and records that core damage was “far more substantial than either had anticipated”. The “about half the core melted” figure comes from the later core examinations, via the NRC, which is not a source on this page. Both sentences are as supplied; neither has been changed."
-  - "Tale, the printer sentence rests on nrc-printer, which could not be re-read this pass: nrc.gov returns 403 to an automated fetch. The claim stands on the source note already in this file, not on a reading of the document."
-  - "Verified against the Commission's report this pass: the 4 a.m. start (“36 seconds after the hour of 4:00 a.m.”), the stuck-open PORV draining coolant for 2 hours 22 minutes, the operators shutting one high pressure injection pump down and throttling the second to under 100 gallons a minute, Faust's remark, and “the worst accident in the history of commercial nuclear power generation”."
-  - "Design consideration 2 is stronger than CS 25.1322. The rule assigns red to Warnings and amber or yellow to Cautions, but 25.1322(f) says other flight-deck uses of red, amber and yellow “must be limited and must not adversely affect flight crew alerting” — and the AMC allows weather radar and terrain displays. “Used for nothing else” is the practice the rule protects, not the rule's own words."
-  - "Design consideration 1 compresses the rule's definitions. CS 25.1322(b) distinguishes Warning and Caution by the response (“immediate” versus “subsequent”), but requires immediate flight crew awareness for both. “Act soon” carries the response and drops the awareness."
-  - "Mechanism steps: drafted. Steps 2 and 3 carry sourced notes; the titles, details, and steps 4 and 5 are mine. Step 4 in particular — grouping consequential alarms under their cause — is standard alarm-management practice but is not in the research."
-  - "Demo is a simplified illustration in the shape of the TMI sequence, not plant data, and says so on both panels. The thirty alarm texts are plausible rather than drawn from the record: the Commission's report names some of them, but the list, the arrival order and the split between cautions and consequences are mine."
-
 openQuestions:
   - "The process industry's alarm management standard, ISA-18.2, is closer to a warehouse or plant control room than a flight deck, and it's where alarm rationalization and grouping are actually specified. It hasn't been pulled yet."
   - "Whether ranking survives a cascade. Three levels work on a flight deck partly because the number of possible alerts is limited and certified in advance. A plant or a robot fleet can generate thousands, and then the ranking has to be computed, not assigned ahead of time."

@@ -11,11 +11,13 @@ export const RISKS = ["low", "elevated", "critical"] as const;
 export const REVERSIBILITY = ["reversible", "costly", "irreversible"] as const;
 export const STATUSES = ["seed", "draft", "reviewed", "stable"] as const;
 export const DOMAINS = [
-  "automotive",
-  // Medical devices generally — a therapy machine, an infusion pump, a
-  // monitor. "surgical" stays for robots that operate on a patient, which is
-  // a narrower thing with its own literature.
-  "medical",
+  // Road vehicles that drive themselves or assist the driver. Was
+  // "automotive"; renamed so the filter names the activity, not the industry.
+  "driving",
+  // Clinical devices generally — a therapy machine, an infusion pump, a
+  // monitor. Was "medical". "surgical" stays for robots that operate on a
+  // patient, which is a narrower thing with its own literature.
+  "clinical",
   "surgical",
   "industrial",
   "drone",
@@ -28,6 +30,25 @@ export const DOMAINS = [
   "home",
   "general",
 ] as const;
+
+/**
+ * How each domain is written in the interface. Most are the value with a
+ * capital; "drone" reads as the plural, because a chip saying "Drone 3" is
+ * counting drones rather than patterns about them.
+ */
+export const DOMAIN_LABELS: Record<(typeof DOMAINS)[number], string> = {
+  driving: "Driving",
+  clinical: "Clinical",
+  surgical: "Surgical",
+  industrial: "Industrial",
+  drone: "Drones",
+  warehouse: "Warehouse",
+  maritime: "Maritime",
+  aviation: "Aviation",
+  defense: "Defense",
+  home: "Home",
+  general: "General",
+};
 export const SOURCE_TYPES = ["paper", "book", "standard", "incident-report", "article", "talk"] as const;
 export const RELATIONS = ["requires", "complements", "alternative-to", "tension-with", "precedes"] as const;
 

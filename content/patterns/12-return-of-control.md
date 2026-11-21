@@ -11,7 +11,7 @@ trustJobs: [intervene, predict]
 risk: critical
 reversibility: irreversible
 autonomy: [1, 4]
-domains: [aviation, automotive, industrial]
+domains: [aviation, driving, industrial]
 
 status: draft
 updated: "2026-11-07"
@@ -106,20 +106,6 @@ related:
     type: complements
     note: "Both treat the human's state as something to verify rather than assume — one before engaging, one before resuming."
 
-review:
-  - "Opening story replaced this pass: the Washington State driverless forklift in, China Airlines 140 out. Nothing in the new tale, the new anti-pattern or the rethemed demo has been read against FACE Report 71-171-2018 - all three are drafted from the brief, all three carry `drafts:` flags, and the VERIFY comments in this frontmatter list what to check."
-  - "The anti-pattern was renamed from “The Tug-of-War” to “Resumes on Its Own”, which changes what this pattern is about. The old name is the contest: two parties commanding one axis, which is the Nagoya and 737 MAX failure, and most of this page still argues it - the mechanism's “Machine stands back / without arguing”, the design consideration “Give the person the last word”, the Lion Air In the field entry, and the `with` caption's “never commanding the same axis with different intentions”. The new name is unilateral resumption, which is a narrower thing. Both failures are real and this pattern now carries both; decide whether that is one pattern or two before it leaves draft."
-  - "`domains` is still `[aviation, automotive, industrial]`, which still covers the page: the new opening is industrial. Worth noting `warehouse` exists in the schema and is arguably the better fit for a bottling plant."
-  - "Tale, verified against the AAIC report, with one simplification worth knowing about. The report has the GO lever cause a thrust increase that pushed the aircraft above the glide path, and the crew then engaged the autopilots with GO AROUND still active — that is cause 2 of 12 — which is when the stabilizer began working against the control wheel. The story's “the automation began working to climb” compresses those two steps into one and leaves out that the crew engaged the autopilots themselves. Everything else matches. Text left as supplied."
-  - "Anti-pattern, “quietly” and “nothing told the pilots” are right about warnings and slightly strong about feel. The report's cause 5 is that “there was no warning and recognition function to alert the crew directly and actively to the onset of the abnormal out-of-trim condition”, which supports the claim exactly. But cause 3 records that the first officer kept pushing the control wheel “despite its strong resistive force”, so the contest was not silent in the hands, only unannounced. Text left as supplied."
-  - "Tale source is a translation. The AAIC report was read in the English version the FAA hosts, which carries the notice: “Although efforts are made to translate as accurate as possible, only the Japanese version is authentic.” Every figure quoted here appears in that translation; the Japanese original was not consulted."
-  - "Tale, the captain did notice the GO lever itself. The CVR has him telling the first officer “you triggered the GO lever” about five seconds after it happened. What the crew did not recognise, per causes 5 and 6, was the out-of-trim condition and the autopilot override behaviour — which is what the story's “still following its own plan” refers to, so the sentence holds as written."
-  - "Design considerations, the once-per-event citation is still Wikipedia. The first consideration's claim about the post-737 MAX change rests on `wikipedia-mcas`, an encyclopedia summary the source note already marks as not a source. Replace it with the FAA airworthiness directive or Boeing's own description of the change before this leaves draft. The brief asked for this flag."
-  - "“Centering” in the first open question is US spelling; the page it replaced used “centring”, and the `gm-techlink` note below uses “centres”. Left as supplied, so the page now spells it both ways."
-  - "Demo invents its data. The pattern's tale is a 1994 approach to Nagoya; the pitch scale, the degree values, the 15-second window and the counter are written for this page. What is taken from the sources is the shape of the failure — a correction that is reversed without being announced."
-  - "Mechanism steps: drafted. Steps 2 and 4 carry sourced notes; the titles, details and the five-step shape are mine."
-  - "Primary source to pull: the KNKT final report (JT610). NTSB ASR-19-01 has been pulled and added as a source — it carries Boeing's four pilot-response assumptions and the fatality figures, but not the repeated-activation or post-crash design-change claims, which stay on secondary sources."
-
 openQuestions:
   - "What should resuming require when there's no obvious confirming act? Centering the car in a lane is a visible condition; most machines have no equivalent, and a timeout is exactly what this pattern exists to rule out."
   - "Should a machine ever resume a function the person has overridden without being asked? The industrial answer is no: reset is manual, at the machine. Driving assistance says yes, on a visible condition. The difference probably comes down to how often people want the function back."
@@ -202,7 +188,7 @@ sources:
 
 **Observed · Aviation.** Lion Air 610 and Ethiopian Airlines 302. On Lion Air 610 the trim moved more than thirty times, the pilots trimming back against it each time; using the electric trim paused the automated system, which then reset and pushed the nose down again.[cite:claims-journal][cite:satcom-guru] All 189 people on board Lion Air 610 died, and all 157 on Ethiopian 302.[cite:ntsb-asr-19-01]
 
-**Observed · Automotive.** Super Cruise's light bar shows when it will resume: it pulses blue while the driver is steering, and the driver centres the car in the lane and waits for green before the system takes the wheel again.[cite:gm-techlink]
+**Observed · Driving.** Super Cruise's light bar shows when it will resume: it pulses blue while the driver is steering, and the driver centres the car in the lane and waits for green before the system takes the wheel again.[cite:gm-techlink]
 
 **Observed · Industrial.** ISO 13850 keeps an emergency stop in force until someone resets it by hand, at the place where the stop was triggered.[cite:iso-13850]
 
