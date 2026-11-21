@@ -69,7 +69,23 @@ Research status key: **Ready** = incident, interface example and research all fo
 
 **Anti-pattern name:** Silent Mode Switch.
 
+### Incident: Air Inter Flight 148, Mont Sainte-Odile (1992)
+Added 2026-11-21. Asiana 214 below is already the opening story of Shared Mental Model, so this is the incident Mode Awareness opens with. Read from the French commission of inquiry report (BEA, F-GGED); translations are mine.
+- Airbus A320 F-GGED, Lyon to Strasbourg-Entzheim, call sign ITF 148 DA. 20 January 1992, 18:20 UTC (add one hour for local time). Night, in cloud, VOR-TAC approach to runway 05.
+- On board: 2 flight crew, 4 cabin crew, 90 passengers. Killed: 5 crew, 82 passengers. Nine survived. (Synopsis; ch. 1.2; ch. 3.1.)
+- The descent began at the published distance, 11 NM from the TACAN, but the vertical speed settled at 3300 ft/mn instead of about 800 ft/mn, the rate for the published path. The reference was almost certainly HDG-VS. (Ch. 3.1.)
+- Impact on Mont La Bloss (summit 826 m / 2710 ft) at 799 m (2620 ft), about 10.5 NM from the runway 05 threshold. (Ch. 3.1.)
+- Cause not established with certainty. The hypotheses the commission judged "assez probables": a vertical mode confusion (forgetting to change the reference, or mis-executing the change) or a setting error (entering by habit the value announced at the briefing). A FCU failure was judged very unlikely. (32.4.)
+- In every hypothesis, the crew did not perceive the resulting vertical path anomaly, a vertical speed about four times the reference value. (32.5.)
+- Display and control, 22.335: one rotary knob and one numeric window serve both VS and FPA; the digits are about three times the height of the mode legend; VS is shown in two digits (hundreds of ft/min), so "33" and "3.3" are near-identical. The commission judged the probability of confusion between 33 and 3.3 "élevée" and the error, once made, practically undetectable from the display alone.
+- Annex 4 (3.3): the V/S or FPA target was shown in the FCU window and the mode on the FMA, but the target value was not shown on the PFD.
+- 32.63: the presentation of vertical path parameters suited normal situations but lacked sufficient alerting power for a crew with a wrong picture of the situation. 32.7: the ergonomic design of the vertical autopilot controls may have contributed.
+- No GPWS fitted; French rules did not require one at the time. (Ch. 3.1; 32.67.)
+- Recommendations, 44.1: show the VS or FPA target on the PFD; change the FCU window to an unambiguous expression in normal units; strengthen the difference between the HDG-VS and TRK-FPA symbology on the PFD. 44.2: for all new-generation aircraft, mode annunciation by small alphanumeric text needs central vision and high-level decoding, and has low alerting power for a crew whose picture of the automation is wrong.
+- Source: [BEA, Rapport de la commission d'enquête, F-GGED](https://bea.aero/uploads/tx_elydbrapports/F-GGED.pdf). English translation hosted at faa.gov (Accident_Report_Eng.pdf) refused an automated fetch; not read.
+
 ### Incident: Asiana Airlines Flight 214, San Francisco (2013)
+Already used as the opening story of Shared Mental Model (05). Kept here as a second example.
 - The pilot flying disconnected the autopilot and moved the thrust levers to idle, which put the autothrottle into HOLD mode, where it does not control airspeed.
 - None of the three pilots in the cockpit noticed the change to HOLD.
 - NTSB cited autothrottle and autopilot complexities that were inadequately described in Boeing's documentation and Asiana's training, which increased the likelihood of mode error.

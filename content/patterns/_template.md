@@ -40,7 +40,7 @@ reversibility: costly     # reversible | costly | irreversible   [costly]
 # defined on the About page.
 autonomy: [0, 5]          # [[0, 5]]
 
-# domains: one or more of automotive, surgical, industrial, drone, warehouse,
+# domains: one or more of driving, clinical, surgical, industrial, drone, warehouse,
 # maritime, aviation, home, general. Use "general" on its own, never alongside
 # a specific domain.
 domains: [general]        # [[general]]

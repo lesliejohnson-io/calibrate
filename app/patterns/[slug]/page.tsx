@@ -101,7 +101,15 @@ export default async function PatternPage({ params }: Props) {
           <p className="lede">{p.intent}</p>
         </header>
 
-        {tale && <CautionaryTale tale={tale} numbers={p.citations} draft={drafts.tale} />}
+        {tale && (
+          <CautionaryTale
+            tale={tale}
+            paragraphs={p.taleParagraphs}
+            citesInline={p.taleCitesInline}
+            numbers={p.citations}
+            draft={drafts.tale}
+          />
+        )}
 
         {/* The mistake and the answer to it, side by side: the pair is the
             argument, and reading one directly after the other down a single

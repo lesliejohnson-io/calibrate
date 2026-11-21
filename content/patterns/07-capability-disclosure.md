@@ -11,7 +11,7 @@ trustJobs: [know]
 risk: critical
 reversibility: irreversible
 autonomy: [1, 4]
-domains: [automotive]
+domains: [driving]
 
 status: draft
 updated: "2026-11-09"
@@ -73,14 +73,6 @@ related:
     type: complements
     note: "Disclosure is where the human's model of the machine starts. Keeping it current once the machine is running is the other pattern's job."
 
-review:
-  - "Tale verified against NTSB/HAR-17/02 this pass: the 2015 Tesla Model S 70D, eastbound on US-27A west of Williston, 4:36 p.m. on May 7, 2016; “vehicle speed just before impact with the semitrailer was 74 mph. The highway has a posted speed limit of 65 mph”; US-27A at the crash site is “a four-lane divided highway” and “is not a limited-access roadway because it has” at-grade crossings; the manual's “Warning: Autosteer is intended for use only on highways and limited-access roads with a fully attentive driver”; the truck “making a left turn from westbound US-27A across the two eastbound travel lanes”; “The car struck the right side of the semitrailer, crossed underneath it”; and the forward collision warning and automatic emergency braking “did not activate”, with “no record in the … braking or steering input immediately before the crash”."
-  - "Tale corrected: the 37 minutes are not the last 37 minutes. The draft read “For the last 37 minutes of the drive, the system steered while the driver's hands were on the wheel for just 25 seconds.” The report: “for the 41-minute trip from Cedar Key, Autopilot was active for 37 minutes. During the trip, while Autopilot was in use, the system detected driver-applied torque on the steering wheel on seven different occasions for a total of 25 seconds.” Autopilot was on for 37 of 41 minutes, not for the final 37. Rewritten to say so; the 25 seconds is accurate as drafted."
-  - "Anti-pattern corrected: the car recognized speed signs, not signs generally. The draft read “from GPS, map data and sign recognition.” Footnote 61 (p. 43): “Tesla's Autopilot system uses vehicle GPS data, commercially available road data, and camera recognition of speed signs to determine the type of road and the speed limit of the roadway.” Narrowed to “speed-sign recognition”."
-  - "Demo invents one road. US-27A is the report's road. I-75 does not appear anywhere in NTSB/HAR-17/02 — it is a real limited-access highway written in for the contrast, which is the one place this demo names a place its source does not. Everything else it turns on is sourced in substance: road class is what the report says the firmware could determine and placed no restriction on."
-  - "Demo's ten-second handback is not in the report. The brief specified the “Autosteer ending in 10 seconds, take the wheel” line; the AUTOSTEER OFF line that follows it is written here, so a countdown the reader starts actually resolves. The report describes no such behaviour either way — Tesla's hands-off escalation at the time ran to alerts, and “nor did the system initiate the Autosteer deactivation protocol” on this trip."
-  - "Design considerations moved from frontmatter into the body so they can carry citations and a link, and the whole list is now four items rather than one. Only the first is carried over from the previous version."
-
 openQuestions:
   - "The industrial example is still missing: a mobile robot or forklift that shows its operating zone and payload limits on the operator's tablet rather than in a commissioning document. Until there is one, the pattern is tagged automotive only."
   - "Where's the line between refusing to engage and warning loudly? Super Cruise refuses; most systems warn. Refusing is safer but more paternalistic, and the right answer probably depends on the stakes: refuse when a mistake can't be undone, warn when it can."
@@ -123,6 +115,6 @@ sources:
 
 ## In the field
 
-**Observed · Automotive.** [Tesla, Williston](#tale): the manual restricted Autosteer to highways and limited-access roads, and the firmware placed no restriction on road class at all.[cite:ntsb-har-17-02]
+**Observed · Driving.** [Tesla, Williston](#tale): the manual restricted Autosteer to highways and limited-access roads, and the firmware placed no restriction on road class at all.[cite:ntsb-har-17-02]
 
-**Observed · Automotive.** GM's Super Cruise offers hands-free driving only on roads GM has mapped, so the limit is enforced by the system rather than stated in a manual.[cite:gmc-super-cruise]
+**Observed · Driving.** GM's Super Cruise offers hands-free driving only on roads GM has mapped, so the limit is enforced by the system rather than stated in a manual.[cite:gmc-super-cruise]

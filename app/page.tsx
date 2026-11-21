@@ -15,14 +15,14 @@ export default function Home() {
    */
   const domainCount = availableDomains(published).length;
   /**
-   * The library's date, not the newest entry's. A pattern's own `updated:`
-   * says when that entry was last revised; this line is about the whole
-   * library, which changes whenever the site is rebuilt — so it is read at
-   * build time rather than derived from the files. The page is statically
-   * prerendered, so this is the deploy date and stays fixed until the next
-   * build.
+   * The newest entry's own `updated:` date, among the patterns counted above.
+   * ISO dates sort as strings, so the largest string is the latest day. This
+   * moves only when a pattern is revised, not every time the site rebuilds.
    */
-  const updated = new Date().toISOString().slice(0, 10);
+  const updated = patterns
+    .filter((p) => p.status !== "seed")
+    .map((p) => p.updated)
+    .reduce((latest, d) => (d > latest ? d : latest), "");
 
   return (
     <div className="wrap">
@@ -32,9 +32,10 @@ export default function Home() {
               below and in the page title, not in a second heading. */}
           <h1 className="display hero-name">Calibrate</h1>
           <p className="lede">
-            Design patterns for human–machine trust, for vehicles, robots and drones that move,
-            lift, cut and fly. Each pattern starts with a real incident and ends with a design you
-            can try.
+            Design patterns for human–machine trust. For autonomous systems that move, lift, cut
+            and fly. Each pattern begins with a failure incident, names the anti-pattern, and gives
+            a structure that works differently in a cockpit than in a warehouse. Blueprints, not
+            components.
           </p>
           <p className="label hero-meta">
             {published.length} {published.length === 1 ? "pattern" : "patterns"}

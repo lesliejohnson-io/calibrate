@@ -12,7 +12,7 @@ trustJobs: [intervene]
 risk: critical
 reversibility: irreversible
 autonomy: [1, 5]
-domains: [automotive, industrial]
+domains: [driving, industrial]
 
 status: draft
 updated: "2026-11-06"
@@ -149,15 +149,6 @@ sources:
     type: article
     note: "Carried in the research for the emergency-stop function's requirements: latching, manual reset, and availability at all times. The URL it was filed under (ipd.com.au/ArticleView.aspx?ID=227) now serves an unrelated article about switchboards, so the link has been dropped rather than left pointing at the wrong page. Everything it was carried for is quoted directly from ISO 13850 in the IDEC source above."
 
-review:
-  - "Tale, three wordings changed against the DMV order. The supplied copy said “a hit-and-run driver”; the order says “an unknown third-party vehicle” and never uses the words hit-and-run, so the text says “an unidentified car”. The supplied copy said “her”; the order says only “a pedestrian” and gives no gender, so the text carries no pronoun. The supplied copy said the car was “following a routine to pull over after a collision”; the order says only that it “attempted to perform a pullover maneuver”, so that characterisation has moved out of the tale and into the anti-pattern sentence, where it reads as the argument it is."
-  - "Tale, one word kept that is worth a look: “dragging”. The order does not use it. It says the AV “traveled approximately 20 feet and reached a speed of 7 mph” and that “the pedestrian remained under the vehicle”, which amounts to the same thing, but the word is ours."
-  - "Permit nuance the tale flattens. The car in this incident was operating under Cruise’s *deployment* permit; the order cited here suspends the *driverless testing* permit, reasoning that the behaviour raises the same concern about the test fleet. The DMV suspended the deployment permit as well, but that is a separate document not cited here. “Cruise’s driverless testing permit” is accurate for this source; decide whether the page should say more."
-  - "Design consideration 1 is a shade stronger than its standards source. Schneider’s IEC 60204-1 extract reserves red-on-yellow for “emergency operation devices”, which includes emergency switching off. The “and nothing else” reading comes from NFPA 79 via In Compliance: “reserved exclusively for emergency stop applications”. Both are cited; the sentence leans on the second."
-  - "Design consideration 3 says the reset is local. ISO 13850 4.1.1.2 as quoted by IDEC requires “intentional human action” and reset “by disengagement of an emergency stop device”, which puts a hand on the device but is not the same as the standard’s separate requirement that reset only be possible at the point of actuation. Read the standard itself before this sentence is treated as settled."
-  - "Source ipd-estop has rotted: its URL now serves a different article. Kept without a link because the research carried it, but nothing on this page cites it and it could be dropped."
-  - "Mechanism steps: drafted. Steps 3 and 4 carry sourced notes; the titles, details and the five-step shape are mine."
-
 openQuestions:
   - "How do autonomous mobile robot fleets handle a remote stop versus a stop on the robot itself, and who on the floor is allowed to trigger each? The industrial standards assume someone within reach of the machine, and a fleet managed from a control room doesn't guarantee that."
   - "Who gets the authority to stop a machine when no operator is present? A physical emergency control works because someone is standing at it. A driverless car on a public road is surrounded by people with no control at all, and it isn't clear what the equivalent is, or how to stop it being abused."
@@ -172,7 +163,7 @@ openQuestions:
 
 ## In the field
 
-**Observed · Automotive.** The Cruise car at Fifth and Market stopped itself, then started again with a pedestrian underneath it, and nobody on the street had any way to intervene.[cite:dmv-cruise-suspension]
+**Observed · Driving.** The Cruise car at Fifth and Market stopped itself, then started again with a pedestrian underneath it, and nobody on the street had any way to intervene.[cite:dmv-cruise-suspension]
 
 **Illustrative · Automotive.** A Waymo car confused by traffic cones asked its remote assistance team for help and got the wrong guidance. It later pulled out, parked partly in the road, then drove off as a roadside assistant walked up to it. Neither the remote team nor the person standing next to it could stop it.[cite:ai-business-waymo]
 

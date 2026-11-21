@@ -4,18 +4,11 @@ import localFont from "next/font/local";
 import { ExternalLink } from "@/components/ExternalLink";
 import { ByIcon, CcIcon } from "@/components/LicenseIcons";
 import { BrandMark } from "@/components/BrandLogo";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { BrowseProvider } from "@/components/BrowseProvider";
 import { NavDrawer } from "@/components/NavDrawer";
 import { getAllPatterns, toCardData } from "@/lib/patterns";
 import { toFacets } from "@/lib/browse";
 import "./globals.css";
-
-/**
- * Re-applies a stored theme choice before first paint, so a reader who chose
- * a theme against their system setting never sees the other one flash.
- */
-const THEME_SCRIPT = `try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}`;
 
 /*
  * Fonts are self-hosted rather than pulled from `next/font/google`.
@@ -107,9 +100,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${display.variable} ${sans.variable} ${serif.variable} ${mono.variable}`}
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
-      </head>
       <body>
         <BrowseProvider facets={facets}>
           <header className="site-header">
@@ -130,7 +120,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Link href="/changelog" className="site-nav-link site-nav-link-sm">
                   Changelog
                 </Link>
-                <ThemeToggle />
               </nav>
               {/* Below the breakpoint the nav above is hidden and this is the
                   only control in the header. */}

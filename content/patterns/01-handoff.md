@@ -11,7 +11,7 @@ trustJobs: [intervene, predict]
 risk: critical
 reversibility: irreversible
 autonomy: [2, 4]
-domains: [automotive, surgical, drone]
+domains: [driving, surgical, drone]
 
 status: draft
 updated: "2026-11-07"
@@ -40,31 +40,41 @@ interface:
 # the construction zone and the countdowns are written for this page.
 demoNote: "Simplified illustration."
 
-# VERIFY against the CIAF report and the 2024 ruling: train number, ETCS
-# onboard switched off and why (processing delay) and the date of the order,
-# transition point and signage, speeds (approach ~200 km/h, curve entry
-# ~179-192 km/h, limit 80 km/h), the call from the conductor (timing and
-# length), deaths (79 per court, 80 per CIAF; match the cited source) and
-# injuries.
+# VERIFY against the CIAF report directly: see the open item under
+# 01 · The Handoff in review/AUDIT.md. The death toll (79) is settled.
 cautionaryTale:
   title: "Alvia train at Santiago de Compostela"
   date: "July 24, 2013"
   place: "Santiago de Compostela, Spain"
   story: >-
-    On the evening run from Madrid to Ferrol, an Alvia train approached
-    Santiago de Compostela on a new high-speed line. That line was built with
-    a European train control system that would have announced the end of the
-    high-speed section, asked the driver to acknowledge it, and braked if he
-    didn't. But a processing delay in the onboard equipment meant trains had
-    been ordered to run on Spain's older ASFA system instead, which warns a
-    driver but doesn't brake for him. A few kilometres before the city, the
-    line passed from high-speed to conventional track, and slowing from about
-    200 km/h to the 80 km/h limit for the A Grandeira curve became entirely
-    the driver's job, marked only by trackside signs. He was on a work call
-    from the train's conductor as the train passed the point where he needed
-    to start braking. It entered the curve at more than twice the limit and
-    derailed. 79 people died and more than 140 were injured.
-  sourceId: ciaf-santiago-2014
+    On the evening run from Madrid to Ferrol, an Alvia train came off about
+    eighty kilometres of new high-speed line and onto conventional track on the
+    approach to Santiago de Compostela. The high-speed section was signalled
+    with the European train control system, which supervises speed
+    continuously. The conventional track it joined carried only Spain's older
+    ASFA, which warns a driver about speed but will not slow a train for him.
+    The A Grandeira curve, limited to 80 km/h, is the first bend after the
+    change.[cite:ciaf-santiago-2014]
+
+    The train's own ERTMS equipment had been switched off since June 2012
+    because of compatibility faults. Had it been working, it would have alerted
+    the driver as he passed the last balise of the high-speed line, four
+    kilometres before the curve.[cite:irj-santiago-2014] What remained was a speed reduction sign 200
+    metres out, which the investigator called useless: a train that has not
+    already slowed by the time it reaches that sign cannot.[cite:irj-santiago-2014]
+
+    So the entire deceleration, from line speed to 80 km/h, was the driver's to
+    remember, with nothing to prompt him at the moment it mattered. He was
+    taking a call from the train's conductor about the route
+    ahead.[cite:ciaf-santiago-2014] The
+    recorder put the train at 195 km/h 250 metres before the curve and at
+    179 km/h when it derailed, more than twice the limit.[cite:shultz-2016]
+    79 people died.[cite:ciaf-santiago-2014]
+
+    The commission found the driver's loss of attention to be the only cause.
+    It did not count the missing onboard system as
+    contributory.[cite:irj-santiago-2014]
+  sourceId: [ciaf-santiago-2014, irj-santiago-2014, shultz-2016]
 
 # Which of the sections above the fold are freshly written and unchecked.
 drafts:
@@ -102,24 +112,6 @@ related:
     type: requires
     note: "The state briefing only works if the human's model of the situation is already current."
 
-review:
-  - "Opening story replaced this pass: the Alvia derailment at Santiago de Compostela in, Tempe out. Nothing in the new tale or the new anti-pattern has been read against the CIAF report or the 2024 ruling, neither of which could be linked - see their source notes. Both carry `drafts:` flags and VERIFY comments."
-  - "The death toll is unsettled on the page. The tale says 79, which the brief attributes to the 2024 ruling, and the footnote at the end of the paragraph points at the CIAF report, which the brief says carries 80. As written, the opening cites a source for a number that source does not give. Reconcile before the DRAFT tag comes off: either change the figure or change the footnote."
-  - "The anti-pattern was renamed from “The Handoff That Never Came” to “The Unannounced Handoff”, which is a different failure. The old name is a handoff the design never made at all, which is Tempe; the new one is a handoff that happened without being announced, which is Santiago. The rest of the page still argues the old name in places - the first design consideration is “Never depend on someone you can't alert”, and the `with` caption turns on acknowledgement. Both failures are real; decide which one this pattern is about."
-  - "Three new sources carry no `url`. The CIAF report, the 2024 ruling and the IRJ article were all supplied by title only, and none was located at a stable public address, so the opening story on this page rests on two sources a reader cannot follow. This is the strongest reason the tale keeps its DRAFT tag."
-  - "In the field now mixes two formats. The two new entries use the verdict shapes — `■ Without it`, `● Applies the pattern` — as the brief asked; the two existing entries below them still use `**Observed · Domain.**`, which is what the other fourteen patterns use. The same mismatch was introduced on Learning Loop in the same pass. Pick one format and convert the library."
-  - "`domains` is still `[automotive, surgical, drone]` and the opening story is now a railway. Add `rail` to `DOMAINS` in the schema and to this pattern, or accept that the page opens in a domain the vocabulary does not have. There is no `rail` value at present, which is why nothing was changed here."
-  - "Tale, the speed does not match the report. The story has the SUV “driving itself at about 40 mph” at the moment it detected her. NTSB HAR-19/03 has it approaching the site “at a speed of 45 mph” and recorded at 44.1 mph 5.6 seconds before impact; 40.5 mph is its speed 0.2 seconds before impact, and 39 mph is the impact speed. “About 45 mph” is what the source carries for the moment the sentence describes. Text left as supplied."
-  - "Tale, “it wasn't designed to alert her” is contradicted by the report, and this is the page's load-bearing claim. The ADS was designed to alert: “If a collision could not be avoided with the application of maximum allowed braking, the system was designed to send an auditory alert to the vehicle operator while simultaneously initiating gradual vehicle slowdown.” It did so, 0.2 seconds before impact. What the report supports is narrower and still damning: no alert was given when the system first recognised the emergency at 1.2 seconds (“No alert was given to the operator when action suppression was initiated”), and the alert it was designed to send announced the vehicle's own slowdown rather than asking her to take over. The system had no way to ask for a takeover; it is not true that it had no way to alert her. Text left as supplied."
-  - "Anti-pattern, “it had no way to ask her” carries the same problem as the tale's last clause, for the same reason. Accurate as written if “ask” means “request a takeover”; wrong if a reader takes it as “no alert of any kind”. Text left as supplied."
-  - "Tale, “about a second before impact” is 1.2 seconds in the report: “Only when the ADS determined that the pedestrian's detected location was in the path of the SUV, 1.2 seconds before impact, did the system recognize an emergency situation.” Rounding down is defensible; the figure is recorded here so the next editor does not have to look it up."
-  - "The `ntsb-har-19-03` source note still reads “The system never alerted the safety operator.” The same report shows an auditory alert 0.2 seconds before impact. The note was not in the brief's scope, so it was left alone, but it is wrong on the same point as the tale and should change with it."
-  - "“Safety operator” is not the report's term. NTSB HAR-19/03 says “vehicle operator” throughout; Uber ATG renamed the role “mission specialist” after the crash. The site has used “safety operator” on this page already, so it was kept for consistency rather than changed here."
-  - "The five existing design considerations were kept verbatim, per the brief, and so remain uncited. Three have direct support among the sources already on the page: window sizing in Eriksson & Stanton and Gold et al., the three-level briefing in Endsley & Jones, and clearing the channel in UN R157, which the source note says “requires non-driving displays to suspend once a handoff starts”. Say the word and the citations go on."
-  - "The AF447 entry was reworded by three words. It used to end “as a few lines of text in this zone”, pointing at a BEA figure that was never added to /public and that the move to prose entries removes; it now reads “on the message display”. Nothing else about the entry changed."
-  - "Demo invents its data. The pattern's source describes a 2018 crash in Tempe; the motorway, the construction zone, the 62 mph and both countdowns are written for this page. What is taken from the source is the shape of the failure: a design that depends on a person taking over, with no useful warning before the moment it needs them."
-  - "Check Bainbridge citation placement. Bainbridge supports why a late or cold takeover fails — the operator has been monitoring for rare failures with skills gone rusty from disuse — not the \"hand off early, at a designed boundary\" claim the sentence leads with. There is no sentence in the body making that point on its own, so the citation was removed rather than moved."
-
 openQuestions:
   - "How long is long enough? The time a person needs to get their bearings varies with the domain, and with how long they've been out of the loop."
   - "What if the operator says no? A handoff assumes the person will accept control. The design needs an answer for when they can't or won't."
@@ -130,7 +122,21 @@ sources:
     author: "Comisión de Investigación de Accidentes Ferroviarios (CIAF)"
     year: 2014
     type: incident-report
-    note: "Observed, and the source for the opening story. FLAGGED, and the reason this entry has no `url`: the CIAF report was not located at a stable public address, so nothing could be linked without inventing a citation. Note also that the death toll differs between the sources - the tale says 79, which is the figure in the 2024 ruling; the CIAF report is cited for 80. Reconcile the two and make the number match whichever source carries the footnote. Nothing in the tale or the anti-pattern has been read against either document; the VERIFY comments in this frontmatter list what to check."
+    note: "Observed, and the source for the opening story. FLAGGED, and the reason this entry has no `url`: the CIAF report was not located at a stable public address, so nothing could be linked without inventing a citation. The death toll is 79: the 80 in early reporting was corrected after a misidentification of remains. Nothing in the tale or the anti-pattern has been read against either document; the VERIFY comments in this frontmatter list what to check."
+  - id: irj-santiago-2014
+    title: "Driver error “only cause” of Santiago accident, says report"
+    author: "International Railway Journal"
+    year: 2014
+    url: "https://www.railjournal.com/regions/europe/driver-error-only-cause-of-santiago-accident-says-report/"
+    type: article
+    note: "Secondary. Reporting on the CIAF findings: the onboard ERTMS switched off since June 2012 for compatibility faults, the alert it would have given at the last balise four kilometres before the curve, the speed reduction sign 200 metres out described as useless, and the commission naming the driver's loss of attention as the only cause without counting the missing onboard system as contributory."
+  - id: shultz-2016
+    title: "Disaster complexity and the Santiago de Compostela train derailment"
+    author: "James M. Shultz et al."
+    year: 2016
+    url: "https://www.tandfonline.com/doi/full/10.1080/21665044.2015.1129889"
+    type: paper
+    note: "The recorded speeds in the opening story: 195 km/h 250 metres before the curve, and 179 km/h at the derailment."
   - id: santiago-ruling-2024
     title: "Court ruling on the Angrois derailment, 26 July 2024"
     year: 2024
@@ -232,7 +238,7 @@ sources:
      with the figure from SUBSET-026 and name the subset. -->
 **● Applies the pattern · Rail:** ETCS level transitions. The driver gets a text announcement, then a flashing prompt to acknowledge, and the train brakes if no acknowledgement comes within seconds.[cite:irj-etcs-santiago]
 
-**Observed · Automotive.** UN R157 names this moment the transition demand, and requires non-driving displays to suspend once it starts.[cite:un-r157]
+**Observed · Driving.** UN R157 names this moment the transition demand, and requires non-driving displays to suspend once it starts.[cite:un-r157]
 
 **Observed · Aviation.** Air France 447: the autopilot disconnected suddenly and the crew took over cold. The handoff arrived as a few lines of text on the message display.[cite:bea-af447]
 
