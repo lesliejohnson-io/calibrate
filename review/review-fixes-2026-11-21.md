@@ -213,8 +213,9 @@ normalise it, do it library-wide in one pass.
 
 ### C2 · `content/patterns/01-handoff.md` — audit 1.2, superseded by 1.17
 
-The death toll is **79**. Settled: the 80 figure came from early reporting and was corrected
-after a misidentification of remains. The remaining work is the footnote, not the number —
+The death toll is **80** (corrected 2026-11-22). CIAF p. 25 gives 79, then a further death
+reported by Renfe Operadora. The explanation first given here was wrong and is withdrawn.
+The remaining work is the footnote, not the number —
 the paragraph currently points at the CIAF report for a figure the audit's own footnote table
 also assigns to `ciaf-santiago-2014`, so confirm the marker sits on the right sentence and
 close 1.2.

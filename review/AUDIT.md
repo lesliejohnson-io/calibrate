@@ -107,9 +107,11 @@ Plus 3 items added after recovery (1.17 UNCLEAR, 14.8 UNCLEAR, 15.8 EDITORIAL), 
 > 4. Whether CIAF addresses why the final kilometres were built ASFA-only.
 > If CIAF's wording differs from the text above, CIAF wins.
 >
-> SETTLED: the death toll is 79, not 80. The 80 figure came from early
-> reporting and was corrected after a misidentification of remains. Do not
-> re-flag this.
+> SETTLED: the death toll is 80. CIAF p. 25: "cifraba en 226 las personas
+> afectadas por el accidente, de las que 79 eran víctimas mortales y 147
+> heridos. Posteriormente, Renfe Operadora informó del fallecimiento de una
+> persona, por lo que el número de víctimas mortales es 80". Corrected on
+> 2026-11-22. The explanation this note gave before was wrong and is withdrawn.
 
 Item 1.2 above (death toll unsettled) is kept as recovered text; the
 SETTLED note supersedes it.
@@ -124,7 +126,7 @@ end of the sentence that completes it):
 | The speed reduction sign 200 metres out described as useless | irj-santiago-2014 |
 | 195 km/h at 250 metres; 179 km/h at derailment | shultz-2016 |
 | The call from the conductor about the route ahead | ciaf-santiago-2014 |
-| 79 dead | ciaf-santiago-2014 |
+| 80 dead | ciaf-santiago-2014 |
 | Driver inattention the only cause; missing onboard system not contributory | irj-santiago-2014 |
 
 ## 02 · The Glass Box
