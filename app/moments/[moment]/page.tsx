@@ -62,23 +62,14 @@ export default async function MomentPage({ params }: Props) {
         <section className="group" aria-labelledby="moment-patterns">
           <header className="group-head">
             <h2 id="moment-patterns" className="group-name">
-              {cards.length === 0
-                ? "No patterns yet"
-                : `${cards.length} ${cards.length === 1 ? "pattern" : "patterns"}`}
+              {cards.length} {cards.length === 1 ? "pattern" : "patterns"}
             </h2>
-            {cards.length === 0 && (
-              <p className="group-question">
-                This Moment is named but not yet filled. Candidates are listed in the backlog.
-              </p>
-            )}
           </header>
-          {cards.length > 0 && (
-            <ul className="cards">
-              {cards.map((card) => (
-                <PatternCard key={card.slug} pattern={card} />
-              ))}
-            </ul>
-          )}
+          <ul className="cards">
+            {cards.map((card) => (
+              <PatternCard key={card.slug} pattern={card} />
+            ))}
+          </ul>
         </section>
       </article>
     </div>

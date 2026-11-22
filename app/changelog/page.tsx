@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { buildChangelog, getCommits } from "@/lib/changelog";
-import { getAllPatterns, getHeldSlugs, pad } from "@/lib/patterns";
+import { getAllPatterns, pad } from "@/lib/patterns";
 
 export const metadata: Metadata = {
   title: "Changelog",
@@ -21,13 +21,9 @@ export default function ChangelogPage() {
    * The filter is here rather than in `getCommits`, so the "history was not
    * available" note below still answers the question it is asking: whether
    * git could be read at all, not whether anything it said was about a
-   * pattern. Patterns held out of this build are dropped from each commit, so
-   * a commit that touched only held patterns is not listed either.
+   * pattern.
    */
-  const held = getHeldSlugs();
-  const patternCommits = commits
-    .map((c) => ({ ...c, patterns: c.patterns.filter((slug) => !held.has(slug)) }))
-    .filter((c) => c.patterns.length > 0);
+  const patternCommits = commits.filter((c) => c.patterns.length > 0);
   const days = buildChangelog(
     patternCommits,
     patterns.map((p) => ({ slug: p.slug, updated: p.updated })),
