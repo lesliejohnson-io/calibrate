@@ -11,7 +11,7 @@ trustJobs: [intervene]
 risk: critical
 reversibility: irreversible
 autonomy: [2, 3]
-domains: [driving]
+domains: [surgical]
 
 status: draft
 updated: "2026-11-09"
@@ -36,42 +36,43 @@ interface:
 
 demoNote: "Simplified illustration."
 
-# VERIFY, and note that the date is incomplete. The brief gave "February 2015"
-# and asked for the exact day in Month D, YYYY form; no day could be
-# established without the coroner's report, so the dateline is the month alone
-# and breaks the site's own format until the day is filled in. Also to check
-# against the inquest findings and the Regulation 28 report: that the patient
-# was the first in the UK to have a mitral valve repaired with robotic
-# assistance; the lead surgeon's training (simulator practice alone,
-# observation abroad, no hands-on training on the robot); that the two outside
-# proctors left the theatre partway through without telling the team; the
-# console-and-speaker communication problems; the misaligned sutures and the
-# camera obscured by blood; that no conversion-to-open criteria had been
-# agreed beforehand; the cross-clamp time (reported as 6 h 12 min - the text
-# says "more than six hours"); that the patient died days later; and the
-# coroner's own wording on robotic assistance contributing to the death.
+# Read against the Regulation 28 report. The report spells "inderterminate";
+# the story uses the word unquoted so the misprint is not carried. No person is
+# named and the surgeon carries no pronoun.
 cautionaryTale:
   title: "Robotic heart surgery at the Freeman Hospital"
-  date: "February 2015"
+  date: "February 23, 2015"
   place: "Newcastle upon Tyne, England"
   story: >-
-    A patient became the first person in the UK to have his mitral valve
-    repaired with the help of a surgical robot. The lead surgeon had practiced
-    alone on a simulator and watched the procedure abroad, but had no hands-on
-    training with the robot. The two outside experts brought in to support the
-    team left the theater partway through without telling anyone. With the
-    surgeon's head in the console and his voice coming through a tinny
-    speaker, the team struggled to hear him. Stitches went in misaligned, the
-    camera was blinded by blood, and no one had agreed when to stop and
-    convert to open surgery. The heart stayed clamped for more than six hours,
-    and the patient died days later. The coroner found that the death was due
-    in part to the operation being done with robotic assistance.
-  sourceId: newcastle-coroner-2018
+    A patient with severe mitral valve disease was offered a robotically
+    assisted repair and told it would be the first at the Freeman Hospital. It
+    was also the first the Consultant Surgeon had performed. The surgeon had
+    some experience of minimally invasive repair and had observed four robotic
+    repairs in the USA. Before the operation, the surgeon spent what the
+    coroner called an indeterminate period on the robotic equipment, and was
+    “not supervised or guided when doing so.”[cite:newcastle-coroner-2019]
+
+    The Consultant Surgeon personally arranged for proctors to attend. The
+    evidence “clearly established the absence of any local or national
+    guidelines” on the minimum training for a new procedure, on recruiting and
+    using proctors, on what proctors were for, or on what patients should be
+    told before consenting. “No plan was in place setting out maximum cross
+    clamp time and/or circumstances in which conversion to a conventional
+    operation should occur, prior to the
+    operation.”[cite:newcastle-coroner-2019]
+
+    Complications included misaligned sutures, inability to sight the
+    annuloplasty ring, bleeding, and “the unplanned and unexpected departure of
+    the Proctors” before the operation ended. The cross clamp time ran past six
+    hours. The patient died, and the coroner's narrative conclusion gave the
+    cause as complications of the operation “and in part because the operation
+    was undertaken with Robotic Assistance.”[cite:newcastle-coroner-2019]
+  sourceId: newcastle-coroner-2019
 
 # Which of the sections above the fold are freshly written and unchecked.
+# `examples` stays: no read of the Tempe camera claim or the Super Cruise
+# sources is on record.
 drafts:
-  tale: true
-  antiPattern: true
   examples: true
 
 therefore: >-
@@ -80,14 +81,23 @@ therefore: >-
 
 without:
   steps: ["Human in the seat", "Attention elsewhere", "Nobody supervising"]
-  # VERIFY against the inquest findings and the Regulation 28 report: that no
-  # check was made of the lead surgeon's hands-on training on the robot, that
-  # the proctors' continued presence was assumed rather than agreed, and that
-  # no conversion criteria were settled before the operation began. The three
-  # things this sentence says nobody checked have to be three things the
-  # coroner found were not checked, not three things the page inferred from
-  # the fact that they went wrong.
-  caption: "Everyone the procedure depended on was assumed ready because they were in the room or on the schedule. Nobody checked that the surgeon was trained on the robot, that the experts would stay, or that the team had agreed when to stop."
+  # The coroner and the RCS differ on what the proctors were there for. Both
+  # accounts stay, each attributed. The RCS account is secondhand and must not
+  # be restated as fact. The last sentence is the page's reading of the two.
+  caption: >-
+    The coroner recorded that a surgical and an anesthetic proctor, experienced
+    in robotic heart surgery, “were engaged to attend to advise and assist
+    throughout the operation.”[cite:newcastle-coroner-2019] The Royal College
+    of Surgeons told the coroner it understood something else. It wrote that it
+    “understands from surgical colleagues” that the proctors “attended in
+    relation to the placement of an aortic balloon, rather than the robotic
+    procedure”, and left once the balloon was working, so that there was “no
+    mentor attending with expertise in robotics who would have been able to
+    intervene”. That is the College's secondhand understanding, not a finding.
+    The same letter says the terms “proctor, mentor, trainer, supervisor and
+    coach, are often used interchangeably”.[cite:rcs-response-2019] On either
+    account, the operation relied on a person in the room, and no guideline
+    said what that person was there to do.[cite:newcastle-coroner-2019]
 
 with:
   steps: ["Attention checked", "Escalating prompts", "Stop if unanswered"]
@@ -106,12 +116,19 @@ openQuestions:
   - "Is attention monitoring worth it at partial automation, or does it mostly make an unsupervisable task look supervised? Tempe suggests the real problem wasn't missing monitoring but expecting a person to watch an automated system for hours."
 
 sources:
-  - id: newcastle-coroner-2018
-    title: "Inquest findings and Regulation 28 Report to Prevent Future Deaths, robotic mitral valve repair at the Freeman Hospital, Newcastle upon Tyne"
-    author: "HM Coroner for Newcastle upon Tyne"
-    year: 2018
+  - id: newcastle-coroner-2019
+    title: "Regulation 28 Report to Prevent Future Deaths, ref. 2019-0037"
+    author: "Karen Dilks, HM Senior Coroner for the City of Newcastle upon Tyne"
+    year: 2019
+    url: "https://www.judiciary.uk/wp-content/uploads/2019/05/Stephen-Pettitt-2019-0037_Redacted.pdf"
     type: incident-report
-    note: "Observed, and the source for the opening story. The inquest concluded in November 2018 and the coroner issued a Regulation 28 report. FLAGGED, and the reason this entry has no `url`: no public copy of the Regulation 28 report was located, so nothing could be linked without inventing a citation. Until a link is added - either the Reg. 28 report from the Chief Coroner's Prevention of Future Deaths index, or named inquest coverage standing in for it - the opening story rests on a source a reader cannot follow, which is the strongest reason it carries a DRAFT tag. Every figure in the tale and the anti-pattern is drafted from the rewrite brief; the VERIFY comments in this frontmatter list what to check, including the surgery date, which is currently a month rather than a day."
+    note: "Observed, and the source for the opening story. Dated 25 January 2019, after an inquest held from 5 to 8 November 2018, and published by the Courts and Tribunals Judiciary. Section 3 gives the narrative conclusion and section 4 the circumstances: the surgeon's preparation, the absence of local or national guidelines, including on the role of proctors, the absence of a plan for cross clamp time or conversion, the proctors' engagement and departure, and a cross clamp time in excess of 6 hours."
+  - id: rcs-response-2019
+    title: "Response to the Regulation 28 Report, ref. 2019-0037"
+    author: "Andrew Reed, Chief Executive, Royal College of Surgeons of England"
+    year: 2019
+    url: "https://www.judiciary.uk/wp-content/uploads/2019/05/2019-0037-Response-by-Royal-College-of-Surgeons.pdf"
+    note: "A letter to the coroner dated 20 March 2019, published by the Courts and Tribunals Judiciary, and the source for the second account of the proctors in the anti-pattern. The College states what it “understands from surgical colleagues” and says it is “not aware of the exact circumstances” of the death, so its account is secondhand and is not a coroner's finding. It differs from the report, which records the proctors as engaged to advise and assist throughout."
   - id: ntsb-har-20-01
     title: "Collision Between a Sport Utility Vehicle Operating With Partial Driving Automation and a Crash Attenuator, Mountain View, California"
     author: "National Transportation Safety Board"

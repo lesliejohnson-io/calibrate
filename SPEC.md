@@ -59,7 +59,7 @@ Can be shown as an optional 2×2/3×3 matrix view later. It is not used as navig
 
 ### Axis E — Domain
 
-`domains`: `automotive | surgical | industrial | drone | warehouse | maritime | aviation | home | general`
+`domains`: `automotive | surgical | industrial | drone | warehouse | maritime | aviation | rail | home | general`
 
 Used to filter, and to tag examples.
 
