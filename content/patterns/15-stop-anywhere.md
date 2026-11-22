@@ -143,11 +143,6 @@ sources:
       non-hazardous actuation by the operator and others who could need to
       actuate them” — which is the standards’ own acknowledgement that the
       person who needs the stop is not always the operator.
-  - id: ipd-estop
-    title: "The emergency stop function"
-    author: "IPD"
-    type: article
-    note: "Carried in the research for the emergency-stop function's requirements: latching, manual reset, and availability at all times. The URL it was filed under (ipd.com.au/ArticleView.aspx?ID=227) now serves an unrelated article about switchboards, so the link has been dropped rather than left pointing at the wrong page. Everything it was carried for is quoted directly from ISO 13850 in the IDEC source above."
 
 openQuestions:
   - "How do autonomous mobile robot fleets handle a remote stop versus a stop on the robot itself, and who on the floor is allowed to trigger each? The industrial standards assume someone within reach of the machine, and a fleet managed from a control room doesn't guarantee that."

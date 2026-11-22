@@ -1016,63 +1016,24 @@ a.station-body:hover .station-count {
   margin-top: 20px;
 }
 
-/* ---------- The rail ----------
- *
- * An Are.na-style stepper: one thin line down the left edge of the list,
- * small dots on it, and only the active station showing its question and
- * count. No loop graphics -- no return path, no caps, no triangle.
- *
- * Geometry, all of it derived from these three numbers:
- *
- *  - the line is 2px at x=3, so its centre is x=4;
- *  - dots are 8px at x=0, so they are centred on that line;
- *  - names start at x=28, which is 24px clear of the line.
- *
- * Every item is `--rail-item-h` tall whatever its state, which is what stops
- * the dots moving when a station expands. The height holds a name, the
- * longest question wrapped to two lines at this column width, the count, and
- * about 25px of air; `.rail-slot` is that reserved space and clips rather
- * than grows if a question ever runs longer.
+/* ---------- Moment rail ---------- */
+/*
+ * The index's jump list. It uses the `.toc` markup and styles from the
+ * pattern pages, so the two right-hand columns look the same: one word per
+ * moment, a grey track, and an ink segment on the active one. Only the
+ * positioning lives here, with the same sticky offset and top padding as
+ * `.pattern-aside`.
  */
 .rail {
-  --rail-item-h: 128px;
-  /* 26px name + 6px gap, then 46px of question, 8px, 17px of count. */
-  --rail-slot-h: 71px;
-  /* How far the line runs past the last station before its closing dot. */
-  --rail-tail: 28px;
-
   position: sticky;
   top: 24px;
   align-self: flex-start;
-  padding-top: 56px;
-  /* The tail and its closing dot are drawn outside the list's own box, so
-     the column has to reserve the room. */
-  padding-bottom: calc(var(--rail-tail) + 4px);
+  padding-top: 72px;
 }
 
-/*
- * Short screens, handled by tightening rather than by a scrollbar: the rail
- * never scrolls inside itself, because a nav that needs scrolling to reach
- * its last station is worse than one that is simply shorter.
- *
- * At full height the rail wants 728px and a 700px window offers 676px, so
- * the air between stations drops from 25px to 9px and the lead-in halves,
- * which brings it to 616px. Every station stays the same height as the
- * others, so nothing jumps. Under 640px of window even that will not fit;
- * there the rail stops being sticky and scrolls away with the page, which
- * keeps the last station reachable instead of clipping it.
- */
-@media (max-height: 820px) {
-  .rail {
-    --rail-item-h: 112px;
-    padding-top: 24px;
-  }
-}
-
-@media (max-height: 639px) {
-  .rail {
-    position: static;
-  }
+/* `.toc` adds a top margin for the pattern page; the rail has the padding. */
+.toc.rail {
+  margin-top: 0;
 }
 
 @media (max-width: 720px) {
@@ -1081,172 +1042,11 @@ a.station-body:hover .station-count {
   }
 }
 
-/* The box the line, the dots and the closing dot are all measured from. */
-.rail-body {
-  position: relative;
-}
-
-/* The track: loop grey the whole way down, including the tail. */
-.rail-body::before {
-  content: "";
-  position: absolute;
-  left: 3px;
-  top: 0;
-  width: 2px;
-  height: calc(100% + var(--rail-tail));
-  background: var(--loop);
-}
-
-/*
- * The ink half, painted over the track from the top of the rail to the
- * bottom of the active station -- its expanded question and count included,
- * because those sit inside the station's own fixed height.
- */
-.rail-body::after {
-  content: "";
-  position: absolute;
-  left: 3px;
-  top: 0;
-  width: 2px;
-  height: calc((var(--rail-active, 0) + 1) * var(--rail-item-h));
-  background: var(--ink);
-}
-
-.rail-list {
-  position: relative;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-/* Fixed height, every item, every state. This is the no-jump rule. */
-.rail-item {
-  position: relative;
-  height: var(--rail-item-h);
-}
-
-/* Sits at the end of the tail, below the last station. */
-.rail-end {
-  position: absolute;
-  left: 0;
-  top: 100%;
-  margin-top: calc(var(--rail-tail) - 4px);
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--loop);
-}
-
-.rail-link {
-  display: block;
-  position: relative;
-  padding-left: 28px;
-  text-decoration: none;
-  color: inherit;
-}
-
-/* 8px dot on the line, centred on the name's first line of text. */
-.rail-dot {
-  position: absolute;
-  left: 0;
-  top: 9px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--loop);
-}
-
-.rail-name {
-  display: block;
-  font-family: var(--font-display), system-ui, sans-serif;
-  font-weight: 500;
-  font-size: var(--fs-3xl);
-  line-height: 26px;
-  letter-spacing: -0.01em;
+/* A moment the filters emptied: in the list, but greyed and not a link. */
+.toc-link.is-off {
   color: var(--rail-upcoming);
-}
-
-/*
- * Reserved on every station, filled on the active one. The height is fixed
- * and the overflow hidden, so what is inside can never change the geometry
- * of the rail.
- */
-.rail-slot {
-  display: block;
-  height: var(--rail-slot-h);
-  margin-top: 6px;
-  overflow: hidden;
-}
-
-.rail-question {
-  display: block;
-  font-size: var(--fs-md);
-  line-height: 23px;
-  color: var(--ink);
-}
-
-.rail-count {
-  display: block;
-  margin-top: 8px;
-}
-
-/* The expanded text appears rather than slides: height is never animated,
-   because animating it is the jump this rail is built to avoid. */
-@keyframes rail-reveal {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.rail-item.is-active .rail-slot {
-  animation: rail-reveal 180ms ease-out both;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .rail-item.is-active .rail-slot {
-    animation: none;
-  }
-}
-
-/* States. Ink down to the waterline, loop grey below it. */
-.rail-item.is-passed .rail-name {
-  color: var(--text-3);
-}
-
-.rail-item.is-active .rail-name {
-  color: var(--ink);
-}
-
-.rail-item.is-passed .rail-dot,
-.rail-item.is-active .rail-dot {
-  background: var(--ink);
-}
-
-/*
- * A moment the filters emptied. It keeps its place and its height -- the five
- * stations are the argument, not a menu that shortens -- but it is the loop
- * grey of a station not reached, it does not take the pointer, and its slot
- * carries the nought so the grey has a reason.
- */
-.rail-item.is-disabled .rail-name {
-  color: var(--rail-upcoming);
-}
-
-.rail-link.is-off {
+  opacity: 0.6;
   cursor: default;
-}
-
-.rail-link:not(.is-off):hover .rail-name {
-  color: var(--ink);
-}
-
-.rail-link:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 3px;
-  border-radius: var(--radius-sm);
 }
 
 /* ---------- Illustration key ---------- */
@@ -1728,6 +1528,37 @@ a.station-body:hover .station-count {
   margin-bottom: 20px;
 }
 
+/*
+ * The label over each column, in place of the "Anti-pattern:" prefix the
+ * left heading used to carry. The mistake gets an outline, the answer gets
+ * the solid accent, so which side is the recommendation reads before either
+ * heading does.
+ */
+.duo-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  margin: 0 0 12px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--muted);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+
+/* "On this page" jumps to the heading; leave room for the pill above it. */
+.duo-col > .section-head {
+  scroll-margin-top: calc(24px + 30px + 12px);
+}
+
+.duo-pill-pattern {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
 /* A pattern with no named anti-pattern leaves one column; it should take the
    measure rather than sit in a half-width well. */
 .duo-col:only-child {
@@ -1965,6 +1796,364 @@ a.station-body:hover .station-count {
   color: var(--ink);
 }
 
+/* ---------- Mechanism diagram ---------- */
+/*
+ * The mechanism drawn from a pattern's `diagram` data (MechanismDiagram.tsx).
+ * The component gives every cell a slot number (`--slot`, and `--slot-row`,
+ * which is one more) and this sheet decides what a slot is:
+ *
+ *  - desktop: slots are columns. The event runs across the top row, the spine
+ *    is the second row, branches hang in the third.
+ *  - under 720px, the site's narrow breakpoint: slots are rows. The event
+ *    sits above the spine, and branches move to a second column beside it.
+ *
+ * `--dg-axis` tells the component which of the two it got, so the connectors
+ * it draws follow the layout instead of re-deriving the breakpoint.
+ */
+.dg-wrap {
+  overflow-x: auto;
+}
+
+.dg {
+  --dg-axis: x;
+  /* Elbows on the connectors round to the same radius as the boxes. */
+  --dg-elbow: 4px;
+  --dg-line: var(--muted);
+
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--dg-cols), auto);
+  grid-template-rows: auto auto auto;
+  justify-content: start;
+  row-gap: 18px;
+  padding: 2px 2px 4px;
+}
+
+.dg-lines {
+  position: absolute;
+  inset: 0 auto auto 0;
+  overflow: visible;
+  pointer-events: none;
+  fill: none;
+  stroke: var(--dg-line);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The event: a dot with its label beside it, never inside anything. */
+.dg-event {
+  grid-row: 1;
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.dg-dot {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  /* Level with the title, not the number above it. */
+  margin-top: 23px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.dg-event-text {
+  display: flex;
+  flex-direction: column;
+  max-width: 36ch;
+}
+
+.dg-slot {
+  grid-row: 2;
+  grid-column: var(--slot);
+  align-self: center;
+}
+
+/*
+ * A connector cell. The line runs through its middle; labels go in the half
+ * beside the line (above it on desktop, to its right on mobile), so they sit
+ * on the connector they name rather than near it.
+ */
+.dg-link {
+  align-self: stretch;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 0 minmax(0, 1fr);
+  min-width: 36px;
+  padding: 0 6px;
+}
+
+.dg-labels {
+  grid-row: 1;
+  align-self: end;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.dg-label {
+  display: block;
+  max-width: 150px;
+  font-size: var(--fs-sm);
+  line-height: 17px;
+  color: var(--text-3);
+}
+
+/* Boxes: number above the title, the note under it at a smaller size. */
+.dg-box,
+.dg-gitem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  max-width: 180px;
+  padding: 10px 12px 12px;
+  text-align: center;
+  background: var(--surface);
+}
+
+.dg-box {
+  border: 1.5px solid var(--dg-line);
+  border-radius: var(--radius);
+}
+
+/* "May not happen, and no alternative path is drawn." */
+.dg-box.is-dashed {
+  border-style: dashed;
+}
+
+/* A group: boxes edge to edge in one outer border. They hold together. */
+.dg-group {
+  display: flex;
+  border: 1.5px solid var(--dg-line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.dg-gitem {
+  flex: 1 1 auto;
+}
+
+.dg-gitem + .dg-gitem {
+  border-left: 1.5px solid var(--dg-line);
+}
+
+.dg-num {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: var(--fs-2xs);
+  line-height: 16px;
+  color: var(--muted);
+}
+
+.dg-title {
+  margin-top: 2px;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: var(--fs-base);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.dg-note {
+  margin-top: 4px;
+  font-size: var(--fs-sm);
+  line-height: 17px;
+  color: var(--text-3);
+}
+
+/* The key moment: the one box drawn in reverse. */
+.dg-box.is-key,
+.dg-gitem.is-key {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.dg-box.is-key .dg-num,
+.dg-gitem.is-key .dg-num {
+  color: var(--surface);
+  opacity: 0.85;
+}
+
+.dg-box.is-key .dg-title,
+.dg-box.is-key .dg-note,
+.dg-gitem.is-key .dg-title,
+.dg-gitem.is-key .dg-note {
+  color: var(--surface);
+}
+
+/* A fork: two lanes stacked, each a row that starts with its condition. */
+.dg-fork {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.dg-lane {
+  display: flex;
+  align-items: center;
+}
+
+.dg-lane > .dg-link {
+  flex: none;
+}
+
+/* An empty path is a line straight through to the merge, under its label. */
+.dg-lane.is-empty > .dg-entry {
+  flex: 1;
+  min-height: 40px;
+}
+
+.dg-lane.is-empty .dg-labels {
+  justify-self: start;
+}
+
+/* A branch hangs below the element it leaves, in from its left edge so its
+   connector has a gutter to run down beside the label. */
+.dg-branch {
+  grid-row: 3;
+  grid-column: var(--slot) / -1;
+  justify-self: start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding-left: 28px;
+}
+
+.dg-branch > .dg-label {
+  max-width: 220px;
+}
+
+/* ---------- Mechanism diagram: top to bottom ---------- */
+@media (max-width: 720px) {
+  .dg-wrap {
+    overflow-x: visible;
+  }
+
+  .dg {
+    --dg-axis: y;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    row-gap: 0;
+    column-gap: 20px;
+  }
+
+  .dg.has-branch {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+
+  /* The dot sits over the spine, with its label to the right of it. */
+  .dg-event {
+    grid-column: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .dg-dot {
+    grid-column: 2;
+  }
+
+  .dg-event-text {
+    grid-column: 3;
+    padding-left: 12px;
+  }
+
+  .dg-slot {
+    grid-row: var(--slot-row);
+    grid-column: 1;
+    align-self: auto;
+    justify-self: center;
+    width: 100%;
+  }
+
+  .dg-node {
+    display: flex;
+    justify-content: center;
+  }
+
+  .dg-link {
+    justify-self: stretch;
+    grid-template-rows: none;
+    grid-template-columns: minmax(0, 1fr) 0 minmax(0, 1fr);
+    min-width: 0;
+    min-height: 40px;
+    padding: 8px 0;
+  }
+
+  .dg-labels {
+    grid-row: auto;
+    grid-column: 3;
+    align-self: center;
+    justify-self: start;
+    margin: 0 0 0 10px;
+  }
+
+  .dg-box,
+  .dg-gitem {
+    width: min(100%, 240px);
+    max-width: none;
+  }
+
+  .dg-group {
+    flex-direction: column;
+    width: min(100%, 240px);
+  }
+
+  .dg-gitem {
+    width: auto;
+  }
+
+  .dg-gitem + .dg-gitem {
+    border-left: 0;
+    border-top: 1.5px solid var(--dg-line);
+  }
+
+  /* Fork lanes side by side, each running top to bottom. */
+  .dg-fork {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .dg-lane {
+    flex: 1 1 0;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dg-lane > .dg-link {
+    align-self: stretch;
+  }
+
+  .dg-lane.is-empty > .dg-entry {
+    min-height: 40px;
+  }
+
+  .dg-lane.is-empty .dg-labels {
+    justify-self: start;
+  }
+
+  /* Branches go to the side, level with the element they leave. */
+  .dg-branch {
+    grid-row: var(--slot-row);
+    grid-column: 2;
+    align-self: start;
+    justify-self: stretch;
+    padding-left: 28px;
+  }
+
+  .dg-branch > .dg-box {
+    width: 100%;
+  }
+}
+
 /* ---------- Jump links ---------- */
 .jump {
   margin-top: 20px;
@@ -2193,21 +2382,36 @@ a.station-body:hover .station-count {
   outline-offset: 2px;
 }
 
+/* The picture runs the full height of the card, however long the note
+   beside it is. The generated tile stretches with it: the mark stays centred
+   at its own size and `.thumb`'s background fills the rest. */
 .relation-thumb {
   flex: none;
+  align-self: stretch;
   width: 88px;
-  height: 48px;
+  height: auto;
+  min-height: 48px;
   border-radius: var(--radius-sm);
 }
 
 /* The same slot, filled by the drawing instead of the generated tile. The
-   art is 173x98, so 88px wide lands at 49.9px tall — near enough to the
-   tile's 48 that a grid mixing the two does not step. The drawing brings its
-   own rounded dark card, so nothing is drawn behind it here. */
+   drawing brings its own rounded dark card (#1C1C1C, 173x98), so the slot is
+   painted the same colour and the drawing sits centred in it: the seam
+   between the two doesn't show, and the slot can be as tall as the card. */
 .relation-art {
-  display: block;
+  display: flex;
+  align-items: center;
   flex: none;
+  align-self: stretch;
   width: 88px;
+  background: #1C1C1C;
+  border-radius: 8px;
+}
+
+.relation-art .pattern-illustration {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .relation-body {

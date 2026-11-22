@@ -34,6 +34,9 @@ antiPattern: "Alarm Flood"
 interface:
   component: alert-triage
 
+# VERIFY the printer sentence against nrc-printer: see the open item under
+# 14 · Alert Triage in review/AUDIT.md. "About half the core melted" is
+# settled on nrc-tmi-backgrounder.
 cautionaryTale:
   title: "Three Mile Island Unit 2"
   date: "March 28, 1979"
@@ -42,12 +45,13 @@ cautionaryTale:
     Just after 4 a.m., a valve stuck open in the cooling system of a nuclear
     reactor near Middletown, Pennsylvania, and water began to escape. Within
     minutes, more than a hundred alarms were sounding and flashing in the
-    control room, each one looking as urgent as the next. The printer
-    recording them fell more than two and a half hours behind. Amid the flood,
-    the operators misread what was happening and cut back the emergency
-    cooling the reactor needed, and about half the core melted. It was the
-    worst accident in the history of US commercial nuclear power.
-  sourceId: [tmi-commission, nrc-printer]
+    control room, each one looking as urgent as the next.[cite:tmi-commission]
+    The printer recording them fell more than two and a half hours
+    behind.[cite:nrc-printer] Amid the flood, the operators misread what was
+    happening and cut back the emergency cooling the reactor needed, and about
+    half the core melted.[cite:nrc-tmi-backgrounder] It was the worst accident
+    in the history of US commercial nuclear power.[cite:nrc-tmi-backgrounder]
+  sourceId: [tmi-commission, nrc-printer, nrc-tmi-backgrounder]
 
 therefore: >-
   Rank every alert by how soon someone must act, show the rank in color,
@@ -77,13 +81,19 @@ sources:
     year: 1979
     url: "https://www.tmia.com/sites/tmia.com/files/media/Presidents-Commission.pdf"
     type: incident-report
-    note: "Observed. The Commission's own report, which describes the first alarm followed by a cascade of alarms that numbered 100 within minutes, and quotes operator Craig Faust telling the Commission he would have liked to have thrown away the alarm panel because it was not giving useful information. It also describes a control room where alarms sound or flash many times each hour as a matter of routine. Scanned copy hosted by TMI Alert; the printer delay is not in this report and stays on the NRC testimony."
+    note: "Observed. The Commission's own report, which describes the first alarm followed by a cascade of alarms that numbered 100 within minutes, and quotes operator Craig Faust telling the Commission he would have liked to have thrown away the alarm panel because it was not giving useful information. It also describes a control room where alarms sound or flash many times each hour as a matter of routine. Scanned copy hosted by TMI Alert; the printer delay is not in this report and stays on the NRC testimony. The linked copy is partial: 86 pages holding the Preface, the Account of the Accident and the Glossary, without the Overview. The design consideration quoting the report (\"there was no system for suppressing the unimportant signals so that operators could concentrate on the significant alarms\") is from the Overview, under Causes of the Accident, and was read in the pddoc.com transcription (https://www.pddoc.com/tmi2/kemeny/causes_of_the_accident.htm), not in this copy. The same sentence says more than 100 alarms went off in the first few minutes."
   - id: nrc-printer
     title: "NRC testimony on the Three Mile Island alarm printer delay"
     author: "US Nuclear Regulatory Commission"
     url: "https://www.nrc.gov/docs/ML1933/ML19337A432.pdf"
     type: incident-report
     note: "Observed. The alarm printer running behind events, at one point by more than two and a half hours — the flood outpacing the only record of it."
+  - id: nrc-tmi-backgrounder
+    title: "Backgrounder on the Three Mile Island Accident"
+    author: "U.S. Nuclear Regulatory Commission"
+    url: "https://www.nrc.gov/reading-rm/doc-collections/fact-sheets/3mile-isle.html"
+    type: incident-report
+    note: "The source for the opening story's cut-back emergency cooling, the half-melted core and the worst-accident line. The NRC states that \"about one-half of the core melted during the early stages of the accident.\" Not read directly this pass: nrc.gov returns 403 to an automated fetch. The core-melt wording is supported by archived copies of this page in search results; the emergency-cooling and worst-accident claims were attached without a reading of the page."
   - id: easa-cs25-1322
     title: "CS-25 Book 1, 25.1322 — Flight crew alerting"
     author: "European Union Aviation Safety Agency"
@@ -109,6 +119,7 @@ openQuestions:
 - **Reserve the colors.** Red and amber each mean one thing and are used for nothing else.[cite:easa-cs25-1322]
 - **Use two senses for anything urgent.** Above Advisory, pair the visual alert with sound or touch.[cite:easa-cs25-1322]
 - **Group consequences under their cause.** This is the step most often skipped, and it's the difference between a hundred alarms and one.
+- **Suppress what doesn't matter.** At Three Mile Island, the President's Commission found, "there was no system for suppressing the unimportant signals so that operators could concentrate on the significant alarms."[cite:tmi-commission]
 - **Keep the record live.** At Three Mile Island the alarm printer fell more than two and a half hours behind. A log that lags is history, not status.[cite:nrc-printer]
 
 ## In the field

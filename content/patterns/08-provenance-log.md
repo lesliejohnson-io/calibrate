@@ -29,6 +29,18 @@ steps:
   - title: "Open it to inspection"
     detail: "A record the operator can read"
 
+# The mechanism's real shape (lib/diagram.ts). It replaces the row of
+# steps on the page; `steps` above still feeds the arc and the notes.
+diagram:
+  elements:
+    - { type: event, id: "01", title: "Action taken" }
+    - { type: box, id: "02", title: "Record the actor" }
+    - type: group
+      items:
+        - { id: "03", title: "Put it beyond reach", key: true }
+        - { id: "04", title: "Retain it" }
+    - { type: box, id: "05", title: "Open it to inspection", via: "Later, to someone other than the actor" }
+
 antiPattern: "The Unseen Hand"
 
 interface:
