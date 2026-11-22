@@ -14,7 +14,7 @@ reversibility: irreversible
 autonomy: [1, 5]
 domains: [driving, industrial]
 
-status: draft
+status: reviewed
 updated: "2026-11-06"
 
 steps:

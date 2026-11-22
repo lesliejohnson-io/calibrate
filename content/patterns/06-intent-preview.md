@@ -14,7 +14,7 @@ reversibility: irreversible
 autonomy: [2, 5]
 domains: [aviation, warehouse]
 
-status: draft
+status: reviewed
 updated: "2026-10-28"
 
 steps:

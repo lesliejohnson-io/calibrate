@@ -13,7 +13,7 @@ reversibility: irreversible
 autonomy: [1, 4]
 domains: [industrial, clinical]
 
-status: draft
+status: reviewed
 updated: "2026-11-07"
 
 steps:
@@ -49,7 +49,7 @@ cautionaryTale:
     work wasn't finished when the day shift ended, and the permit for the
     valve work was kept separately from the permit for the pump, with nothing
     connecting the two. That night the other pump failed, and the night
-    shift, not knowing the valve was gone, restarted the first one. Gas
+    shift, not knowing the valve was gone, restarted the first one. Condensate
     escaped through the temporary cover and ignited, and the explosions and
     fires that followed destroyed the platform and killed 167 people.
   sourceId: [jesip-piper-alpha, icheme-lpb261, btw-piper-alpha, fsa-cullen]
@@ -65,9 +65,10 @@ without:
     Nobody lost the information. Both facts existed: this pump is being
     worked on, and this pump's safety valve is gone. But they sat on separate
     pieces of paper, and the handover depended on someone holding both in
-    their head at once.[cite:icheme-lpb261] Lord Cullen found there was no
-    clear procedure for shift handovers at all, and that the permit system
-    was routinely not followed.[cite:btw-piper-alpha]
+    their head at once.[cite:icheme-lpb261] Occidental's procedure required
+    maintenance and operations to meet at the work site and sign off the
+    permits together. In practice the paperwork was left behind
+    instead.[cite:icheme-lpb261]
 
 with:
   steps: ["State assembled", "Receiver restates it", "Responsibility recorded"]

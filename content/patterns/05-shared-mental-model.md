@@ -14,7 +14,7 @@ reversibility: costly
 autonomy: [2, 5]
 domains: [aviation, industrial, warehouse, surgical]
 
-status: draft
+status: reviewed
 updated: "2026-10-23"
 
 steps:
