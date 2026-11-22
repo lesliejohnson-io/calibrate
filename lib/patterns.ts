@@ -203,9 +203,24 @@ function splitBody(markdown: string): Body {
 
   const body: Body = {};
   for (const [key, texts] of Object.entries(parts) as [keyof Body, string[]][]) {
-    body[key] = marked.parse(texts.join("\n\n"), { async: false }) as string;
+    body[key] = evidencePills(marked.parse(texts.join("\n\n"), { async: false }) as string);
   }
   return body;
+}
+
+/**
+ * An example's lead-in, `**Observed · Driving.**`, written as markdown so the
+ * content stays plain text. On the page the evidence level becomes the same
+ * outlined pill the About page defines (solid, dotted or dashed), and the
+ * domain stays bold beside it.
+ */
+const EVIDENCE_LEAD = /<strong>(Observed|Illustrative|Speculative)(?:\s*·\s*([^<]*?))?\.?<\/strong>/g;
+
+function evidencePills(html: string): string {
+  return html.replace(EVIDENCE_LEAD, (_match, level: string, domain?: string) => {
+    const pill = `<span class="tag tag-evidence tag-${level.toLowerCase()}">${level}</span>`;
+    return domain ? `${pill} <strong>${domain}.</strong>` : pill;
+  });
 }
 
 /** Which mark a pattern shows. Defaults to the slug (handoff §4). */

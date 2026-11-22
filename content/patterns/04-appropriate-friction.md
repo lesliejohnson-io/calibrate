@@ -31,6 +31,22 @@ steps:
   - title: "Execute + log"
     detail: "Action runs, provenance kept"
 
+# The mechanism's real shape (lib/diagram.ts). It replaces the row of
+# steps on the page; `steps` above still feeds the arc and the notes.
+diagram:
+  elements:
+    - { type: event, id: "01", title: "Intent", note: "Operator starts an action" }
+    - { type: box, id: "02", title: "Weigh stakes" }
+    - type: fork
+      paths:
+        - condition: "Reversible, low stakes"
+          elements: []
+        - condition: "High stakes"
+          elements:
+            - { type: box, id: "03", title: "Add friction", key: true }
+            - { type: box, id: "04", title: "Commit", note: "Restate the consequence, never just \"Are you sure?\"" }
+    - { type: box, id: "05", title: "Execute + log" }
+
 antiPattern: "One-Tap Catastrophe"
 
 # Show the control itself in the without / with section instead of the box

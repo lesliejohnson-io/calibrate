@@ -48,7 +48,7 @@ Conventions used where an item didn't fit cleanly:
 | UNCLEAR | 48 |
 | **Total** | **152** |
 
-Plus 1 item added after recovery (1.17, UNCLEAR), not counted above.
+Plus 3 items added after recovery (1.17 UNCLEAR, 14.8 UNCLEAR, 15.8 EDITORIAL), not counted above.
 
 | # | Pattern | Items | FACTUAL | EDITORIAL | UNCLEAR |
 |---|---|---|---|---|---|
@@ -335,6 +335,51 @@ end of the sentence that completes it):
 | 14.6 | UNCLEAR | Mechanism steps: drafted. Steps 2 and 3 carry sourced notes; the titles, details, and steps 4 and 5 are mine. Step 4 in particular — grouping consequential alarms under their cause — is standard alarm-management practice but is not in the research. |
 | 14.7 | EDITORIAL | Demo is a simplified illustration in the shape of the TMI sequence, not plant data, and says so on both panels. The thirty alarm texts are plausible rather than drawn from the record: the Commission's report names some of them, but the list, the arrival order and the split between cautions and consequences are mine. |
 
+### Added 2026-11-21, when the opening story was given per-claim footnotes
+
+| # | Severity | Item |
+|---|---|---|
+| 14.8 | UNCLEAR | VERIFY the alarm printer claim against nrc-printer. See below. |
+
+> VERIFY: the claim that the alarm printer fell more than two and a half
+> hours behind. Confirm it appears in the source currently cited
+> (source 3). It is widely repeated in secondary writing. If the cited
+> source does not state it, remove the sentence rather than re-cite it.
+>
+> SETTLED: "about half the core melted" is supported by the NRC
+> backgrounder. Do not re-flag.
+
+Checked the same day, from the text layer of the PDF at the nrc-printer URL
+(ML19337A432). The figure is there: "the alarm printer on the similar
+computer at Unit 2 had a delay time of over two and one-half hours at one
+point, and ran more than an hour behind events for over seven hours." The
+sentence stays. Two things about the source are worth knowing, and neither
+has been changed:
+
+- The words are from ECNP Contention No. 1(a), an intervenor's contention in
+  the TMI-1 restart proceeding. The document quotes it in order to answer
+  it. The document itself is the licensee's testimony (William P. Hamilton
+  and Robert W. Keaten, for Metropolitan Edison, before the Atomic Safety
+  and Licensing Board, dated 9/15/80), not NRC testimony. It is hosted on
+  the NRC's document system. The response doesn't dispute the figure, and
+  it concedes that "the printed record will always be lagging". The
+  source's title and its "Observed" note overstate where the figure comes
+  from.
+- The Kemeny Commission's Overview has "more than 100 alarms went off" in
+  the first few minutes. That supports the tale's "more than a hundred",
+  which item 14.1 flagged against the Account's "numbered 100". The linked
+  copy of the report doesn't contain the Overview. See the tmi-commission
+  source note.
+
+Footnotes per claim, as placed in the story:
+
+| Claim in the story | Source |
+|---|---|
+| More than a hundred alarms, each looking as urgent as the next | tmi-commission |
+| The printer fell more than two and a half hours behind | nrc-printer |
+| Operators cut back the emergency cooling; about half the core melted | nrc-tmi-backgrounder |
+| Worst accident in the history of US commercial nuclear power | nrc-tmi-backgrounder |
+
 ## 15 · Stop Anywhere
 
 `content/patterns/15-stop-anywhere.md`
@@ -348,6 +393,31 @@ end of the sentence that completes it):
 | 15.5 | FACTUAL | Design consideration 3 says the reset is local. ISO 13850 4.1.1.2 as quoted by IDEC requires “intentional human action” and reset “by disengagement of an emergency stop device”, which puts a hand on the device but is not the same as the standard’s separate requirement that reset only be possible at the point of actuation. Read the standard itself before this sentence is treated as settled. |
 | 15.6 | FACTUAL | Source ipd-estop has rotted: its URL now serves a different article. Kept without a link because the research carried it, but nothing on this page cites it and it could be dropped. |
 | 15.7 | UNCLEAR | Mechanism steps: drafted. Steps 3 and 4 carry sourced notes; the titles, details and the five-step shape are mine. |
+
+### Added 2026-11-21, after source 6 (ipd-estop) was deleted
+
+| # | Severity | Item |
+|---|---|---|
+| 15.8 | EDITORIAL | CHECK the source list for other entries with no incoming footnote reference. Source 6 was an orphan. Report any others rather than deleting them. |
+
+Item 15.6 above (ipd-estop rotted) is kept as recovered text. The source it
+describes has been deleted.
+
+Checked the same day. Every remaining source has at least one incoming
+reference, so there are no other orphans:
+
+| # | Source | Referenced from |
+|---|---|---|
+| 1 | iso-13850 | Design considerations 2 and 3 |
+| 2 | iec-60204-colours | Design consideration 1 |
+| 3 | dmv-cruise-suspension | `cautionaryTale.sourceId`; In the field, Cruise entry |
+| 4 | ai-business-waymo | In the field, Waymo entry |
+| 5 | incompliance-colours | Design consideration 1 |
+
+Footnote numbers are not stored in the file. `lib/citations.ts` derives them
+from each source's position in the Sources list, grouped by type, and every
+reference is a `[cite:id]`. Deleting the last entry renumbered nothing, and
+no reference changed.
 
 ## 16 · Mode Awareness
 

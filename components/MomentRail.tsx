@@ -1,26 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { MOMENTS, MOMENT_LABELS, MOMENT_QUESTIONS, type Moment } from "@/lib/schema";
+import { MOMENTS, MOMENT_LABELS, type Moment } from "@/lib/schema";
+
+/** One word per moment. "After and over time" is cut to its first word here. */
+const RAIL_LABELS: Record<Moment, string> = { ...MOMENT_LABELS, after: "After" };
 
 export type RailNode = { moment: Moment; count: number };
 
 /**
- * The index's section navigation: a vertical stepper whose active station
- * follows the reader down the page.
- *
- * Two things shape the markup, and both are about the stepper never moving:
- *
- *  - Every item is the same fixed height, tall enough for the expanded state
- *    (name, two lines of question, count). The question and count live in a
- *    slot that is reserved on every item and filled on one, so expanding a
- *    station cannot shift the dots above or below it. The height is a CSS
- *    variable rather than a measurement because it is the same for all five.
- *  - The line is drawn in two pieces that share that geometry: a full-length
- *    track in the loop grey, and an ink-coloured overlay as tall as the
- *    stations passed so far. The overlay's height is `(index + 1) * item
- *    height`, which CSS can work out from `--rail-active` alone -- nothing
- *    here measures the DOM.
+ * The index's section navigation. It looks and behaves like "On this page" on
+ * the pattern pages: one word per moment on a grey track, with the active
+ * moment's segment of the line darkened. It follows the reader down the page.
  */
 export function MomentRail({
   nodes,
@@ -52,17 +43,6 @@ export function MomentRail({
    */
   const pinned = useRef<Moment | null>(null);
   const releaseTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
-
-  const order = nodes.map((n) => n.moment);
-  const activeIndex = Math.max(0, order.indexOf(current));
-
-  /*
-   * How far the ink half of the line runs. It is the active station, except
-   * when a filter has emptied every one of them: nothing has been reached,
-   * so the waterline is above the first dot rather than level with it.
-   * -1 is the height calc's zero.
-   */
-  const inkIndex = firstLive === undefined ? -1 : activeIndex;
 
   /* The topmost section crossing ~30% down the viewport is the active one. */
   useEffect(() => {
@@ -121,69 +101,34 @@ export function MomentRail({
   if (nodes.length === 0) return null;
 
   return (
-    <nav className="rail" aria-label="Moments">
-      {/* `--rail-active` is the only thing the ink-coloured half of the line
-          needs: its height is that many item heights. */}
-      <div
-        className="rail-body"
-        style={{ "--rail-active": inkIndex } as React.CSSProperties}
-      >
-        <ol className="rail-list">
-          {nodes.map((node, i) => {
-            const off = node.count === 0;
-            const isActive = !off && node.moment === current;
-            const state = off
-              ? "disabled"
-              : isActive
-                ? "active"
-                : i < activeIndex
-                  ? "passed"
-                  : "upcoming";
-
-            const inside = (
-              <>
-                <span className="rail-dot" aria-hidden="true" />
-                <span className="rail-name">{MOMENT_LABELS[node.moment]}</span>
-                {/* Reserved on every item, filled on one -- and on a dead
-                    station, where the count is the whole explanation. */}
-                <span className="rail-slot">
-                  {isActive && (
-                    <span className="rail-question">{MOMENT_QUESTIONS[node.moment]}</span>
-                  )}
-                  {(isActive || off) && (
-                    <span className="label rail-count">
-                      {node.count} {node.count === 1 ? "pattern" : "patterns"}
-                    </span>
-                  )}
+    <nav className="rail toc" aria-label="Moments">
+      <ul className="toc-list">
+        {nodes.map((node) => {
+          // A moment the filters emptied has no section to scroll to, so it
+          // stays in the list, greyed and unclickable.
+          const off = node.count === 0;
+          const isActive = !off && node.moment === current;
+          const label = RAIL_LABELS[node.moment];
+          return (
+            <li key={node.moment}>
+              {off ? (
+                <span className="toc-link is-off" aria-disabled="true">
+                  {label}
                 </span>
-              </>
-            );
-
-            return (
-              <li key={node.moment} className={`rail-item is-${state}`}>
-                {off ? (
-                  <span className="rail-link is-off" aria-disabled="true">
-                    {inside}
-                  </span>
-                ) : (
-                  <a
-                    href={hrefFor(node.moment)}
-                    className="rail-link"
-                    aria-current={isActive ? "true" : undefined}
-                    onClick={() => goTo(node.moment)}
-                  >
-                    {inside}
-                  </a>
-                )}
-              </li>
-            );
-          })}
-        </ol>
-
-        {/* The line runs a little past the last station and stops on a dot,
-            so the list ends rather than being cut off. */}
-        <span className="rail-end" aria-hidden="true" />
-      </div>
+              ) : (
+                <a
+                  href={hrefFor(node.moment)}
+                  className="toc-link"
+                  aria-current={isActive ? "true" : undefined}
+                  onClick={() => goTo(node.moment)}
+                >
+                  {label}
+                </a>
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </nav>
   );
 }

@@ -28,6 +28,20 @@ steps:
   - title: "Check the result"
     detail: "Target and effect shown where the operator looks"
 
+# The mechanism's real shape (lib/diagram.ts). It replaces the row of
+# steps on the page; `steps` above still feeds the arc and the notes.
+diagram:
+  elements:
+    - { type: event, id: "01", title: "Mode changes", note: "Selected, or switched by the machine" }
+    - type: group
+      items:
+        - { id: "02", title: "Name what moved" }
+        - { id: "03", title: "Pair mode + value", key: true }
+        - { id: "05", title: "Check the result" }
+    - type: branch
+      condition: "When a job returns to the operator"
+      item: { id: "04", title: "Escalate the handback" }
+
 antiPattern: "Silent Mode Switch"
 
 cautionaryTale:

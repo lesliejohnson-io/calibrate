@@ -1,5 +1,7 @@
 import type { Step } from "@/lib/patterns";
 import { pad } from "@/lib/format";
+import type { Diagram } from "@/lib/diagram";
+import { MechanismDiagram } from "./MechanismDiagram";
 
 /**
  * The mechanism as the pattern page's hero: a white panel holding the steps
@@ -18,7 +20,13 @@ import { pad } from "@/lib/format";
  * the switch has to happen is different on every page; `--steps` is what lets
  * the stylesheet work it out instead of guessing at a breakpoint.
  */
-export function MechanismFlow({ steps }: { steps: Step[] }) {
+export function MechanismFlow({
+  steps,
+  diagram,
+}: {
+  steps: Step[];
+  diagram?: Diagram;
+}) {
   const notes = steps
     .map((step, i) => ({ number: pad(i + 1), note: step.note }))
     .filter((n): n is { number: string; note: string } => Boolean(n.note));
@@ -39,22 +47,31 @@ export function MechanismFlow({ steps }: { steps: Step[] }) {
         )}
       </div>
 
-      <ol
-        className="flow"
-        aria-label="Mechanism, step by step"
-        style={{ "--steps": steps.length } as React.CSSProperties}
-      >
-        {steps.map((step, i) => (
-          <li key={step.title} className={`flow-card${step.key ? " is-key" : ""}`}>
-            <span className="label flow-num">
-              {pad(i + 1)}
-              {step.key && " · Key moment"}
-            </span>
-            <strong className="flow-title">{step.title}</strong>
-            <span className="flow-detail">{step.detail}</span>
-          </li>
-        ))}
-      </ol>
+      {/* A pattern with a `diagram` draws its real shape; the rest keep the
+          row of cards until they are converted. */}
+      {diagram ? (
+        <MechanismDiagram diagram={diagram} />
+      ) : (
+        <ol
+          className="flow"
+          aria-label="Mechanism, step by step"
+          style={{ "--steps": steps.length } as React.CSSProperties}
+        >
+          {steps.map((step, i) => (
+            <li
+              key={step.title}
+              className={`flow-card${step.key ? " is-key" : ""}`}
+            >
+              <span className="label flow-num">
+                {pad(i + 1)}
+                {step.key && " · Key moment"}
+              </span>
+              <strong className="flow-title">{step.title}</strong>
+              <span className="flow-detail">{step.detail}</span>
+            </li>
+          ))}
+        </ol>
+      )}
 
       {notes.length > 0 && (
         <div className="flow-notes">

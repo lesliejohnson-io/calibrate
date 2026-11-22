@@ -73,7 +73,7 @@ export default async function PatternPage({ params }: Props) {
 
   const toc: TocItem[] = [
     tale ? { id: "tale", label: tale.title } : null,
-    p.antiPattern ? { id: "anti-pattern", label: `Anti-pattern: ${p.antiPattern}` } : null,
+    p.antiPattern ? { id: "anti-pattern", label: p.antiPattern } : null,
     { id: "solution", label: p.name },
     { id: "mechanism", label: "The mechanism" },
     ...sections,
@@ -117,9 +117,12 @@ export default async function PatternPage({ params }: Props) {
             spans both, because it is the same two things again, operable. */}
         <div className="pattern-duo">
           {p.antiPattern && (
-            <section className="duo-col" aria-labelledby="anti-pattern">
+            <section className="duo-col" aria-labelledby="anti-pattern-pill anti-pattern">
+              <p id="anti-pattern-pill" className="duo-pill duo-pill-anti">
+                Anti-pattern
+              </p>
               <h2 id="anti-pattern" className="section-head">
-                Anti-pattern: {p.antiPattern} <DraftTag when={drafts.antiPattern} />
+                {p.antiPattern} <DraftTag when={drafts.antiPattern} />
               </h2>
               {/* Escaped and cited upstream; paragraphs so an anti-pattern
                   with a downstream cost to describe can take two. */}
@@ -127,7 +130,10 @@ export default async function PatternPage({ params }: Props) {
             </section>
           )}
 
-          <section className="duo-col" aria-labelledby="solution">
+          <section className="duo-col" aria-labelledby="solution-pill solution">
+            <p id="solution-pill" className="duo-pill duo-pill-pattern">
+              Pattern
+            </p>
             <h2 id="solution" className="section-head">
               {p.name}
             </h2>
@@ -169,7 +175,7 @@ export default async function PatternPage({ params }: Props) {
         )}
 
         <section className="section section-mechanism" aria-labelledby="mechanism">
-          <MechanismFlow steps={p.steps} />
+          <MechanismFlow steps={p.steps} diagram={p.diagram} />
         </section>
 
         {/* The jump pills used to repeat these as chips; the sticky "On this

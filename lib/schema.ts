@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { diagramSchema } from "./diagram";
 
 /**
  * The vocabularies behind the facets. Exported as `as const` arrays so the UI
@@ -638,6 +639,14 @@ export const frontmatterSchema = z
         (steps) => steps.filter((s) => s.key).length <= 1,
         "only one step can be the key moment",
       ),
+    /**
+     * The mechanism drawn as a diagram (lib/diagram.ts): its real shape, with
+     * forks, simultaneous obligations and conditional branches, rather than
+     * the five-box row `steps` renders. Where it is set it replaces the row;
+     * `steps` stays, because the arc above the diagram and the step notes
+     * under it still read from it.
+     */
+    diagram: diagramSchema.optional(),
     without: contrastSchema,
     with: contrastSchema,
 
