@@ -11,7 +11,7 @@ trustJobs: [intervene, predict]
 risk: critical
 reversibility: irreversible
 autonomy: [2, 4]
-domains: [driving, surgical, drone]
+domains: [rail, driving, surgical, drone]
 
 status: draft
 updated: "2026-11-07"
@@ -41,7 +41,8 @@ interface:
 demoNote: "Simplified illustration."
 
 # VERIFY against the CIAF report directly: see the open item under
-# 01 · The Handoff in review/AUDIT.md. The death toll (79) is settled.
+# 01 · The Handoff in review/AUDIT.md. The death toll (80) is settled by CIAF
+# p. 25: 79 at the end of August, then a further death reported by Renfe.
 cautionaryTale:
   title: "Alvia train at Santiago de Compostela"
   date: "July 24, 2013"
@@ -69,7 +70,7 @@ cautionaryTale:
     ahead.[cite:ciaf-santiago-2014] The
     recorder put the train at 195 km/h 250 metres before the curve and at
     179 km/h when it derailed, more than twice the limit.[cite:shultz-2016]
-    79 people died.[cite:ciaf-santiago-2014]
+    80 people died.[cite:ciaf-santiago-2014]
 
     The commission found the driver's loss of attention to be the only cause.
     It did not count the missing onboard system as
@@ -122,7 +123,7 @@ sources:
     author: "Comisión de Investigación de Accidentes Ferroviarios (CIAF)"
     year: 2014
     type: incident-report
-    note: "Observed, and the source for the opening story. FLAGGED, and the reason this entry has no `url`: the CIAF report was not located at a stable public address, so nothing could be linked without inventing a citation. The death toll is 79: the 80 in early reporting was corrected after a misidentification of remains. Nothing in the tale or the anti-pattern has been read against either document; the VERIFY comments in this frontmatter list what to check."
+    note: "Observed, and the source for the opening story. FLAGGED, and the reason this entry has no `url`: the CIAF report was not located at a stable public address, so nothing could be linked without inventing a citation. The death toll is 80. CIAF p. 25, section 2.3.1, gives the court's count at the end of August and then a further death: “a finales de agosto, el Juzgado de Instrucción nº 3 de Santiago de Compostela cifraba en 226 las personas afectadas por el accidente, de las que 79 eran víctimas mortales y 147 heridos. Posteriormente, Renfe Operadora informó del fallecimiento de una persona, por lo que el número de víctimas mortales es 80 (dos pertenecientes al personal del tren) y 152 los afectados por el accidente.” Do not mix the denominators: CIAF's 226 is people affected, while shultz-2016 counts 224 occupants. CIAF does not explain its closing figure of 152 against the 226. Apart from the death toll, nothing in the tale or the anti-pattern has been read against either document; the VERIFY comments in this frontmatter list what to check."
   - id: irj-santiago-2014
     title: "Driver error “only cause” of Santiago accident, says report"
     author: "International Railway Journal"

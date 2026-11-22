@@ -25,6 +25,7 @@ export const DOMAINS = [
   "warehouse",
   "maritime",
   "aviation",
+  "rail",
   // Military systems, where the operator is a crew acting under rules of
   // engagement rather than a user with a preference.
   "defense",
@@ -46,6 +47,7 @@ export const DOMAIN_LABELS: Record<(typeof DOMAINS)[number], string> = {
   warehouse: "Warehouse",
   maritime: "Maritime",
   aviation: "Aviation",
+  rail: "Rail",
   defense: "Defense",
   home: "Home",
   general: "General",
