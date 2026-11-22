@@ -19,13 +19,56 @@ To publish a page, finish its list and change its `status` to `reviewed`.
 
 | Item | What has to happen |
 |---|---|
-| 1.1, 1.4 | **The CIAF report and the 2024 ruling have not been located at any stable address.** The opening story and anti-pattern cannot be checked until both are found and read. |
-| 1.17 | Read CIAF for the signalling layout, the exact "useless signal" wording, its injured figure, and why the final kilometres were ASFA-only. CIAF wins wherever its wording differs. |
-| 1.2 follow-up | Confirm CIAF itself prints 79. The toll is settled, but 1.2 records the brief saying CIAF carries 80, and the footnote on "79 people died" cites CIAF. If CIAF prints 80, the marker has to move to the source that carries 79. |
+| 1.1, 1.4 | **The CIAF report is now in `review/sources/IF_240713_200514_CIAF.pdf`.** Its public address is in `review/sources/README.md`, but the page's source entry has no `url` yet. Only pages 7 and 25 have been read. The 2024 ruling is still not in `review/`. The opening story and anti-pattern cannot be cleared until both are read. |
+| 1.17 | Read CIAF for the signalling layout, the exact "useless signal" wording, its injured figure, and why the final kilometres were ASFA-only. CIAF wins wherever its wording differs. See the Shultz coverage map below. |
+| ~~1.2 follow-up~~ | ~~Confirm the figure CIAF prints.~~ Closed on 2026-11-22: the page now says 80, from CIAF p. 25. |
 | No audit item | `irj-etcs-santiago` has no URL. The ETCS entry's acknowledgement window needs the figure from SUBSET-026, per the VERIFY comment beside it. |
 | ~~1.7, 8.12~~ | ~~`about 40 mph`.~~ The sentence left the page when the Tempe tale was replaced. Provenance Log's 44.1 mph is correct. |
 | ~~1.8, 1.9, 1.11~~ | ~~The alert claim in the Tempe entry and source note.~~ Corrected. |
 | ~~1.2~~ | ~~Death toll and footnote.~~ Closed as directed: the ruling's note no longer claims the figure. See the follow-up above. |
+
+#### ~~Death-toll conflict (1.2, 1.17)~~: closed on 2026-11-22 at 80
+
+**Resolution, CIAF p. 25:** "Posteriormente, Renfe Operadora informó del
+fallecimiento de una persona, por lo que el número de víctimas mortales es 80".
+The figure rose from 79 because a further person died. The explanation previously
+recorded for 79 was wrong and has been withdrawn from the page and the review
+documents. The evidence stays below as the record.
+
+| Source | What it says | Where |
+|---|---|---|
+| CIAF final report, 2014 | "Se producen 80 fallecidos y numerosos heridos de distinta gravedad." | p. 7 |
+| CIAF final report, 2014 | "a finales de agosto, el Juzgado de Instrucción nº 3 de Santiago de Compostela cifraba en 226 las personas afectadas por el accidente, de las que 79 eran víctimas mortales y 147 heridos. Posteriormente, Renfe Operadora informó del fallecimiento de una persona, por lo que el número de víctimas mortales es 80 (dos pertenecientes al personal del tren) y 152 los afectados por el accidente." | p. 25, section 2.3.1 |
+| Shultz et al. 2016, on the October 6, 2015 ruling | "a judge charged the driver with 80 counts of reckless manslaughter, one charge for each death, and 144 counts of reckless injury." | p. 14 |
+| Shultz et al. 2016, occupants | "There were 218 passengers and six railway staff onboard at the time of derailment." "All of these 224 occupants can be considered to be direct victims, including the 80 who were killed (78 passengers and the two cafeteria/service staff). All 144 survivors of the crash (140 passengers, two drivers, controller, and security officer) were physically injured with 140 of the injured requiring medical or surgical treatment." | p. 22 |
+| Shultz et al. 2016, reference 20 | A July 28, 2013 Reuters headline: "Spanish train driver Francisco Garzon charged with 79 counts of homicide." | p. 29 |
+| 2024 ruling | Audit 1.2 records the original brief attributing 79 to it. **It is not in `review/`, so what it prints is unconfirmed.** | Not read |
+
+- CIAF records 79 as the earlier figure and 80 as the later one, after a further death.
+- ~~To settle it, read the 2024 ruling.~~ CIAF settles the figure. When the ruling is read for 1.1 and 1.4, check what it prints, and reopen this only if it gives a different count with a reason.
+- Keep the denominators apart: CIAF's 226 is people affected, and Shultz's 224 is occupants.
+- CIAF's "152 los afectados" does not follow from its own 226, and CIAF counts 227 people plus an unknown number of young children aboard, against Shultz's 224.
+
+#### What Shultz et al. 2016 does and does not support
+
+Attribution check: the page cites `shultz-2016` once, and the claim holds.
+
+| Claim on the page | Shultz | Result |
+|---|---|---|
+| The recorder put the train at 195 km/h, 250 metres before the curve | "250 m before the curve: 195 km/h (121 mph): black box confirmed" (Table 2, p. 19) | Holds |
+| 179 km/h when it derailed | "179 km/h (111 mph) at moment of derailment" (Table 2, p. 19; also pp. 13, 21) | Holds |
+| More than twice the limit | "more than twice the posted speed" (p. 11; Table 1, p. 14). Posted speed 80 km/h (pp. 12, 19) | Holds |
+
+Coverage of the four items in 1.17's VERIFY list. Nothing here has been promoted to the page.
+
+| 1.17 item | Does Shultz touch it? | What still has to come from CIAF |
+|---|---|---|
+| ERTMS coverage boundary at the A Grandeira curve | **Partly.** ERTMS "was not available along the curve" (p. 12), and "the section of track at the accident site did not have ERTMS installed and activated" (p. 22). It gives no location for where coverage ended. | The boundary itself |
+| "Useless signal" wording | **No.** The word and the signal do not appear. | All of it |
+| CIAF's own injured figure | **No.** It gives 144 injured but cites the ruling and press report (refs 2, 3), not CIAF. | The figure. CIAF p. 25 carries 147 as the court's August count, and "152 los afectados", which needs reading in context |
+| Whether CIAF addresses the ASFA-only final kilometres | **No.** It never names ASFA. It says only that "the older-generation signaling system" warned the driver but "could not 'commandeer' the speed controls" (p. 22). | All of it |
+
+One further difference: the page says the call came from the train's conductor, citing CIAF. Shultz calls the caller "the railway's inspector" (p. 13), "the track agent" and "railway controller" (p. 14). Check this against CIAF.
 
 ### `content/patterns/03-graceful-degradation.md`: source linked, not read
 
@@ -53,12 +96,18 @@ To publish a page, finish its list and change its `status` to `reviewed`.
 | 10.3 | The JT610 entry still rests on secondary sources. See section 2. |
 | ~~10.4, 10.5~~ | ~~JT610 details, "a new Boeing 737 MAX 8", and the speed trim claim.~~ No longer on the page. |
 
-### `content/patterns/11-readiness-check.md`: no source has been located
+### `content/patterns/11-readiness-check.md`: opening read, In the field not read
 
 | Item | What has to happen |
 |---|---|
-| 11.1 | **No citable source exists for the Freeman Hospital opening.** `newcastle-coroner-2018` has no URL. Find the coroner's report or replace the story. |
-| 11.2 | The month-only dateline needs the day from that report, or a decision to allow it. |
+| No audit item | **This is what holds the page at `draft`.** No read is on record for the Super Cruise claims (`gmc-super-cruise`, `seeing-machines`) or for the Tempe camera claim. |
+| No audit item | **The Tempe camera claim looks too strong.** The page says Uber "didn't check" what its cameras showed, in In the field, Design considerations and Notes. Its own `ntsb-har-19-03` note says ATG used the cameras "as a spot-check" and that spot-checks were infrequent. Read HAR-19/03 and correct the wording. |
+| ~~No audit item~~ | ~~Neither coroner document has a public URL on the page.~~ Both URLs added on 2026-11-22. |
+| No audit item | **The coroner and the RCS differ on the proctors.** The report says they were engaged "to advise and assist throughout the operation". The RCS understands they attended for the aortic balloon. The anti-pattern carries both, attributed. Do not collapse them. |
+| 11.5 | Open as craft work. **Drafted mechanisms do not block `reviewed`** (decided 2026-11-22, with 8.22 as the precedent). The steps remain the library's synthesis: neither coroner document describes a machine checking a person's attention. |
+| No audit item | The `examples` draft flag stays until the two items above are read. ~~The `tale` and `antiPattern` flags.~~ Cleared on 2026-11-22. |
+| ~~11.1~~ | ~~No citable source for the opening.~~ Tale and anti-pattern rewritten from the Regulation 28 report and the RCS response on 2026-11-22. |
+| ~~11.2~~ | ~~Month-only dateline.~~ Now February 23, 2015, from the report. |
 
 ### `content/patterns/12-return-of-control.md`: source linked, not read
 
@@ -94,8 +143,8 @@ To publish a page, finish its list and change its `status` to `reviewed`.
 | 15.4 | `15-stop-anywhere.md` | **Yes** | Decide whether IEC 60204-1 or NFPA 79 carries "and nothing else". |
 | 15.5 | `15-stop-anywhere.md` | **Yes** | Read ISO 13850 on whether reset must be local. |
 | 12.8 | `12-return-of-control.md` | Held | Replace `wikipedia-mcas` with the FAA airworthiness directive or Boeing's description. |
-| 1.4 | `01-handoff.md` | Held | CIAF, the 2024 ruling and the IRJ article were supplied by title only. |
-| 11.1 | `11-readiness-check.md` | Held | The coroner's report. |
+| 1.4 | `01-handoff.md` | Held | CIAF is now in `review/sources/`, unread except pp. 7 and 25. The 2024 ruling and the IRJ article were supplied by title only. |
+| ~~11.1~~ | `11-readiness-check.md` | Held | ~~The coroner's report.~~ Now in `review/sources/` and read. |
 | 10.3 | `10-explainable-fault.md` | Held | The KNKT final report. |
 
 ### Found in the repo, not in Group E
@@ -123,7 +172,7 @@ To publish a page, finish its list and change its `status` to `reviewed`.
 | Provenance Log | `08-provenance-log.md` | 8.22 | Titles and details. Notes are sourced. |
 | Learning Loop | `09-learning-loop.md` | 9.5 | Titles and details. The two notes are sourced. |
 | Explainable Fault | `10-explainable-fault.md` | 10.7 | Titles and details. The two notes are sourced. |
-| Readiness Check | `11-readiness-check.md` | 11.5 | Titles, details and step 5. Steps 3 and 4 come from Super Cruise. |
+| Readiness Check | `11-readiness-check.md` | 11.5 | Titles, details and step 5. Steps 3 and 4 come from Super Cruise. Craft work, not a publishing blocker. |
 | Return of Control | `12-return-of-control.md` | 12.11 | Titles, details and five-step shape. Steps 2 and 4 carry notes. |
 | Operator-to-Operator Handover | `13-operator-to-operator-handover.md` | 13.13 | Titles, details and five-step shape. Steps 2 and 4 carry notes. |
 | Alert Triage | `14-alert-triage.md` | 14.6 | Titles, details, and steps 4 and 5. |
@@ -145,11 +194,11 @@ To publish a page, finish its list and change its `status` to `reviewed`.
 
 | File | `domains` | Opening story | Item |
 |---|---|---|---|
-| `01-handoff.md` | driving, surgical, drone | Railway. `rail` is not in the schema's `DOMAINS`. | 1.6 |
+| ~~`01-handoff.md`~~ | rail, driving, surgical, drone | ~~Railway. `rail` is not in the schema's `DOMAINS`.~~ Added to the schema and this page. | ~~1.6~~ |
 | `03-graceful-degradation.md` | driving, drone, industrial | Cruise ship (`maritime`) | Not in audit |
 | `09-learning-loop.md` | aviation | Ferry (`maritime`) | Not in audit |
 | `10-explainable-fault.md` | aviation | Drone (`drone`) | Not in audit |
-| `11-readiness-check.md` | driving | Cardiac surgery (`surgical`) | 11.4 |
+| ~~`11-readiness-check.md`~~ | surgical | ~~Cardiac surgery (`surgical`)~~ Now matches. All three In the field entries are still Driving. | ~~11.4~~ |
 | `12-return-of-control.md` | aviation, driving, industrial | Bottling-plant forklift. Covered, though `warehouse` may fit better. | 12.3 |
 
 In the field labels also stray from the vocabulary or the page's facets:
