@@ -41,11 +41,12 @@ reversibility: costly     # reversible | costly | irreversible   [costly]
 autonomy: [0, 5]          # [[0, 5]]
 
 # domains: one or more of driving, clinical, surgical, industrial, drone, warehouse,
-# maritime, aviation, rail, home, general. Use "general" on its own, never alongside
+# maritime, aviation, rail, defense, software, home, general. Use "general" on its own, never alongside
 # a specific domain.
 domains: [general]        # [[general]]
 
 # --- Housekeeping -----------------------------------------------------------
+# status: what each value means is in CLAUDE.md, under Status.
 status: draft             # seed | draft | reviewed | stable     [draft]
 updated: "2026-10-23"     # keep the quotes
 aliases: []               # other names people search for        [[]]

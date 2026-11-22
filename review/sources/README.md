@@ -56,3 +56,14 @@ reader locates them. Titles are given as printed on each document.
 - **Date:** Adopted April 2, 1997
 - **Public URL:** https://www.ntsb.gov/investigations/AccidentReports/Reports/MAR9701.pdf
 - **Relied on by:** Graceful Degradation, for the opening story and the anti-pattern.
+
+## NTSB report on the Tempe collision
+
+- **File:** `har1903.pdf`
+- **Title:** Collision Between Vehicle Controlled by Developmental Automated Driving System and Pedestrian, Tempe, Arizona, March 18, 2018
+- **Reference:** NTSB/HAR-19/03, PB2019-101402 (Highway Accident Report)
+- **Issued by:** National Transportation Safety Board
+- **Date:** Adopted November 19, 2019; reissued June 26, 2020, with corrections to the report title
+- **Length and language:** 78 PDF pages, English
+- **Public URL:** https://www.ntsb.gov/investigations/accidentreports/reports/har1903.pdf
+- **Relied on by:** The Handoff, Provenance Log and Readiness Check.

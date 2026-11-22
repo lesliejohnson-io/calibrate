@@ -4,16 +4,17 @@ Checked against the working tree on 2026-11-22. Item numbers refer to
 `review/AUDIT.md`. Struck-through entries are resolved and stay here as the
 record.
 
-**Current state:** nine patterns have `status: reviewed` and are served. Seven
-have `status: draft`, return 404 in a production build, and remain readable
-under `npm run dev`. The site-wide `noindex` has been removed in the working
-tree. None of this is live until it is committed and deployed.
+**Current state:** all sixteen patterns are published in every build. Nine have
+`status: reviewed` and seven have `status: draft`. Each draft page carries a
+notice saying what is unverified, and `review/DRAFTS.md` is the worklist. The
+site-wide `noindex` has been removed in the working tree. None of this is live
+until it is committed and deployed.
 
 ---
 
-## 1. Blocks publishing a held page
+## 1. Holds a page at `draft`
 
-To publish a page, finish its list and change its `status` to `reviewed`.
+To move a page to `reviewed`, finish its list and change its `status`.
 
 ### `content/patterns/01-handoff.md`: no source has been located
 
@@ -22,7 +23,7 @@ To publish a page, finish its list and change its `status` to `reviewed`.
 | 1.1, 1.4 | **The CIAF report is now in `review/sources/IF_240713_200514_CIAF.pdf`.** Its public address is in `review/sources/README.md`, but the page's source entry has no `url` yet. Only pages 7 and 25 have been read. The 2024 ruling is still not in `review/`. The opening story and anti-pattern cannot be cleared until both are read. |
 | 1.17 | Read CIAF for the signalling layout, the exact "useless signal" wording, its injured figure, and why the final kilometres were ASFA-only. CIAF wins wherever its wording differs. See the Shultz coverage map below. |
 | ~~1.2 follow-up~~ | ~~Confirm the figure CIAF prints.~~ Closed on 2026-11-22: the page now says 80, from CIAF p. 25. |
-| No audit item | `irj-etcs-santiago` has no URL. The ETCS entry's acknowledgement window needs the figure from SUBSET-026, per the VERIFY comment beside it. |
+| No audit item | `irj-etcs-santiago` has no URL. The ETCS entry's acknowledgement window needs the figure from SUBSET-026, per the VERIFY comment that sat beside it (see `3608cd0`). |
 | ~~1.7, 8.12~~ | ~~`about 40 mph`.~~ The sentence left the page when the Tempe tale was replaced. Provenance Log's 44.1 mph is correct. |
 | ~~1.8, 1.9, 1.11~~ | ~~The alert claim in the Tempe entry and source note.~~ Corrected. |
 | ~~1.2~~ | ~~Death toll and footnote.~~ Closed as directed: the ruling's note no longer claims the figure. See the follow-up above. |
@@ -74,11 +75,11 @@ One further difference: the page says the call came from the train's conductor, 
 
 | Item | What has to happen |
 |---|---|
-| 3.1 | **Read NTSB/MAR-97/01** (Royal Majesty). Check every figure in the VERIFY comments on the tale and anti-pattern. |
+| 3.1 | **Read NTSB/MAR-97/01** (Royal Majesty). Check every figure in the VERIFY comments on the tale and anti-pattern (see `3608cd0`). |
 | 3.5 | No sentence on the page now carries these wordings. Strike after confirming against the BEA report. |
 | 3.7 | Read UN R157 section 5.4 to learn whether the manoeuvre is mandatory after a severe failure. |
 | No audit item | The `bea-af447` note still ends "The 'says so' half of the pattern failed", which conflicts with the ECAM callout. Recommend cutting it. |
-| No audit item | The VERIFY comment above the AF447 entry quotes the old sentence. Remove it. |
+| ~~No audit item~~ | ~~The VERIFY comment above the AF447 entry quotes the old sentence.~~ Removed on 2026-11-22. |
 | ~~3.3, 3.4~~ | ~~AF447 protections claims.~~ Corrected with the BEA's hedge. |
 
 ### `content/patterns/09-learning-loop.md`: source linked, not read
@@ -116,7 +117,7 @@ One further difference: the page says the call came from the train's conductor, 
 | 12.1 | **Read Washington State FACE Report 71-171-2018.** Above all, confirm the auto-resume behaviour the whole pattern rests on. |
 | 12.2 | Naming decision. See section 5. |
 | 12.8 | Replace `wikipedia-mcas`. See section 2. |
-| No audit item | The VERIFY comment above China Airlines 140 says "Nothing new to check", which is no longer true. Remove or update it. |
+| ~~No audit item~~ | ~~The VERIFY comment above China Airlines 140 says "Nothing new to check".~~ Removed on 2026-11-22. |
 | ~~12.4, 12.5~~ | ~~China Airlines 140 compression and "nothing showed the contest".~~ Corrected to cause 2 and cause 5. |
 
 ### `content/patterns/16-mode-awareness.md`: tale read, page unfinished
@@ -134,33 +135,33 @@ One further difference: the page says the call came from the train's conductor, 
 
 ### Group E
 
-| Item | File | Published? | What has to happen |
+| Item | File | Status | What has to happen |
 |---|---|---|---|
-| 2.5 | `02-glass-box.md` | **Yes** | The rubber-stamping claim has no source. Read Chen et al. 2014 or restate it as the library's position. |
-| 2.6 | `02-glass-box.md` | **Yes** | Chen 2014 and Boyce 2015 are unread. The audit says to confirm them before this page leaves draft, and it now has. |
-| 14.4 | `14-alert-triage.md` | **Yes** | "Used for nothing else" is stronger than CS 25.1322(f). Soften it to the rule's scope. |
-| 14.5 | `14-alert-triage.md` | **Yes** | "Act soon" drops the immediate-awareness requirement CS 25.1322(b) sets for both levels. |
-| 15.4 | `15-stop-anywhere.md` | **Yes** | Decide whether IEC 60204-1 or NFPA 79 carries "and nothing else". |
-| 15.5 | `15-stop-anywhere.md` | **Yes** | Read ISO 13850 on whether reset must be local. |
-| 12.8 | `12-return-of-control.md` | Held | Replace `wikipedia-mcas` with the FAA airworthiness directive or Boeing's description. |
-| 1.4 | `01-handoff.md` | Held | CIAF is now in `review/sources/`, unread except pp. 7 and 25. The 2024 ruling and the IRJ article were supplied by title only. |
-| ~~11.1~~ | `11-readiness-check.md` | Held | ~~The coroner's report.~~ Now in `review/sources/` and read. |
-| 10.3 | `10-explainable-fault.md` | Held | The KNKT final report. |
+| 2.5 | `02-glass-box.md` | reviewed | The rubber-stamping claim has no source. Read Chen et al. 2014 or restate it as the library's position. |
+| 2.6 | `02-glass-box.md` | reviewed | Chen 2014 and Boyce 2015 are unread. The audit says to confirm them before this page leaves draft, and it now has. |
+| 14.4 | `14-alert-triage.md` | reviewed | "Used for nothing else" is stronger than CS 25.1322(f). Soften it to the rule's scope. |
+| 14.5 | `14-alert-triage.md` | reviewed | "Act soon" drops the immediate-awareness requirement CS 25.1322(b) sets for both levels. |
+| 15.4 | `15-stop-anywhere.md` | reviewed | Decide whether IEC 60204-1 or NFPA 79 carries "and nothing else". |
+| 15.5 | `15-stop-anywhere.md` | reviewed | Read ISO 13850 on whether reset must be local. |
+| 12.8 | `12-return-of-control.md` | draft | Replace `wikipedia-mcas` with the FAA airworthiness directive or Boeing's description. |
+| 1.4 | `01-handoff.md` | draft | CIAF is now in `review/sources/`, unread except pp. 7 and 25. The 2024 ruling and the IRJ article were supplied by title only. |
+| ~~11.1~~ | `11-readiness-check.md` | draft | ~~The coroner's report.~~ Now in `review/sources/` and read. |
+| 10.3 | `10-explainable-fault.md` | draft | The KNKT final report. |
 
 ### Found in the repo, not in Group E
 
-| Item | File | Published? | What has to happen |
+| Item | File | Status | What has to happen |
 |---|---|---|---|
-| No audit item | `14-alert-triage.md` | **Yes** | The `nrc-tmi-backgrounder` note says the emergency-cooling and worst-accident claims were attached without reading the page. 14.3 verifies both in the Commission's report, so read the backgrounder or re-cite them there. |
-| 13.1 | `13-operator-to-operator-handover.md` | **Yes** | Read the Cullen Report. `btw-piper-alpha` and `fsa-cullen` remain in the tale's sources but are secondary. |
-| 5.5 | `05-shared-mental-model.md` | **Yes** | The machine's-model-of-the-operator claim is argued, not sourced. |
-| 8.15 | `08-provenance-log.md` | **Yes** | Replace or supplement the Washington Post story with Benavides v. Tesla filings. |
-| 8.20 | `08-provenance-log.md` | **Yes** | Check the EU AI Act wording against EUR-Lex or the AI Act Service Desk. |
-| 6.2 | `06-intent-preview.md` | **Yes** | Confirm 160 of 164 is the figure you want. FSF gives 159 at the scene plus one later death. |
-| 12.6 | `12-return-of-control.md` | Held | The AAIC report was read in translation. Only the Japanese version is authentic. |
-| 12.12 | `12-return-of-control.md` | Held | The KNKT final report for the repeated-activation claims. |
-| 16.5, 16.6 | `16-mode-awareness.md` | Held | Check the English translation and the report's exact date. |
-| 16.9 | `16-mode-awareness.md` | Held | NTSB AAR-14/01 for the Asiana wake-up finding, if it is wanted. |
+| No audit item | `14-alert-triage.md` | reviewed | The `nrc-tmi-backgrounder` note says the emergency-cooling and worst-accident claims were attached without reading the page. 14.3 verifies both in the Commission's report, so read the backgrounder or re-cite them there. |
+| 13.1 | `13-operator-to-operator-handover.md` | reviewed | Read the Cullen Report. `btw-piper-alpha` and `fsa-cullen` remain in the tale's sources but are secondary. |
+| 5.5 | `05-shared-mental-model.md` | reviewed | The machine's-model-of-the-operator claim is argued, not sourced. |
+| 8.15 | `08-provenance-log.md` | reviewed | Replace or supplement the Washington Post story with Benavides v. Tesla filings. |
+| 8.20 | `08-provenance-log.md` | reviewed | Check the EU AI Act wording against EUR-Lex or the AI Act Service Desk. |
+| 6.2 | `06-intent-preview.md` | reviewed | Confirm 160 of 164 is the figure you want. FSF gives 159 at the scene plus one later death. |
+| 12.6 | `12-return-of-control.md` | draft | The AAIC report was read in translation. Only the Japanese version is authentic. |
+| 12.12 | `12-return-of-control.md` | draft | The KNKT final report for the repeated-activation claims. |
+| 16.5, 16.6 | `16-mode-awareness.md` | draft | Check the English translation and the report's exact date. |
+| 16.9 | `16-mode-awareness.md` | draft | NTSB AAR-14/01 for the Asiana wake-up finding, if it is wanted. |
 | ~~14.1, 14.2, 14.8~~ | `14-alert-triage.md` | | ~~Alarm count, core melt and printer source.~~ Settled. The `nrc-printer` attribution is corrected. |
 
 ---
@@ -194,16 +195,15 @@ One further difference: the page says the call came from the train's conductor, 
 
 | File | `domains` | Opening story | Item |
 |---|---|---|---|
-| ~~`01-handoff.md`~~ | rail, driving, surgical, drone | ~~Railway. `rail` is not in the schema's `DOMAINS`.~~ Added to the schema and this page. | ~~1.6~~ |
-| `03-graceful-degradation.md` | driving, drone, industrial | Cruise ship (`maritime`) | Not in audit |
-| `09-learning-loop.md` | aviation | Ferry (`maritime`) | Not in audit |
-| `10-explainable-fault.md` | aviation | Drone (`drone`) | Not in audit |
-| ~~`11-readiness-check.md`~~ | surgical | ~~Cardiac surgery (`surgical`)~~ Now matches. All three In the field entries are still Driving. | ~~11.4~~ |
-| `12-return-of-control.md` | aviation, driving, industrial | Bottling-plant forklift. Covered, though `warehouse` may fit better. | 12.3 |
+| ~~`01-handoff.md`~~ | rail, driving, aviation | ~~Railway. `rail` is not in the schema's `DOMAINS`.~~ Added to the schema and this page. | ~~1.6~~ |
+| ~~`03-graceful-degradation.md`~~ | maritime, aviation, driving | ~~Cruise ship (`maritime`)~~ Now matches. | Not in audit |
+| ~~`09-learning-loop.md`~~ | maritime, aviation | ~~Ferry (`maritime`)~~ Now matches. | Not in audit |
+| ~~`10-explainable-fault.md`~~ | drone, aviation | ~~Drone (`drone`)~~ Now matches. | Not in audit |
+| ~~`11-readiness-check.md`~~ | surgical, driving | ~~Cardiac surgery (`surgical`)~~ Now matches, and `driving` covers the three In the field entries. | ~~11.4~~ |
+| ~~`12-return-of-control.md`~~ | warehouse, aviation, driving, industrial | ~~Bottling-plant forklift.~~ Carries both `warehouse` and `industrial`. | ~~12.3~~ |
 
-In the field labels also stray from the vocabulary or the page's facets:
-`01` uses Automotive and Rail, and Aviation is not in its domains. `03` uses
-Aviation. `08` uses Software. `09` uses Maritime.
+One In the field label still strays from the vocabulary: `01` and `15` use
+Automotive, where the value is `driving`.
 
 ### Quote style
 
@@ -239,11 +239,11 @@ Aviation. `08` uses Software. `09` uses Maritime.
 
 ### Publishing
 
-- **`reviewed` overstates some of the nine.** The schema defines it as every section filled, at least three sources and at least one observed example. Shared Mental Model and Intent Preview have no Design considerations or In the field section. Only The Handoff has a When to use section. Either fill those sections, loosen the definition, or add a status for "opening verified".
+- **`reviewed` overstates some of the nine.** It now means every claim on the page has been read against the source it cites. The open items in section 2 mean Glass Box, Provenance Log, Operator-to-Operator Handover, Alert Triage and Stop Anywhere do not yet meet that. 5.5 and 6.2 may also count. Close those items or move the pages to `draft`.
 - ~~**8.7, 8.14:** Provenance Log's Draft tag on the In the field section.~~ Cleared by your decision on 2026-11-22. ~~The Key Largo example still renders as text with no figure.~~ Example deleted on 2026-11-22, so no figure needs restoring.
-- **The Failure moment is empty in production.** Both its patterns (03, 10) are held, so `/moments/failure` says "No patterns yet… Candidates are listed in the backlog", and there is no public backlog.
-- **The changelog names held patterns in old commit subjects**, for example "Updated Handoff pattern…". They are not links. Decide whether that history stays visible.
-- **No sitemap or robots file exists.** Neither is needed to exclude held pages. Add them if you want to submit the site to search engines.
+- ~~**The Failure moment is empty in production.**~~ Closed: all sixteen are published, so it holds 03 and 10, and the backlog copy is gone.
+- ~~**The changelog names held patterns in old commit subjects.**~~ Closed: no pattern is held, and the changelog links all sixteen.
+- **No sitemap or robots file exists.** Add them if you want to submit the site to search engines.
 
 ### Other
 
