@@ -191,7 +191,7 @@ Aviation. `08` uses Software. `09` uses Maritime.
 ### Publishing
 
 - **`reviewed` overstates some of the nine.** The schema defines it as every section filled, at least three sources and at least one observed example. Shared Mental Model and Intent Preview have no Design considerations or In the field section. Only The Handoff has a When to use section. Either fill those sections, loosen the definition, or add a status for "opening verified".
-- **8.7, 8.14:** Provenance Log's Draft tag sits on the whole In the field section, including the finished UN R157 and Horizon entries. The Key Largo example renders as text with no figure. 8.14's "placeholder box" no longer describes the page. Keep the tag or clear it.
+- ~~**8.7, 8.14:** Provenance Log's Draft tag on the In the field section.~~ Cleared by your decision on 2026-11-22. ~~The Key Largo example still renders as text with no figure.~~ Example deleted on 2026-11-22, so no figure needs restoring.
 - **The Failure moment is empty in production.** Both its patterns (03, 10) are held, so `/moments/failure` says "No patterns yet… Candidates are listed in the backlog", and there is no public backlog.
 - **The changelog names held patterns in old commit subjects**, for example "Updated Handoff pattern…". They are not links. Decide whether that history stays visible.
 - **No sitemap or robots file exists.** Neither is needed to exclude held pages. Add them if you want to submit the site to search engines.

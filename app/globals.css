@@ -3620,27 +3620,35 @@ a.station-body:hover .station-count {
  * has long since stacked, instead of every tale sharing one guessed
  * breakpoint.
  *
- * `--mark-min` is what sets where the switch lands, and 120px is chosen
+ * `--mark-min` is what sets where the switch lands, and 112px is chosen
  * against the narrowest the article column ever gets while the page is still
  * two columns: the aside leaves at 1100px, and just above that the article is
- * about 700px. Five markers have to stay in a row there, or the strip would
- * stack on a laptop and then unstack on the tablet below it.
+ * about 700px, less the box's padding and border. Five markers have to stay
+ * in a row there, or the strip would stack on a laptop and then unstack on
+ * the tablet below it.
  *
  * The rule is the markers' own top border: side by side they join into one
  * line with the marks sitting on it, and stacked they become a hairline
  * above each marker. Nothing here moves or reacts to the pointer.
+ *
+ * The tint is mixed onto the ground rather than left transparent so the
+ * hollow markers can be filled with exactly the colour behind them.
  */
 .tale-timeline {
   --mark-gap: 18px;
-  --mark-min: 120px;
+  --mark-min: 112px;
   --threshold: calc(var(--marks, 5) * var(--mark-min) + (var(--marks, 5) - 1) * var(--mark-gap));
+  --timeline-tint: color-mix(in srgb, var(--accent) 15%, var(--ground));
 
   display: flex;
   flex-wrap: wrap;
   gap: var(--mark-gap);
   list-style: none;
   margin: 26px 0 0;
-  padding: 0;
+  padding: 24px 20px 20px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--ground));
+  border-radius: var(--radius-lg);
+  background: var(--timeline-tint);
 }
 
 .tale-mark {
@@ -3653,7 +3661,8 @@ a.station-body:hover .station-count {
      and defeat the switch. */
   min-width: 0;
   padding-top: 16px;
-  border-top: 1px solid var(--border-strong);
+  /* --border-strong all but vanishes on the tint. */
+  border-top: 1px solid var(--edge);
 }
 
 /*
@@ -3669,9 +3678,9 @@ a.station-body:hover .station-count {
   box-sizing: border-box;
   width: 9px;
   height: 9px;
-  border: 2px solid var(--border-strong);
+  border: 2px solid var(--edge);
   border-radius: 50%;
-  background: var(--ground);
+  background: var(--timeline-tint);
 }
 
 .tale-mark.is-impact {

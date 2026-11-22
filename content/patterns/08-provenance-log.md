@@ -74,7 +74,6 @@ cautionaryTale:
       detail: "One second after it began."
     - at: "0 s"
       label: "Impact"
-  kicker: "None of that is testimony. It is a readout."
   sourceId: ntsb-har-19-03
 
 therefore: >-
@@ -94,21 +93,6 @@ without:
 with:
   steps: ["Change applied", "Actor recorded", "Responsibility traceable"]
   caption: "Every state change carries its author and its time."
-
-examples:
-  - alt: "Line drawing of the Key Largo data flow: the crash, the car uploading a collision snapshot to Tesla's servers, the server acknowledging it, the car marking its own copy for deletion, and years later a hacker recovering it from a forensic copy of the Autopilot unit."
-    placeholder: false
-    credit: "The Washington Post"
-    url: "https://www.spokesman.com/stories/2025/aug/29/tesla-said-it-didnt-have-key-data-in-a-fatal-crash"
-    verdict: without
-    domain: driving
-    evidence: observed
-    caption: "Tesla held the car's collision data on its own servers for years while saying it didn't have it."
-
-# The example is a news story with no figure cleared for reuse yet, so the
-# section keeps its DRAFT tag.
-drafts:
-  examples: true
 
 related:
   - slug: glass-box
