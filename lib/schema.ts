@@ -642,9 +642,10 @@ export const frontmatterSchema = z
     /**
      * The mechanism drawn as a diagram (lib/diagram.ts): its real shape, with
      * forks, simultaneous obligations and conditional branches, rather than
-     * the five-box row `steps` renders. Where it is set it replaces the row;
-     * `steps` stays, because the arc above the diagram and the step notes
-     * under it still read from it.
+     * the five-box row `steps` renders. Where it is set it replaces the
+     * row, the arc beside the heading and the notes under it: notes go in
+     * the diagram's own boxes. `steps` is still required while the other
+     * patterns are unconverted.
      */
     diagram: diagramSchema.optional(),
     without: contrastSchema,

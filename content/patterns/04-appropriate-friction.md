@@ -21,22 +21,20 @@ steps:
     detail: "Operator starts an action"
   - title: "Weigh stakes"
     detail: "Reversible? Who’s affected?"
-    note: "Friction scales with consequence. Low-stakes, reversible actions stay fast."
   - title: "Add friction"
     detail: "Confirm, delay or second trigger"
     key: true
   - title: "Commit"
     detail: "Re-affirm with the consequence shown"
-    note: "Restate the consequence (“Release payload over zone B”), never just “Are you sure?”"
   - title: "Execute + log"
     detail: "Action runs, provenance kept"
 
 # The mechanism's real shape (lib/diagram.ts). It replaces the row of
-# steps on the page; `steps` above still feeds the arc and the notes.
+# steps on the page, notes included; `steps` above is no longer shown here.
 diagram:
   elements:
     - { type: event, id: "01", title: "Intent", note: "Operator starts an action" }
-    - { type: box, id: "02", title: "Weigh stakes" }
+    - { type: box, id: "02", title: "Weigh stakes", note: "Friction scales with consequence. Low-stakes, reversible actions stay fast." }
     - type: fork
       paths:
         - condition: "Reversible, low stakes"
@@ -44,7 +42,7 @@ diagram:
         - condition: "High stakes"
           elements:
             - { type: box, id: "03", title: "Add friction", key: true }
-            - { type: box, id: "04", title: "Commit", note: "Restate the consequence, never just \"Are you sure?\"" }
+            - { type: box, id: "04", title: "Commit", note: "Restate the consequence (“Release payload over zone B”), never just “Are you sure?”" }
     - { type: box, id: "05", title: "Execute + log" }
 
 antiPattern: "One-Tap Catastrophe"
