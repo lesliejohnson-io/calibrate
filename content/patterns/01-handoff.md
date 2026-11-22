@@ -141,7 +141,7 @@ sources:
     title: "Court ruling on the Angrois derailment, 26 July 2024"
     year: 2024
     type: incident-report
-    note: "Observed. The ruling found both the driver and the former head of operating safety at Adif responsible, which is why this pattern can say the handoff was a design decision rather than only a lapse. FLAGGED: no `url`, for the same reason as the CIAF entry - no stable public address was located. It is also the source of the 79 figure in the opening story."
+    note: "Observed. The ruling found both the driver and the former head of operating safety at Adif responsible, which is why this pattern can say the handoff was a design decision rather than only a lapse. FLAGGED: no `url`, for the same reason as the CIAF entry - no stable public address was located."
   - id: irj-etcs-santiago
     title: "ETCS a crucial factor in Santiago accident inquiry"
     author: "International Railway Journal"
@@ -184,7 +184,7 @@ sources:
     year: 2019
     url: "https://www.ntsb.gov/investigations/accidentreports/reports/har1903.pdf"
     type: incident-report
-    note: "Observed: the failure this pattern exists to prevent. The system never alerted the safety operator, and the operator was not monitoring."
+    note: "Observed: the failure this pattern exists to prevent. The system had no way to request a takeover. The one auditory alert it was designed to send announced its own slowdown, 0.2 seconds before impact. The operator was not monitoring."
   - id: bea-af447
     title: "BEA Final Report — Air France Flight AF447, Rio de Janeiro to Paris"
     year: 2012
@@ -218,16 +218,7 @@ sources:
 
 ## In the field
 
-<!-- VERIFY: the Tempe entry below is this page's displaced opening story,
-     cut to one sentence and keeping its NTSB source. One claim in it is
-     contradicted by the report and is this page's long-standing flag, kept
-     here so it is not lost in the move: the ADS *was* designed to alert, and
-     did so 0.2 seconds before impact. What the report supports is that no
-     alert was given when the system first recognised the emergency at 1.2
-     seconds, and that the alert it was designed to send announced the car's
-     own slowdown rather than asking for a takeover. See this file's review
-     list. -->
-**■ Without it · Automotive:** The system relied on the safety operator to brake in an emergency but wasn't designed to alert her.[cite:ntsb-har-19-03] See [Provenance Log](/patterns/provenance-log) for the full timeline.
+**■ Without it · Automotive:** The system relied on the safety operator to brake in an emergency but had no way to ask her to take over. When it recognised the emergency, 1.2 seconds before impact, it told her nothing; the one alert it was built to send announced its own braking, and that arrived 0.2 seconds before the collision.[cite:ntsb-har-19-03] See [Provenance Log](/patterns/provenance-log) for the full timeline.
 
 <!-- VERIFY the five seconds, which is the one number in this entry and the
      least certain thing in it: the IRJ article is the source for the shape of

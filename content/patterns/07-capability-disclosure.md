@@ -13,7 +13,7 @@ reversibility: irreversible
 autonomy: [1, 4]
 domains: [driving]
 
-status: draft
+status: reviewed
 updated: "2026-11-09"
 
 steps:

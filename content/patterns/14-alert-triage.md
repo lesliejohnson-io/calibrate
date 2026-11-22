@@ -13,7 +13,7 @@ reversibility: costly
 autonomy: [1, 4]
 domains: [industrial, aviation]
 
-status: draft
+status: reviewed
 updated: "2026-11-06"
 
 steps:
@@ -81,13 +81,13 @@ sources:
     year: 1979
     url: "https://www.tmia.com/sites/tmia.com/files/media/Presidents-Commission.pdf"
     type: incident-report
-    note: "Observed. The Commission's own report, which describes the first alarm followed by a cascade of alarms that numbered 100 within minutes, and quotes operator Craig Faust telling the Commission he would have liked to have thrown away the alarm panel because it was not giving useful information. It also describes a control room where alarms sound or flash many times each hour as a matter of routine. Scanned copy hosted by TMI Alert; the printer delay is not in this report and stays on the NRC testimony. The linked copy is partial: 86 pages holding the Preface, the Account of the Accident and the Glossary, without the Overview. The design consideration quoting the report (\"there was no system for suppressing the unimportant signals so that operators could concentrate on the significant alarms\") is from the Overview, under Causes of the Accident, and was read in the pddoc.com transcription (https://www.pddoc.com/tmi2/kemeny/causes_of_the_accident.htm), not in this copy. The same sentence says more than 100 alarms went off in the first few minutes."
+    note: "Observed. The Commission's own report, which describes the first alarm followed by a cascade of alarms that numbered 100 within minutes, and quotes operator Craig Faust telling the Commission he would have liked to have thrown away the alarm panel because it was not giving useful information. It also describes a control room where alarms sound or flash many times each hour as a matter of routine. Scanned copy hosted by TMI Alert; the printer delay is not in this report and stays on the Metropolitan Edison testimony. The linked copy is partial: 86 pages holding the Preface, the Account of the Accident and the Glossary, without the Overview. The design consideration quoting the report (\"there was no system for suppressing the unimportant signals so that operators could concentrate on the significant alarms\") is from the Overview, under Causes of the Accident, and was read in the pddoc.com transcription (https://www.pddoc.com/tmi2/kemeny/causes_of_the_accident.htm), not in this copy. The same sentence says more than 100 alarms went off in the first few minutes."
   - id: nrc-printer
-    title: "NRC testimony on the Three Mile Island alarm printer delay"
-    author: "US Nuclear Regulatory Commission"
+    title: "Metropolitan Edison testimony on the Three Mile Island alarm printer delay"
+    author: "William P. Hamilton and Robert W. Keaten, for Metropolitan Edison"
     url: "https://www.nrc.gov/docs/ML1933/ML19337A432.pdf"
     type: incident-report
-    note: "Observed. The alarm printer running behind events, at one point by more than two and a half hours — the flood outpacing the only record of it."
+    note: "The licensee's testimony in the TMI-1 restart proceeding, dated 9/15/80 and hosted on the NRC's document system. It is not NRC testimony. The figure is in ECNP Contention No. 1(a), an intervenor's contention the testimony quotes in order to answer it: “the alarm printer on the similar computer at Unit 2 had a delay time of over two and one-half hours at one point, and ran more than an hour behind events for over seven hours.” The response doesn't dispute the figure, and concedes that “the printed record will always be lagging”."
   - id: nrc-tmi-backgrounder
     title: "Backgrounder on the Three Mile Island Accident"
     author: "U.S. Nuclear Regulatory Commission"

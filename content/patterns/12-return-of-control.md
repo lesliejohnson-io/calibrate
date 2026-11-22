@@ -184,7 +184,7 @@ sources:
      control-wheel inputs, and cause 5, that there was no warning and
      recognition function to alert the crew to the out-of-trim condition.
      Nothing new to check: the sentence is a cut, not a claim. -->
-**Observed · Aviation.** China Airlines 140. The automation kept trimming nose-up against the pilots' nose-down inputs, and nothing on the flight deck showed the contest.[cite:aaic-b1816]
+**Observed · Aviation.** China Airlines 140. The crew engaged the autopilots with go-around still active. The automation kept trimming nose-up against the pilots' nose-down inputs, and no warning function announced the out-of-trim condition as it developed.[cite:aaic-b1816]
 
 **Observed · Aviation.** Lion Air 610 and Ethiopian Airlines 302. On Lion Air 610 the trim moved more than thirty times, the pilots trimming back against it each time; using the electric trim paused the automated system, which then reset and pushed the nose down again.[cite:claims-journal][cite:satcom-guru] All 189 people on board Lion Air 610 died, and all 157 on Ethiopian 302.[cite:ntsb-asr-19-01]
 

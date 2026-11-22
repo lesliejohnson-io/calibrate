@@ -85,9 +85,6 @@ export const metadata: Metadata = {
   title: { default: "Calibrate Patterns: Designing for human–machine trust", template: "%s · Calibrate" },
   description:
     "Named, reusable design patterns for the trust layer between humans and autonomous machines.",
-  /* REMOVE AT DOMAIN LAUNCH. Keeps the whole site out of search indexes while
-     the patterns are drafts carrying unverified claims and review flags. */
-  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

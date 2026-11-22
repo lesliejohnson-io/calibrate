@@ -127,7 +127,7 @@ sources:
     year: 2012
     url: "https://www.faa.gov/sites/faa.gov/files/f-cp090601.en_.pdf"
     type: incident-report
-    note: "Observed: the system dropped to a degraded control mode after unreliable airspeed, and the crew did not grasp the new state. The “says so” half of the pattern failed."
+    note: "Observed: the system dropped to a degraded control mode after unreliable airspeed. The reconfiguration was called out from the ECAM, and the BEA concludes it is possible the pilot flying “was not fully aware of this reconfiguration and of what it implied.” The “says so” half of the pattern failed."
 ---
 
 ## Design considerations
@@ -148,6 +148,6 @@ sources:
      new mode could still be trusted with" rests on the report's hedged
      conclusion that the pilot flying may not have grasped what it implied,
      not on a finding that nothing was shown. -->
-**Observed · Aviation.** Air France 447: the flight controls stepped down to a mode without stall protection, and the crew never established what the new mode could still be trusted with.[cite:bea-af447]
+**Observed · Aviation.** Air France 447: the flight controls stepped down to a mode without stall protection. The reconfiguration was called out from the ECAM, and the BEA concludes it is possible the pilot flying "was not fully aware of this reconfiguration and of what it implied."[cite:bea-af447]
 
 **Observed · Driving.** UN R157 requires an automated lane keeping system to perform a minimum risk manoeuvre when the driver does not resume control after a transition demand — the floor of the ladder, written into a regulation.[cite:un-r157]

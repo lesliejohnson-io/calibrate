@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { getAllPatterns, pad } from "@/lib/patterns";
 
 /**
  * The working queue: every draft carrying review flags, in one place. Not
- * linked from the nav — it is an author's page, reached by typing /review.
+ * linked from the nav — it is an author's page, available only in dev.
  */
 export const metadata: Metadata = {
   title: "Review queue",
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default function ReviewPage() {
+  if (process.env.NODE_ENV === "production") notFound();
+
   const flagged = getAllPatterns().filter((p) => p.status === "draft" && p.review.length > 0);
   const total = flagged.reduce((sum, p) => sum + p.review.length, 0);
 

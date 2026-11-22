@@ -13,7 +13,7 @@ reversibility: costly
 autonomy: [2, 4]
 domains: [defense, industrial, surgical, maritime]
 
-status: draft
+status: reviewed
 updated: "2026-11-07"
 
 steps:
@@ -43,7 +43,7 @@ demoNote: "Simplified illustration."
 cautionaryTale:
   title: "Patriot missile battery"
   date: "March 22, 2003"
-  place: "Iraq–Kuwait border"
+  place: "Kuwait"
   story: >-
     A British Tornado was flying back to base after a mission over Iraq when a
     US Patriot missile battery's computer classified it as an incoming
@@ -51,7 +51,7 @@ cautionaryTale:
     identification system wasn't working, and the criteria programmed into the
     Patriot for that kind of missile were broad enough to include it. The
     battery's crew, following their rules of engagement for self-defense,
-    fired. Both men on board the Tornado were killed.
+    fired. Both crew on board the Tornado were killed.
   sourceId: [mod-zg710, hansard-zg710]
 
 therefore: >-
@@ -61,10 +61,10 @@ therefore: >-
 without:
   steps: ["Black-box model", "Verdict only", "Blind accept or ignore"]
   caption: |
-    The system gave the battery's crew an answer, anti-radiation missile, but
-    not the evidence behind it. They couldn't see that the classification
-    rested on criteria a friendly aircraft with a broken transponder could
-    meet.[cite:mod-zg710][cite:hansard-zg710] An answer without reasons leaves
+    The Patriot's criteria for an anti-radiation missile were “very broad”,
+    the Tornado's IFF gave no response, and the crew had about one minute to
+    decide. They had been “trained to react quickly, engage early and to trust
+    the Patriot system”.[cite:mod-zg710][cite:hansard-zg710] An answer without reasons leaves
     only two choices, trust it completely or ignore it, and under time
     pressure people trust it.
 

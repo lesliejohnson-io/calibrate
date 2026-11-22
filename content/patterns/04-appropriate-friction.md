@@ -13,7 +13,7 @@ reversibility: irreversible
 autonomy: [1, 5]
 domains: [clinical, aviation, drone, surgical, industrial]
 
-status: draft
+status: reviewed
 updated: "2026-11-07"
 
 steps:
