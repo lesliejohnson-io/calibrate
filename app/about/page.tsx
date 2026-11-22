@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 /** The site's production origin, used in the citation format. */
-const SITE = "https://trust-layer-patterns.vercel.app";
+const SITE = "https://calibrate.lesliejohnson.io/";
 
 /** Lee & See (2004), the source of the term, cited as on The Glass Box. */
 const LEE_SEE_URL = "https://journals.sagepub.com/doi/10.1518/hfes.46.1.50_30392";

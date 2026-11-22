@@ -19,6 +19,8 @@ import { ExternalLink } from "@/components/ExternalLink";
 import { RelatedPatterns } from "@/components/RelatedPatterns";
 import { PatternAside } from "@/components/PatternAside";
 import { DraftTag } from "@/components/DraftTag";
+import { VerificationNotice } from "@/components/VerificationNotice";
+import { StatusBadge } from "@/components/StatusBadge";
 import { TocDisclosure } from "@/components/TocDisclosure";
 import type { TocItem } from "@/components/PatternToc";
 import { CautionaryTale } from "@/components/CautionaryTale";
@@ -82,17 +84,20 @@ export default async function PatternPage({ params }: Props) {
   return (
     <div className="wrap pattern-layout">
       <article className="pattern">
-        <nav className="crumbs" aria-label="Breadcrumb">
-          <ol>
-            <li>
-              <Link href="/">All patterns</Link>
-            </li>
-            <li>
-              <Link href={momentHref(p.moment)}>{momentName}</Link>
-            </li>
-            <li aria-current="page">Pattern {pad(p.number)}</li>
-          </ol>
-        </nav>
+        <div className="pattern-meta">
+          <nav className="crumbs" aria-label="Breadcrumb">
+            <ol>
+              <li>
+                <Link href="/">All patterns</Link>
+              </li>
+              <li>
+                <Link href={momentHref(p.moment)}>{momentName}</Link>
+              </li>
+              <li aria-current="page">Pattern {pad(p.number)}</li>
+            </ol>
+          </nav>
+          <StatusBadge status={p.status} />
+        </div>
 
         <header className="pattern-head">
           {/* The name alone. The number is in the breadcrumb directly above,
@@ -100,6 +105,8 @@ export default async function PatternPage({ params }: Props) {
           <h1 className="display">{p.name}</h1>
           <p className="lede">{p.intent}</p>
         </header>
+
+        {p.unverified && <VerificationNotice items={p.unverified} sources={p.sources} />}
 
         {tale && (
           <CautionaryTale

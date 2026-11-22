@@ -34,9 +34,6 @@ antiPattern: "Alarm Flood"
 interface:
   component: alert-triage
 
-# VERIFY the printer sentence against nrc-printer: see the open item under
-# 14 · Alert Triage in review/AUDIT.md. "About half the core melted" is
-# settled on nrc-tmi-backgrounder.
 cautionaryTale:
   title: "Three Mile Island Unit 2"
   date: "March 28, 1979"

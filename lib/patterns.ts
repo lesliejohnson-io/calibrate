@@ -17,7 +17,6 @@ import {
   type Moment,
   type Relation,
   type RelationKey,
-  type Status,
 } from "./schema";
 
 export type { InterfaceComponent, Verdict } from "./schema";
@@ -342,50 +341,12 @@ function checkLibrary(patterns: Pattern[]): void {
   }
 }
 
-/** The statuses a production build serves. Anything else stays off the site. */
-const PUBLISHED_STATUSES: readonly Status[] = ["reviewed", "stable"];
-
-let heldSlugs = new Set<string>();
-
-/**
- * Removes the link, and keeps its words, wherever a body points at a pattern
- * that is not being served, so a published page never links to a 404.
- */
-function unlinkHeld(body: Body, held: Set<string>): Body {
-  const unlink = (html: string) =>
-    html.replace(/<a href="\/patterns\/([a-z0-9-]+)">([\s\S]*?)<\/a>/g, (link, slug: string, text: string) =>
-      held.has(slug) ? text : link,
-    );
-  return Object.fromEntries(
-    Object.entries(body).map(([key, html]) => [key, html ? unlink(html) : html]),
-  ) as Body;
-}
-
-/**
- * What the site serves. In production that is published patterns only; in dev
- * it is everything, so held pages can still be read and worked on. Every route
- * reads patterns through `getAllPatterns`, so filtering here means a new route
- * cannot expose a held page by forgetting to filter.
- */
-function servedPatterns(all: Pattern[]): Pattern[] {
-  if (process.env.NODE_ENV !== "production") return all;
-  const isPublished = (p: Pattern) => PUBLISHED_STATUSES.includes(p.status);
-  heldSlugs = new Set(all.filter((p) => !isPublished(p)).map((p) => p.slug));
-  return all.filter(isPublished).map((p) => ({ ...p, body: unlinkHeld(p.body, heldSlugs) }));
-}
-
-/** Slugs of patterns that exist but are not being served. Empty in dev. */
-export function getHeldSlugs(): Set<string> {
-  getAllPatterns();
-  return heldSlugs;
-}
-
 let cache: Pattern[] | undefined;
 
 /**
- * Every pattern this build serves, ordered by `number`: published patterns in
- * production, all of them in dev. Files starting with "_" are ignored. Every
- * file is still validated, including the ones that are held back.
+ * Every pattern, ordered by `number`, whatever its status. Status tells a
+ * reader how far to trust a page; it does not decide whether they can see it.
+ * Files starting with "_" are ignored.
  */
 export function getAllPatterns(): Pattern[] {
   if (cache) return cache;
@@ -414,11 +375,9 @@ export function getAllPatterns(): Pattern[] {
   patterns.sort((a, b) => a.number - b.number);
   checkLibrary(patterns);
 
-  const served = servedPatterns(patterns);
-
   // Only cache in production: in dev, editing a .md file should show up on reload.
-  if (process.env.NODE_ENV === "production") cache = served;
-  return served;
+  if (process.env.NODE_ENV === "production") cache = patterns;
+  return patterns;
 }
 
 export function getPattern(slug: string): Pattern | undefined {

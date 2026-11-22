@@ -11,7 +11,7 @@ trustJobs: [recover, know]
 risk: critical
 reversibility: costly
 autonomy: [3, 5]
-domains: [driving, drone, industrial]
+domains: [maritime, aviation, driving]
 
 status: draft
 updated: "2026-11-06"
@@ -36,17 +36,6 @@ antiPattern: "Silent Step-Down"
 interface:
   component: graceful-degradation
 
-# VERIFY against NTSB/MAR-97/01 before this leaves draft: how long after
-# leaving Bermuda the antenna cable separated ("about an hour"); the alarm the
-# GPS gave on losing signal — its duration, whether it was audible, and where
-# on the bridge it annunciated; the "DR" indication on the GPS display and
-# where that display sat relative to the watch station; that the autopilot
-# took position from the GPS without distinguishing a fix from an estimate;
-# the roughly 34 hours between the switch to dead reckoning and the
-# grounding; how far west of the intended track the ship had drifted;
-# "about 10 miles east of Nantucket" for Rose and Crown Shoal; roughly 1,500
-# people aboard; and that there were no injuries, which the text implies by
-# not mentioning any.
 cautionaryTale:
   title: "Royal Majesty cruise ship"
   date: "June 10, 1995"
@@ -69,18 +58,18 @@ drafts:
   antiPattern: true
   examples: true
 
+# The notice above the opening story. Proposed wording, on this page only.
+unverified:
+  - text: "The opening story and the anti-pattern on this page have not yet been checked against {document}, the report that would settle them. Treat their details as unconfirmed until then."
+    document: "NTSB report MAR-97/01"
+    sourceId: ntsb-mar-97-01
+
 therefore: >-
   When a system loses capability, it steps down to a fallback designed in
   advance, and tells the operator plainly what still works and what doesn't.
 
 without:
   steps: ["Fault occurs", "Silence or alarm flood", "Operator guesses"]
-  # VERIFY against NTSB/MAR-97/01: that switching to dead reckoning on loss
-  # of satellite signal was the GPS unit's designed behaviour rather than a
-  # fault; that the autopilot consumed the estimated position without
-  # distinguishing it from a fix, and had no way to detect the mode change;
-  # and that the officers of the watch were navigating on that position for
-  # the roughly day and a half the phrase "a day and a half earlier" rests on.
   caption: "The GPS stepped down exactly as designed when it lost its signal, but nothing downstream noticed. The autopilot kept treating estimates as fixes, and the officers kept trusting a position that had stopped being measured a day and a half earlier."
 
 with:
@@ -121,7 +110,7 @@ sources:
     year: 1997
     url: "https://www.ntsb.gov/investigations/AccidentReports/Reports/MAR9701.pdf"
     type: incident-report
-    note: "Observed, and the source for the opening story. NTSB/MAR-97/01. Not yet read against the page: every figure in the tale and the anti-pattern above is drafted from the brief, and the VERIFY comments in this file's frontmatter list what has to be checked. The reason this incident is here rather than a second aviation one is that the step-down and the failure to notice it sit in different boxes — the GPS degraded correctly, and the autopilot consuming its output had no idea."
+    note: "Observed, and the source for the opening story. NTSB/MAR-97/01. Not yet read against the page: every figure in the tale and the anti-pattern above is drafted from the brief, and review/DRAFTS.md lists what has to be checked. The reason this incident is here rather than a second aviation one is that the step-down and the failure to notice it sit in different boxes — the GPS degraded correctly, and the autopilot consuming its output had no idea."
   - id: bea-af447
     title: "BEA Final Report — Air France Flight AF447, Rio de Janeiro to Paris"
     year: 2012
@@ -140,14 +129,6 @@ sources:
 
 ## In the field
 
-<!-- VERIFY: the AF447 entry below is this page's displaced opening story, cut
-     to one sentence and keeping its own source. The claim to check against
-     the BEA final report is the one this file's review list already records
-     at length: the report says the reconfiguration to alternate law *was*
-     called out and should have been displayed, so "never established what the
-     new mode could still be trusted with" rests on the report's hedged
-     conclusion that the pilot flying may not have grasped what it implied,
-     not on a finding that nothing was shown. -->
 **Observed · Aviation.** Air France 447: the flight controls stepped down to a mode without stall protection. The reconfiguration was called out from the ECAM, and the BEA concludes it is possible the pilot flying "was not fully aware of this reconfiguration and of what it implied."[cite:bea-af447]
 
 **Observed · Driving.** UN R157 requires an automated lane keeping system to perform a minimum risk manoeuvre when the driver does not resume control after a transition demand — the floor of the ladder, written into a regulation.[cite:un-r157]

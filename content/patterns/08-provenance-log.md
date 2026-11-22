@@ -11,7 +11,7 @@ trustJobs: [know]
 risk: critical
 reversibility: irreversible
 autonomy: [0, 5]
-domains: [driving]
+domains: [driving, software]
 
 status: reviewed
 updated: "2026-11-09"

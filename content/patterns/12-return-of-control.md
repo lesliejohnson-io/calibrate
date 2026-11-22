@@ -11,7 +11,7 @@ trustJobs: [intervene, predict]
 risk: critical
 reversibility: irreversible
 autonomy: [1, 4]
-domains: [aviation, driving, industrial]
+domains: [warehouse, aviation, driving, industrial]
 
 status: draft
 updated: "2026-11-07"
@@ -37,24 +37,8 @@ interface:
 # The demo is now an invented top-down aisle rather than an invented pitch
 # display: the forklift, the aisle, the two-second auto-resume and the hold
 # wording are written for this page.
-# VERIFY: the one thing the demo asserts about the real machine is the
-# behaviour it contrasts - that the vehicle resumed by itself once its path
-# cleared, with no human act in between. Check that against FACE Report
-# 71-171-2018, including whether two seconds is anywhere near the real delay
-# or is purely this page's pacing.
 demoNote: "Simplified illustration."
 
-# VERIFY against Washington State L&I FACE Report 71-171-2018 before this
-# leaves draft: the date of the incident; that the laser guided vehicles
-# navigated by laser and moved pallets at a water bottling plant; the
-# auto-resume behaviour - that the vehicle restarted by itself once the
-# obstruction cleared unless an emergency stop had been pressed, which is the
-# claim the whole pattern rests on; the sequence of events (the forklift alarm,
-# the dock coordinator entering the warehouse, the coworker hearing noises over
-# the radio and finding him slumped against the vehicle, the vehicle then
-# moving again, and the raised forks coming down); and the victim's age (45)
-# and role (dock coordinator). No individual is named here and none should be
-# added.
 cautionaryTale:
   title: "Driverless forklift at a bottling plant"
   date: "December 9, 2015"
@@ -77,18 +61,25 @@ drafts:
   demo: true
   examples: true
 
+# The notice above the opening story.
+unverified:
+  - text: "The opening story, the anti-pattern and the demo on this page have not yet been checked against {document}, the report that would settle them. Treat their details as unconfirmed until then."
+    document: "FACE Report 71-171-2018"
+    sourceId: wa-face-71-171-2018
+  - text: "The Lion Air entry under In the field has not yet been checked against {document}, the report that would settle it."
+    document: "the KNKT final report"
+  - text: "The Super Cruise entry under In the field has not yet been checked against {document}, the source it cites."
+    document: "GM TechLink"
+    sourceId: gm-techlink
+  - text: "The ISO 13850 entry under In the field was read from a manufacturer's datasheet and has not yet been checked against {document}."
+    document: "the standard itself"
+
 therefore: >-
   When a person takes control, the machine stops acting and says so, and it
   resumes only when the person deliberately hands control back.
 
 without:
   steps: ["Human corrects", "Machine re-asserts", "They fight"]
-  # VERIFY against FACE Report 71-171-2018: that the vehicle treated an
-  # obstruction as a pause rather than a stop, that it resumed on its own
-  # sensors clearing with no human action, and that an emergency stop was the
-  # only thing that would hold it. "No one confirming the space was safe" is
-  # the pattern's reading of that behaviour, not a finding - check the report
-  # does not describe some other gate before resumption.
   caption: >-
     The forklift treated a stop as a pause. Once its sensors cleared, it took
     control back by itself, with no one choosing to hand it back and no one
@@ -117,7 +108,7 @@ sources:
     year: 2018
     url: "https://www.lni.wa.gov/safety-health/safety-research/files/2018/71_171_2018_LaserGuidedVehicle.pdf"
     type: incident-report
-    note: "Observed, and the source for the opening story. Washington State FACE program, report 71-171-2018. Not yet read against this page: every figure in the tale, the anti-pattern and the rethemed demo is drafted from the rewrite brief, and the VERIFY comments in this frontmatter list what to check. The reason this incident replaced a flight-deck one is that it is the pattern's failure in its purest form - the machine was not fighting anyone, it simply decided on its own that the interruption was over."
+    note: "Observed, and the source for the opening story. Washington State FACE program, report 71-171-2018. Not yet read against this page: every figure in the tale, the anti-pattern and the rethemed demo is drafted from the rewrite brief, and review/DRAFTS.md lists what to check. The reason this incident replaced a flight-deck one is that it is the pattern's failure in its purest form - the machine was not fighting anyone, it simply decided on its own that the interruption was over."
   - id: aaic-b1816
     title: "Aircraft Accident Investigation Report — China Airlines Airbus Industrie A300B4-622R B1816, Nagoya Airport, April 26, 1994"
     author: "Aircraft Accident Investigation Commission, Ministry of Transport, Japan"
@@ -177,13 +168,6 @@ sources:
 
 ## In the field
 
-<!-- VERIFY: the China Airlines 140 entry below is this page's displaced
-     opening story, cut to one sentence and keeping its AAIC source. Both
-     halves are already verified against the report in this file's review
-     list - the THS moving to full nose-up against the first officer's
-     control-wheel inputs, and cause 5, that there was no warning and
-     recognition function to alert the crew to the out-of-trim condition.
-     Nothing new to check: the sentence is a cut, not a claim. -->
 **Observed · Aviation.** China Airlines 140. The crew engaged the autopilots with go-around still active. The automation kept trimming nose-up against the pilots' nose-down inputs, and no warning function announced the out-of-trim condition as it developed.[cite:aaic-b1816]
 
 **Observed · Aviation.** Lion Air 610 and Ethiopian Airlines 302. On Lion Air 610 the trim moved more than thirty times, the pilots trimming back against it each time; using the electric trim paused the automated system, which then reset and pushed the nose down again.[cite:claims-journal][cite:satcom-guru] All 189 people on board Lion Air 610 died, and all 157 on Ethiopian 302.[cite:ntsb-asr-19-01]

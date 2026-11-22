@@ -105,6 +105,18 @@ drafts:
   demo: true
   considerations: true
 
+# The notice above the opening story.
+unverified:
+  - text: "The opening story and the anti-pattern on this page have been read against {document}, but that reading has not yet been reviewed. Treat their details as unconfirmed until then."
+    document: "the official French report on Air Inter Flight 148"
+    sourceId: bea-f-gged
+  - text: "The four design considerations citing {document} have not yet been checked against it."
+    document: "that report"
+    sourceId: bea-f-gged
+  - text: "The Asiana detail in the design considerations has not yet been checked against {document}, the report it cites."
+    document: "NTSB report AAR-14/01"
+    sourceId: ntsb-aar-14-01
+
 openQuestions:
   - "Which mode changes deserve a cue strong enough to interrupt, and which should stay quiet? Every alert spent on a routine change trains operators to look past the one that hands a job back."
   - "How does this carry over to machines without a flight deck's display discipline — a forklift switching from autonomous to manual, a surgical robot changing control scheme? The research so far is all aviation."

@@ -11,7 +11,7 @@ trustJobs: [know, recover]
 risk: critical
 reversibility: irreversible
 autonomy: [1, 4]
-domains: [aviation]
+domains: [drone, aviation]
 
 status: draft
 updated: "2026-11-07"
@@ -37,26 +37,8 @@ interface:
 # Shown above the demo. This one stages a real accident with invented
 # readouts, so it says so rather than leaving the reader to assume the lines
 # are from the recorder.
-# VERIFY: the demo now stages the Nogales ground control station rather than a
-# flight deck. Nothing in it is a reading from CHI06MA121 — the ALT and
-# AIRSPEED behaviour, the "ENGINE —" placeholder and the wording of the named
-# alert are written for this page. What has to be checked is the one claim the
-# demo rests on: that the condition lever on the payload operator's console
-# becomes the engine fuel control when that console is flying, and that its
-# cutoff position produced no annunciation.
 demoNote: "Simplified illustration, not real ground station data."
 
-# VERIFY against NTSB brief CHI06MA121 and Safety Recommendations A-07-70
-# through -86 before this leaves draft: the time of day ("before dawn") and
-# that this was a border patrol flight; that it was the pilot's console in the
-# ground control station that locked up, and that he transferred control to
-# the payload operator's console rather than to a spare; that on each console
-# the same lever is the camera iris control under the payload operator and the
-# engine condition lever under the pilot; that the position the lever was
-# sitting in corresponded to fuel cutoff; that nothing in the station
-# annunciated the cutoff, so the pilot saw the descent without its cause;
-# "about 10 miles northwest of Nogales International Airport" for the crash
-# site; and that nobody on the ground was hurt.
 cautionaryTale:
   title: "CBP Predator B drone"
   date: "April 25, 2006"
@@ -80,18 +62,20 @@ drafts:
   demo: true
   examples: true
 
+# The notice above the opening story.
+unverified:
+  - text: "The opening story, the anti-pattern and the demo on this page have not yet been checked against {document}, the documents that would settle them. Treat their details as unconfirmed until then."
+    document: "NTSB brief CHI06MA121 and Safety Recommendations A-07-70 through A-07-86"
+    sourceId: ntsb-chi06ma121
+  - text: "The Lion Air 610 entry under In the field rests on secondary reporting and has not yet been checked against {document}, the report that would settle it."
+    document: "the KNKT final report"
+
 therefore: >-
   Name the fault itself, not just its symptoms, and record it so it reaches
   the people who can fix it.
 
 without:
   steps: ["Fault occurs", "Symptoms only", "Wrong diagnosis"]
-  # VERIFY against NTSB brief CHI06MA121 and A-07-70 through -86: that the
-  # ground control station presented altitude and airspeed but annunciated
-  # nothing about the fuel condition lever or the cutoff; and that the pilot
-  # did not identify the lever as the cause during the descent. "Falling
-  # altitude, decaying speed" is this page's own shorthand for what the
-  # station showed, not a quotation from the brief.
   caption: "The ground station showed every symptom of an engine failure (falling altitude, decaying speed) but never named the cause: one lever, on one console, in the cutoff position. The pilot had to infer it, and didn't."
 
 with:
@@ -116,7 +100,7 @@ sources:
     year: 2007
     url: "https://www.ntsb.gov/safety/safety-recs/RecLetters/A07_70_86.pdf"
     type: incident-report
-    note: "Observed, and the source for the opening story. The brief was adopted October 31, 2007; the recommendation letter covering unmanned aircraft ground control stations was issued alongside it. Not yet read against this page: every figure in the tale and the anti-pattern above is drafted from the brief supplied with the rewrite, and the VERIFY comments in this file's frontmatter list what has to be checked. The reason this incident replaced a flight-deck one is that the cause here was a control's meaning changing underneath the operator — the strongest possible case of symptoms arriving without a nameable cause."
+    note: "Observed, and the source for the opening story. The brief was adopted October 31, 2007; the recommendation letter covering unmanned aircraft ground control stations was issued alongside it. Not yet read against this page: every figure in the tale and the anti-pattern above is drafted from the brief supplied with the rewrite, and review/DRAFTS.md lists what has to be checked. The reason this incident replaced a flight-deck one is that the cause here was a control's meaning changing underneath the operator — the strongest possible case of symptoms arriving without a nameable cause."
   - id: airlineratings-knkt
     title: "Lion Air MAX report finds Boeing, airline, pilots contributed to tragedy"
     author: "AirlineRatings"
@@ -163,12 +147,6 @@ sources:
 
 ## In the field
 
-<!-- VERIFY: the Lion Air 610 entry below is this page's displaced opening
-     story, cut to one sentence and keeping both of its sources. What to check
-     against the KNKT final report, when it is pulled, is what this file's
-     review list already records: that the AOA DISAGREE alert was inoperative
-     on that airframe, and that the stick shaker, the IAS/ALT disagreement and
-     the nose-down trim were all present with no alert naming the sensor. -->
 **Observed · Aviation.** Lion Air 610. The crew had the stick shaker, disagreeing instruments and runaway trim, but no alert named the faulty sensor behind them.[cite:airlineratings-knkt][cite:leeham-jt610]
 
 **Observed · Aviation.** The 777's crew alerting pairs each message with a checklist indicator: the icon sits beside the message while its checklist is outstanding and clears once it is done, so the alert carries its response rather than just its name.[cite:mit-16422]
