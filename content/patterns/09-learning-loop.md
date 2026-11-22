@@ -11,7 +11,7 @@ trustJobs: [recover]
 risk: critical
 reversibility: irreversible
 autonomy: [1, 4]
-domains: [aviation]
+domains: [maritime, aviation]
 
 status: draft
 updated: "2026-10-30"
@@ -36,26 +36,8 @@ interface:
 
 # The demo invents its bridge: the sailing counter, the status track and the
 # three-sailing count are written for this page.
-# VERIFY: the demo asserts two things about the real ship, and both come from
-# the Sheen Report rather than from this page - that masters had asked for
-# bridge door indicator lights and been refused, and that the bridge had no
-# indicator to tell the captain whether the doors were shut. Check both, and
-# check that "3 other masters reported this" is not a figure the report
-# contradicts; it is written here as a plausible number, not a finding.
 demoNote: "Simplified illustration."
 
-# VERIFY against the Sheen Report (Department of Transport, Court No. 8074)
-# before this leaves draft: the departure time ("just after 6 p.m.") and that
-# she sailed from the inner harbour at Zeebrugge; that the assistant bosun
-# responsible for closing the doors was asleep in his cabin; that the bow
-# doors were not visible from the wheelhouse and that there was no indicator
-# there; the time from departure to capsize ("within minutes") and the
-# distance from the harbour ("less than a mile"); the death toll of 193; that
-# ships in the fleet had sailed with doors open before; the 1985 request from
-# a captain for bridge indicator lights and how the company answered it; and
-# when bridge indicator lights became a legal requirement, which the text
-# places after the disaster without giving a date or an instrument. No
-# individual is named here and none should be added.
 cautionaryTale:
   title: "Herald of Free Enterprise"
   date: "March 6, 1987"
@@ -82,6 +64,17 @@ drafts:
   considerations: true
   examples: true
 
+# The notice above the opening story.
+unverified:
+  - text: "The opening story, the anti-pattern, the demo and the Herald entry under In the field have not yet been checked against {document}, the report that would settle them. Treat their details as unconfirmed until then."
+    document: "the Sheen Report"
+    sourceId: sheen-report
+  - text: "The ASRS entry under In the field and the two design considerations that cite it have not yet been checked against {document}, the document that would settle them."
+    document: "the ASRS Program Briefing"
+    sourceId: asrs-briefing
+  - text: "The design considerations on counting repeats and on treating workarounds as reports are {document}, with no source behind them yet."
+    document: "this library's own reasoning"
+
 therefore: >-
   Make reporting cheaper than staying silent, route every report to someone
   who can change the machine, the procedure or the training, and show the
@@ -89,13 +82,6 @@ therefore: >-
 
 without:
   steps: ["Crew learns something", "It goes in a log", "Next crew starts blind"]
-  # VERIFY against the Sheen Report: that masters across the fleet knew ships
-  # had sailed with their doors open; that the 1985 request was made in
-  # writing and proposed indicator lights as the fix; that it reached
-  # management; and that nobody who could have fitted them acted on it. "And
-  # nobody who reported it heard back" is the sharpest claim here and the one
-  # least likely to be stated outright in the report - check it before the
-  # DRAFT tag comes off.
   caption: >-
     Masters across the fleet knew ships had sailed with their doors open, and
     one put it in writing with a fix attached. The memo reached management and
@@ -121,7 +107,7 @@ sources:
     year: 1987
     url: "https://assets.publishing.service.gov.uk/media/54c1704ce5274a15b6000025/FormalInvestigation_HeraldofFreeEnterprise-MSA1894.pdf"
     type: incident-report
-    note: "Observed, and the source for the opening story and the anti-pattern. Not yet read against this page: both are drafted from the rewrite brief, and the VERIFY comments in this frontmatter list what to check. The reason this incident opens the pattern is that the loop failed at its middle rather than at its intake - the report was filed, in writing, with the fix named in it."
+    note: "Observed, and the source for the opening story and the anti-pattern. Not yet read against this page: both are drafted from the rewrite brief, and review/DRAFTS.md lists what to check. The reason this incident opens the pattern is that the loop failed at its middle rather than at its intake - the report was filed, in writing, with the fix named in it."
   - id: bea-af447
     title: "BEA Final Report — Air France Flight AF447, Rio de Janeiro to Paris"
     year: 2012
@@ -157,24 +143,10 @@ openQuestions:
 
 ## In the field
 
-<!-- VERIFY: the Herald entry is this page's opening story in one line. The
-     claim to check against the Sheen Report is the one the tale and the
-     anti-pattern both rest on - that indicator lights were asked for before
-     the capsizing and the request was refused. -->
 **■ Without it · Maritime:** [Herald of Free Enterprise](#tale) (1987). Requests for bridge door indicators were dismissed before the capsizing.[cite:sheen-report]
 
-<!-- VERIFY: already verified against the BEA final report in the
-     `bea-af447` source note below - nine unreliable-airspeed reports in the
-     fleet between May 2008 and March 2009, six further events found only
-     afterwards, and section 2.4 on feedback making the repeated
-     non-application of the procedure impossible to identify in advance.
-     Nothing new to check here. -->
 **■ Without it · Aviation:** Air France 447. Repeated unreliable-airspeed events were reported, but the feedback never reached training.[cite:bea-af447] It is the opening story on [Graceful Degradation](/patterns/graceful-degradation).
 
-<!-- VERIFY against the ASRS program briefing: that intake is voluntary,
-     confidential and non-punitive and is held by NASA rather than the FAA;
-     that reports are analysed rather than only filed; and that CALLBACK is
-     the monthly publication that carries findings back to pilots. -->
 **● Applies the pattern · Aviation:** NASA ASRS. Confidential, non-punitive reporting, analyzed and published back to pilots through CALLBACK.[cite:asrs-briefing]
 
 ## Notes

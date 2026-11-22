@@ -11,7 +11,7 @@ trustJobs: [intervene]
 risk: critical
 reversibility: irreversible
 autonomy: [2, 3]
-domains: [surgical]
+domains: [surgical, driving]
 
 status: draft
 updated: "2026-11-09"
@@ -74,6 +74,18 @@ cautionaryTale:
 # sources is on record.
 drafts:
   examples: true
+
+# The notice above the opening story.
+unverified:
+  - text: "The Uber entry under In the field, and the page's other claims about Uber's cameras, have not yet been checked against {document}, the report that would settle them. Treat their details as unconfirmed until then."
+    document: "NTSB report HAR-19/03"
+    sourceId: ntsb-har-19-03
+  - text: "The Super Cruise entry under In the field and the escalation considerations have not yet been checked against {document}, the page they cite."
+    document: "GMC's Super Cruise page"
+    sourceId: gmc-super-cruise
+  - text: "That entry's camera detail has not yet been checked against {document}, the article it cites."
+    document: "the Seeing Machines article"
+    sourceId: seeing-machines
 
 therefore: >-
   Check that the person can actually supervise (looking, present, hands
@@ -174,12 +186,6 @@ sources:
 
 ## In the field
 
-<!-- VERIFY: the Mountain View entry below is this page's displaced opening
-     story, cut to one sentence and keeping its NTSB source. Both figures in it
-     are already verified against NTSB/HAR-20/01 in this file's review list -
-     engagement assessed from steering wheel torque, and no driver-applied
-     torque detected from about 6 seconds before impact until the impact.
-     Nothing new to check: the sentence is a cut, not a claim. -->
 **Observed · Driving.** Tesla, Mountain View. The car checked for hands on the wheel, and hadn't detected them for the last six seconds before it struck a barrier.[cite:ntsb-har-20-01]
 
 **Observed · Driving.** Uber, Tempe. The NTSB found the operator was visually distracted by her phone, and that Uber had cameras watching operators but didn't check that they were paying attention.[cite:ntsb-har-19-03] Tempe is the opening story on [Provenance Log](/patterns/provenance-log).

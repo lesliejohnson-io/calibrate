@@ -12,7 +12,7 @@ trustJobs: [predict, know]
 risk: elevated
 reversibility: costly
 autonomy: [2, 5]
-domains: [aviation, industrial, warehouse, surgical]
+domains: [aviation]
 
 status: reviewed
 updated: "2026-10-23"

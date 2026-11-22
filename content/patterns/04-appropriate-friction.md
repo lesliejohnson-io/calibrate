@@ -11,7 +11,7 @@ trustJobs: [intervene, know]
 risk: critical
 reversibility: irreversible
 autonomy: [1, 5]
-domains: [clinical, aviation, drone, surgical, industrial]
+domains: [clinical, aviation]
 
 status: reviewed
 updated: "2026-11-07"

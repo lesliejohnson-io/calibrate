@@ -11,7 +11,7 @@ trustJobs: [know, calibrate]
 risk: elevated
 reversibility: costly
 autonomy: [2, 4]
-domains: [defense, industrial, surgical, maritime]
+domains: [defense]
 
 status: reviewed
 updated: "2026-11-07"

@@ -11,7 +11,7 @@ trustJobs: [intervene, predict]
 risk: critical
 reversibility: irreversible
 autonomy: [2, 4]
-domains: [rail, driving, surgical, drone]
+domains: [rail, driving, aviation]
 
 status: draft
 updated: "2026-11-07"
@@ -40,9 +40,6 @@ interface:
 # the construction zone and the countdowns are written for this page.
 demoNote: "Simplified illustration."
 
-# VERIFY against the CIAF report directly: see the open item under
-# 01 · The Handoff in review/AUDIT.md. The death toll (80) is settled by CIAF
-# p. 25: 79 at the end of August, then a further death reported by Renfe.
 cautionaryTale:
   title: "Alvia train at Santiago de Compostela"
   date: "July 24, 2013"
@@ -83,6 +80,17 @@ drafts:
   antiPattern: true
   examples: true
 
+# The notice above the opening story.
+unverified:
+  - text: "The opening story and the anti-pattern on this page have not yet been fully checked against {document}, the report that would settle them. Treat their details as unconfirmed until then."
+    document: "the CIAF final report"
+    sourceId: ciaf-santiago-2014
+  - text: "The ETCS entry under In the field has not yet been checked against {document}, the specification that would settle it."
+    document: "ETCS SUBSET-026"
+  - text: "{document}, listed under Sources, has not yet been located or read."
+    document: "The July 2024 court ruling on the derailment"
+    sourceId: santiago-ruling-2024
+
 therefore: >-
   Hand over control early and on purpose: signal clearly, tell the operator
   what's happening, give them time to get their bearings, and release only
@@ -90,12 +98,6 @@ therefore: >-
 
 without:
   steps: ["Machine driving", "Sudden alarm", "Human takes over cold"]
-  # VERIFY against the CIAF report: that the transition from high-speed to
-  # conventional track happened at a fixed point on the line rather than on a
-  # condition; that nothing in the cab annunciated it, leaving trackside
-  # signage as the only marker; and that the ETCS onboard equipment - which
-  # would have announced the transition, demanded an acknowledgement and
-  # applied the brakes without one - had been switched off by order.
   caption: >-
     The track handed speed control to the driver at a fixed point, at full
     speed, with nothing in the cab to say it had happened. The version that
@@ -123,7 +125,7 @@ sources:
     author: "Comisión de Investigación de Accidentes Ferroviarios (CIAF)"
     year: 2014
     type: incident-report
-    note: "Observed, and the source for the opening story. FLAGGED, and the reason this entry has no `url`: the CIAF report was not located at a stable public address, so nothing could be linked without inventing a citation. The death toll is 80. CIAF p. 25, section 2.3.1, gives the court's count at the end of August and then a further death: “a finales de agosto, el Juzgado de Instrucción nº 3 de Santiago de Compostela cifraba en 226 las personas afectadas por el accidente, de las que 79 eran víctimas mortales y 147 heridos. Posteriormente, Renfe Operadora informó del fallecimiento de una persona, por lo que el número de víctimas mortales es 80 (dos pertenecientes al personal del tren) y 152 los afectados por el accidente.” Do not mix the denominators: CIAF's 226 is people affected, while shultz-2016 counts 224 occupants. CIAF does not explain its closing figure of 152 against the 226. Apart from the death toll, nothing in the tale or the anti-pattern has been read against either document; the VERIFY comments in this frontmatter list what to check."
+    note: "Observed, and the source for the opening story. FLAGGED, and the reason this entry has no `url`: the CIAF report was not located at a stable public address, so nothing could be linked without inventing a citation. The death toll is 80. CIAF p. 25, section 2.3.1, gives the court's count at the end of August and then a further death: “a finales de agosto, el Juzgado de Instrucción nº 3 de Santiago de Compostela cifraba en 226 las personas afectadas por el accidente, de las que 79 eran víctimas mortales y 147 heridos. Posteriormente, Renfe Operadora informó del fallecimiento de una persona, por lo que el número de víctimas mortales es 80 (dos pertenecientes al personal del tren) y 152 los afectados por el accidente.” Do not mix the denominators: CIAF's 226 is people affected, while shultz-2016 counts 224 occupants. CIAF does not explain its closing figure of 152 against the 226. Apart from the death toll, nothing in the tale or the anti-pattern has been read against either document; review/DRAFTS.md lists what to check."
   - id: irj-santiago-2014
     title: "Driver error “only cause” of Santiago accident, says report"
     author: "International Railway Journal"
@@ -147,7 +149,7 @@ sources:
     title: "ETCS a crucial factor in Santiago accident inquiry"
     author: "International Railway Journal"
     type: article
-    note: "Secondary, and the source for the ETCS level-transition behaviour in the In the field entry: a text announcement, a flashing acknowledgement prompt, and a brake application if no acknowledgement comes. FLAGGED: no `url`, and the five-second figure in that entry is not verified - see the VERIFY comment beside it."
+    note: "Secondary, and the source for the ETCS level-transition behaviour in the In the field entry: a text announcement, a flashing acknowledgement prompt, and a brake application if no acknowledgement comes. FLAGGED: no `url`, and the five-second figure in that entry is not verified - see review/DRAFTS.md."
   - id: bainbridge-1983
     title: "Ironies of Automation"
     author: "Lisanne Bainbridge"
@@ -221,13 +223,6 @@ sources:
 
 **■ Without it · Automotive:** The system relied on the safety operator to brake in an emergency but had no way to ask her to take over. When it recognised the emergency, 1.2 seconds before impact, it told her nothing; the one alert it was built to send announced its own braking, and that arrived 0.2 seconds before the collision.[cite:ntsb-har-19-03] See [Provenance Log](/patterns/provenance-log) for the full timeline.
 
-<!-- VERIFY the five seconds, which is the one number in this entry and the
-     least certain thing in it: the IRJ article is the source for the shape of
-     an ETCS level transition - text announcement, flashing acknowledgement
-     prompt, brake application without one - but the acknowledgement window is
-     set by the ETCS specification rather than by the article, and "within
-     seconds" is written here deliberately vaguely because of that. Replace it
-     with the figure from SUBSET-026 and name the subset. -->
 **● Applies the pattern · Rail:** ETCS level transitions. The driver gets a text announcement, then a flashing prompt to acknowledge, and the train brakes if no acknowledgement comes within seconds.[cite:irj-etcs-santiago]
 
 **Observed · Driving.** UN R157 names this moment the transition demand, and requires non-driving displays to suspend once it starts.[cite:un-r157]
