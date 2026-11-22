@@ -1823,6 +1823,8 @@ a.station-body:hover .station-count {
   position: relative;
   display: grid;
   grid-template-columns: repeat(var(--dg-cols), auto);
+  /* One face for the whole diagram: numbers, titles, notes and labels. */
+  font-family: var(--font-sans), system-ui, sans-serif;
   grid-template-rows: auto auto auto;
   justify-content: start;
   row-gap: 18px;
@@ -1882,7 +1884,7 @@ a.station-body:hover .station-count {
   display: grid;
   grid-template-rows: minmax(0, 1fr) 0 minmax(0, 1fr);
   min-width: 36px;
-  padding: 0 6px;
+  padding: 0 4px;
 }
 
 .dg-labels {
@@ -1909,8 +1911,10 @@ a.station-body:hover .station-count {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 0;
-  max-width: 180px;
+  /* Never narrower than the longest word: a squeezed box spills its text
+     over its own border. */
+  min-width: min-content;
+  max-width: 150px;
   padding: 10px 12px 12px;
   text-align: center;
   background: var(--surface);
@@ -1944,7 +1948,7 @@ a.station-body:hover .station-count {
 }
 
 .dg-num {
-  font-family: var(--font-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
   font-size: var(--fs-2xs);
   line-height: 16px;
   color: var(--muted);
@@ -1952,7 +1956,6 @@ a.station-body:hover .station-count {
 
 .dg-title {
   margin-top: 2px;
-  font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 600;
   font-size: var(--fs-base);
   line-height: 1.25;

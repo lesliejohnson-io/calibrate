@@ -19,6 +19,11 @@ import { MechanismDiagram } from "./MechanismDiagram";
  * making. Patterns carry anywhere from three steps to six, so the width where
  * the switch has to happen is different on every page; `--steps` is what lets
  * the stylesheet work it out instead of guessing at a breakpoint.
+ *
+ * A pattern with a `diagram` draws its real shape instead, and the diagram
+ * carries everything itself: its notes sit inside their boxes, and there is
+ * no "first → last" arc beside the label, because the diagram's own start
+ * and end say it.
  */
 export function MechanismFlow({
   steps,
@@ -40,7 +45,7 @@ export function MechanismFlow({
         <h2 id="mechanism" className="mono-label">
           The mechanism
         </h2>
-        {first && last && (
+        {!diagram && first && last && (
           <p className="mechanism-arc">
             {first} &rarr; {last}
           </p>
@@ -73,7 +78,7 @@ export function MechanismFlow({
         </ol>
       )}
 
-      {notes.length > 0 && (
+      {!diagram && notes.length > 0 && (
         <div className="flow-notes">
           {notes.map((n) => (
             <p key={n.number} className="flow-note">

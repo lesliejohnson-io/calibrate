@@ -29,7 +29,7 @@ steps:
     detail: "Target and effect shown where the operator looks"
 
 # The mechanism's real shape (lib/diagram.ts). It replaces the row of
-# steps on the page; `steps` above still feeds the arc and the notes.
+# steps on the page, notes included; `steps` above is no longer shown here.
 diagram:
   elements:
     - { type: event, id: "01", title: "Mode changes", note: "Selected, or switched by the machine" }

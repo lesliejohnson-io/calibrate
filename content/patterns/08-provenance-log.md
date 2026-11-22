@@ -30,7 +30,7 @@ steps:
     detail: "A record the operator can read"
 
 # The mechanism's real shape (lib/diagram.ts). It replaces the row of
-# steps on the page; `steps` above still feeds the arc and the notes.
+# steps on the page, notes included; `steps` above is no longer shown here.
 diagram:
   elements:
     - { type: event, id: "01", title: "Action taken" }
