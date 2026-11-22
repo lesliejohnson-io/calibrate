@@ -3,6 +3,7 @@ import type { PatternCardData } from "@/lib/browse";
 import { pad } from "@/lib/format";
 import { PatternIllustration } from "./PatternIllustration";
 import { PatternThumb } from "./PatternThumb";
+import { StatusBadge } from "./StatusBadge";
 
 /**
  * An index card: thumbnail, number, name and a one-sentence intent
@@ -29,7 +30,10 @@ export function PatternCard({ pattern }: { pattern: PatternCardData }) {
           <PatternThumb id={pattern.thumbnail} size="card" className="card-thumb" />
         )}
         <span className="card-body">
-          <span className="label card-num">{pad(pattern.number)}</span>
+          <span className="card-meta">
+            <span className="label card-num">{pad(pattern.number)}</span>
+            <StatusBadge status={pattern.status} />
+          </span>
           <span className="card-name">{pattern.name}</span>
           <span className="card-intent">{pattern.intent}</span>
         </span>

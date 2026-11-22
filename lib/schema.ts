@@ -29,6 +29,10 @@ export const DOMAINS = [
   // Military systems, where the operator is a crew acting under rules of
   // engagement rather than a user with a preference.
   "defense",
+  // IT and business systems whose failure lands on people, such as an
+  // accounting system. A physical device whose software fails stays under the
+  // device's own domain.
+  "software",
   "home",
   "general",
 ] as const;
@@ -49,6 +53,7 @@ export const DOMAIN_LABELS: Record<(typeof DOMAINS)[number], string> = {
   aviation: "Aviation",
   rail: "Rail",
   defense: "Defense",
+  software: "Software",
   home: "Home",
   general: "General",
 };
@@ -269,8 +274,8 @@ export const REVERSIBILITY_DEFINITIONS: Record<Reversibility, string> = {
 
 export const STATUS_DEFINITIONS: Record<Status, string> = {
   seed: "A candidate: name and intent only. Kept in the repo but off the index until it is written up.",
-  draft: "The story, mechanism and pattern are written, with a few sources so far.",
-  reviewed: "Every section filled, at least three sources, and at least one observed example.",
+  draft: "Some claims have not yet been read against a source. The page says which.",
+  reviewed: "Every claim on the page has been read against the source it cites.",
   stable: "Reviewed, then revisited after real-world use or feedback.",
 };
 
@@ -499,6 +504,21 @@ const draftsSchema = z
   })
   .optional();
 
+/**
+ * What the notice above the opening story says is unverified. `text` is the
+ * sentence, with {document} where the settling document is named; `sourceId`
+ * links that name to its row in Sources.
+ */
+const unverifiedSchema = z
+  .array(
+    z.object({
+      text: z.string().includes("{document}"),
+      document: z.string().min(1),
+      sourceId: z.string().min(1).optional(),
+    }),
+  )
+  .optional();
+
 const relatedSchema = z.object({
   slug: z.string().min(1),
   type: z.enum(RELATIONS),
@@ -597,6 +617,7 @@ export const frontmatterSchema = z
     whenToUse: z.string().min(1).optional(),
     considerations: z.array(considerationSchema).default([]),
     drafts: draftsSchema,
+    unverified: unverifiedSchema,
 
     /* The incident the page opens with, and the one-sentence answer to it. */
     cautionaryTale: cautionaryTaleSchema.optional(),

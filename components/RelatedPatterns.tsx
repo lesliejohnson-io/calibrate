@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getIllustration, pad, thumbnailId, type RelationEntry } from "@/lib/patterns";
 import { PatternIllustration } from "./PatternIllustration";
 import { PatternThumb } from "./PatternThumb";
+import { StatusBadge } from "./StatusBadge";
 
 /**
  * Related patterns as one flat grid of compact cards (redesign-handoff.md
@@ -45,6 +46,7 @@ export function RelatedPatterns({ relations }: { relations: RelationEntry[] }) {
                 </span>
                 <span className="relation-name">{pattern.name}</span>
                 <span className="relation-note">{note}</span>
+                <StatusBadge status={pattern.status} />
               </span>
             </Link>
           </li>

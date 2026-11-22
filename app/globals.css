@@ -1399,6 +1399,18 @@ a.station-body:hover .station-count {
   display: block;
 }
 
+/* The number or relationship on the left, the status on the right. */
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.status-badge {
+  white-space: nowrap;
+}
+
 .card-name {
   display: block;
   margin-top: 2px;
@@ -1475,6 +1487,25 @@ a.station-body:hover .station-count {
 
 .crumbs [aria-current="page"] {
   color: var(--ink);
+}
+
+/* The breadcrumb and the status, as one line of metadata. */
+.pattern-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  padding-top: 32px;
+}
+
+.pattern-meta .crumbs {
+  padding-top: 0;
+}
+
+.pattern-meta .status-badge::before {
+  content: "\00B7" / "";
+  margin-right: 8px;
+  color: var(--muted);
 }
 
 .pattern-head {
@@ -1653,6 +1684,28 @@ a.station-body:hover .station-count {
   border-radius: var(--radius);
   color: var(--muted);
   white-space: nowrap;
+}
+
+/* ---------- Verification notice ---------- */
+/* Dashed like the draft tag: the same provisional signal, with the words. */
+.verification-notice {
+  margin: 24px 0 32px;
+  padding: 16px 20px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+}
+
+.verification-notice .mono-label {
+  margin: 0 0 6px;
+  color: var(--muted);
+}
+
+.verification-notice p:not(.mono-label) {
+  margin: 0;
+}
+
+.verification-notice p:not(.mono-label) + p {
+  margin-top: 8px;
 }
 
 /* ---------- Mechanism ---------- */
@@ -2442,6 +2495,12 @@ a.station-body:hover .station-count {
   font-size: var(--fs-base-sm);
   line-height: 20px;
   color: var(--text-3);
+}
+
+/* On its own line: beside the relationship it wraps the longer labels. */
+.relation-body .status-badge {
+  display: block;
+  margin-top: 6px;
 }
 
 /* ---------- Sources ---------- */
