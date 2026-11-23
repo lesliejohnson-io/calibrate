@@ -30,6 +30,42 @@ the build fails. A pattern with no demo yet carries
   well — the ⚠ and "Off the approach", not just red.
 - **Announce results** through a `role="status"` line, and offer a reset.
 
+## Staging the incident, or inventing a scene
+
+Decided 2026-11-22, for demos built from here on. The ones already built
+predate it and have not been audited against it.
+
+**A demo follows its page's cautionary tale by default.** The reader meets the
+failure in the machine the story is about, and then meets the same moment on a
+display that would have caught it. That is the page's whole argument, made
+under their hands instead of in prose, and it is worth more than a tidier
+scene: a reader who has just set the wrong value themselves does not need the
+anti-pattern explained to them.
+
+Three things override the default. Any one of them is enough.
+
+1. **The reader would have to perform the harm.** Appropriate Friction does not
+   stage Therac-25, because the demonstration would be a reader administering a
+   radiation overdose. A demo may put someone in the position the operator was
+   in; it may not make them the instrument.
+2. **Another pattern already stages that incident.** Shared Mental Model opens
+   on Asiana 214 and flies it; a second demo of the same cockpit teaches the
+   reader that two patterns are one pattern.
+3. **The source has no operable surface in it.** Where a report describes an
+   outcome but not the controls, staging it means inventing the readings and
+   presenting them as the accident, which is worse than a scene that is plainly
+   not it.
+
+Where the default is overridden, the demo **invents outright** rather than
+half-staging: a different machine, a different domain, nothing a reader could
+mistake for the record. It carries `demoNote: "Simplified illustration."`, and
+the pattern's `review:` list says what it departed from and why, so the
+decision is on the page rather than only in this file.
+
+What never changes is the behaviour. An invented scene still has to fail in
+the way the source says the real machine failed; what is invented is the
+setting, never the shape of the failure.
+
 ## Built
 
 Eight of these are **printed displays**: a fixed-width readout that prints one
@@ -464,33 +500,65 @@ masters" figure are written for this page. What is taken from it is the shape
 of the failure — a report filed in writing, with the fix named in it, that
 stopped at management. It carries `demoNote: "Simplified illustration."`
 
+### 16 Mode Awareness — `mode-awareness`
+
+An autonomous forklift whose speed window serves two modes: a precision mode
+reading in cm/s, for easing the forks into a pallet, and a transit mode
+reading in km/h. The reader types a speed — any whole number, 6 is suggested —
+and presses Go. The forklift eases in, seats the pallet, and switches itself
+to transit. The number in the window has not changed. It now means something
+about twenty-eight times larger.
+
+- **Without:** the window sets the digits at three times the height of the
+  mode label, with no unit anywhere. The mode change prints as one dim word,
+  `TRANSIT`, which is the whole of the annunciation. Pressing Go a second time
+  — the natural next move, with the pallet loaded and the drop point ahead —
+  prints `MOVING · 6`, then `⚠ 6 km/h` and `you set 6 cm/s`. The mode was on
+  the display the entire time.
+- **With:** the window carries the mode and the unit at the value's own
+  weight, so `PRECISION 6 cm/s` and `TRANSIT 6 km/h` cannot be read as each
+  other. The machine's switch prints `⚠ MODE CHANGED`, `PRECISION → TRANSIT`,
+  `speed is yours again:` and `6 now means 6 km/h` — the escalation the
+  mechanism asks for when a job comes back — and the setting the value was
+  entered under stays under the window as `set in precision: 6 cm/s`. Two
+  choices follow: keep 6 km/h, or set a transit speed. Keeping still runs at
+  6 km/h.
+
+This is deliberately not the `autothrottle` demo. There the failure is missing
+a mode change; here the mode change is benign on its own and the harm is in
+the value that carried over — a number that reads as correct in the mode it
+was not entered for.
+
+**It departs from the default in the section above, and the departure was
+decided rather than inherited.** The concept this file held for the pattern
+was the A320's own vertical window, with every figure from the BEA report: the
+reader is told the briefed descent is 3.3°, types `3.3`, and the Without
+window prints `-33` with a small `V/S` beside it. That version follows the
+tale, and it also asks a reader to set the descent that killed 87 people. The
+forklift was chosen instead, in the knowledge that it gives up the sourced
+figures — and it answers the pattern's own open question about machines
+without a flight deck's display discipline. The aviation concept is worth
+keeping in mind if the rule above is ever revisited.
+
+Nothing in the demo is a reading from the report, which describes an A320's
+FCU rather than a forklift: the two modes, the units and the speed are written
+for this page, and the speed is the reader's own. Two things are taken from
+it. The shape of the failure — one window serving two modes, in formats that
+do not tell each other apart — and the proportion: 22.335 describes the
+selected value as "beaucoup plus lisible (hauteur triple)" than the mode
+indication, so the Without window is set at exactly that ratio and the
+anti-pattern does not survive being drawn at any other. It carries
+`demoNote: "Simplified illustration."`
+
+The `→` in `PRECISION → TRANSIT` is the third U+2192 inside a printed display
+on the site, after Operator-to-Operator Handover and Provenance Log, and
+carries the same caveat: `.fc-line` is a fixed monospace stack, so the
+character can fall back if a font in it lacks the glyph.
+
 ## To build
 
 Concepts go here as they are decided. Until a pattern has one, its `review:`
 list should say so rather than this file carrying a placeholder.
-
-### 16 Mode Awareness — not built
-
-A printed display, titled `Flight control unit · Vertical`. The reader is
-told the briefed descent is a 3.3° path, types `3.3` and presses Enter. It
-must not repeat Shared Mental Model's `autothrottle` demo: that one is about
-a mode the machine changed; this one is about a value that reads correctly in
-the wrong mode.
-
-- **Without:** the window prints `-33` in large type, with `V/S` beside it
-  in small type, then `DESCENT ESTABLISHED`. The reader can carry on. A few
-  lines later it prints the result: `⚠ V/S 3300 FT/MN · PLANNED ABOUT 800`.
-  The demonstration is that `-33` looked like what they typed.
-- **With:** the same entry prints `V/S −3300 FT/MN`, the unit written out and
-  the mode as large as the value, and the target appears again beside the
-  actual vertical speed. Two choices follow: keep V/S, or switch to FPA, where
-  the window reads `FPA −3.3°`. Keeping V/S still flies at 3300: the display
-  tells, it doesn't veto.
-
-Every figure is from the BEA report: 3.3°, 3300 ft/mn, about 800 ft/mn. The
-report writes ft/mn, so the display does too. The window layout is written for
-the page, not copied from the A320 panel, so it should carry
-`demoNote: "Simplified illustration, not real flight data."`
 
 <!-- Paste the demo list here. One heading per pattern, in the shape of the
      built ones above: what the reader does, what the Without side does, what

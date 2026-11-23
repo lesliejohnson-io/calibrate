@@ -414,6 +414,7 @@ export const INTERFACE_COMPONENTS = [
   "readiness-check",
   "provenance-log",
   "learning-loop",
+  "mode-awareness",
 ] as const;
 export type InterfaceComponent = (typeof INTERFACE_COMPONENTS)[number];
 

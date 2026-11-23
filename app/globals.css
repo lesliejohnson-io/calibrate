@@ -4981,3 +4981,108 @@ a.station-body:hover .station-count {
   gap: 8px;
   margin-top: 6px;
 }
+
+/* ---------- Mode Awareness: the speed window ----------
+ *
+ * The one element the demo turns on. Both screens show the same two digits;
+ * what differs is whether the mode and the unit are set at the value's own
+ * weight or beside it as a small word.
+ *
+ * The unpaired window sets the value at three times the mode label's height.
+ * That proportion is not a style choice: 22.335 of the commission's report
+ * describes the selected value on the A320's FCU as "beaucoup plus lisible
+ * (hauteur triple)" than the mode indication next to it, and the anti-pattern
+ * is unreadable at any other ratio — at equal weight the reader simply sees
+ * the mode and the demo has nothing to demonstrate.
+ *
+ * Inside .console-crt, so it takes the display's green on black and
+ * introduces no colour of its own. Nothing here animates: the window is
+ * state, and the only staggering on these screens is the printing, which
+ * usePrinter already drops under prefers-reduced-motion.
+ */
+.ma-window {
+  margin: 0 0 14px;
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--edge);
+}
+
+.console-crt .ma-window {
+  border-bottom-color: var(--crt-dim);
+}
+
+.ma-face {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  line-height: 1.1;
+  white-space: pre;
+}
+
+/* Three times the mode's height, per the report. */
+.ma-value {
+  font-size: calc(var(--fs-2xs) * 3);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.ma-mode {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.console-crt .ma-mode {
+  color: var(--crt-mid);
+}
+
+/* Paired: the mode and the unit are the value's own size and sit on its line,
+   so the figure cannot be read without them. The mode also stops being dim —
+   it is no longer an annotation on the number, it is part of it. */
+.ma-window.is-paired .ma-mode,
+.ma-window.is-paired .ma-unit {
+  font-size: calc(var(--fs-2xs) * 3);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: inherit;
+}
+
+.console-crt .ma-window.is-paired .ma-mode {
+  color: var(--crt-green);
+}
+
+/* What the value was entered under, once the two have come apart. Dim and
+   small: it is the check on the live reading, not a second reading. */
+.ma-setin {
+  margin: 6px 0 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: var(--fs-base-sm);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.console-crt .ma-setin {
+  color: var(--crt-mid);
+}
+
+/* The field is a machine's field: two digits, not a sentence. */
+.ma-input {
+  width: 4em;
+  text-transform: none;
+}
+
+/* Keep, or set a transit speed. The two sit on one row where there is room
+   and stack where there is not, because neither is the default. */
+.ma-choices {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+}
+
+/* A rejected entry, on the row with the field that rejected it. */
+.ma-reject {
+  flex-basis: 100%;
+  margin: 0;
+}

@@ -44,6 +44,13 @@ diagram:
 
 antiPattern: "Silent Mode Switch"
 
+interface:
+  component: mode-awareness
+
+# The demo invents its scene outright — a forklift, two speed modes, a number
+# the reader types — rather than staging the accident, so it says so.
+demoNote: "Simplified illustration."
+
 cautionaryTale:
   title: "Air Inter Flight 148 at Mont Sainte-Odile"
   date: "January 20, 1992"
@@ -96,7 +103,10 @@ review:
   - "Drafted, needs your review: risk, reversibility, autonomy [1, 4], the five mechanism steps, the With side, and the cardIntent. None is from research."
   - "Not carried over from research: the Asiana “wake-up” finding (that an automatic wake-up in HOLD would likely have added power about 20 seconds before impact). Research has it from Swissinfo/Reuters only; the primary, NTSB AAR-14/01, still needs pulling for that finding. AIN and Business & Commercial Aviation articles also left out: not read this pass."
   - "What Airbus changed on the FCU after the accident is not stated in the report text read here, so the page does not claim it."
-  - "Needs demo (see DEMOS.md). It must not repeat the autothrottle demo Shared Mental Model already uses; the concept in DEMOS.md is built on the shared knob and window instead."
+  - "Demo built 2026-11-22, and not the concept DEMOS.md held for this pattern. That one was the A320's own vertical window, with every figure from the report; this one is an autonomous forklift whose speed window serves a precision mode in cm/s and a transit mode in km/h, and the machine switches between them. Your call, after weighing whether a demo should let a reader set the descent that killed 87 people. The departure is recorded in DEMOS.md."
+  - "Demo: nothing in it is a reading from the report, which describes an A320's FCU rather than a forklift. The two modes, the units and the speed are written for this page, and the speed is whatever the reader types. Two things are taken from the report: the shape of the failure, and the proportion — the Without window sets the digits at three times the height of the mode label, per 22.335."
+  - "Demo: it does not repeat the autothrottle demo Shared Mental Model already uses. There the failure is missing a mode change; here the mode change is benign on its own and the harm is the value that carried over. Worth checking the two read as different things on the site, since this is the second page on which the distinction is being asked to carry weight."
+  - "Demo: the arrow in \"PRECISION → TRANSIT\" is the third U+2192 inside a printed display on the site, after Operator-to-Operator Handover and Provenance Log, and carries the same caveat — `.fc-line` is a fixed monospace stack, so the character can fall back if a font in it lacks the glyph."
   - "Worth settling: whether Mode Awareness stands apart from Shared Mental Model. Both now open on vertical-mode error in aviation; Shared Mental Model's Therefore is close to this pattern's intent."
 
 drafts:
