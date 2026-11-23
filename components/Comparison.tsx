@@ -9,6 +9,7 @@ import { GlassBox } from "./illustrations/GlassBox";
 import { GracefulDegradation } from "./illustrations/GracefulDegradation";
 import { Handoff } from "./illustrations/Handoff";
 import { LearningLoop } from "./illustrations/LearningLoop";
+import { ModeAwareness } from "./illustrations/ModeAwareness";
 import { ProvenanceLog } from "./illustrations/ProvenanceLog";
 import { ReadinessCheck } from "./illustrations/ReadinessCheck";
 import { ReturnOfControl } from "./illustrations/ReturnOfControl";
@@ -34,6 +35,7 @@ const ILLUSTRATIONS: Record<
   "readiness-check": ReadinessCheck,
   "provenance-log": ProvenanceLog,
   "learning-loop": LearningLoop,
+  "mode-awareness": ModeAwareness,
 };
 
 /**
