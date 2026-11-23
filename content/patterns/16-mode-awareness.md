@@ -126,6 +126,9 @@ unverified:
   - text: "The Asiana detail in the design considerations has not yet been checked against {document}, the report it cites."
     document: "NTSB report AAR-14/01"
     sourceId: ntsb-aar-14-01
+  - text: "The demo is an invented forklift scene, not a record of this accident. The one proportion it takes from {document}, digits three times the height of the mode label, has been read, but that reading has not yet been reviewed."
+    document: "the official French report"
+    sourceId: bea-f-gged
 
 openQuestions:
   - "Which mode changes deserve a cue strong enough to interrupt, and which should stay quiet? Every alert spent on a routine change trains operators to look past the one that hands a job back."

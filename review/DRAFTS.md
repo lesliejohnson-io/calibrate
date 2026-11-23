@@ -30,7 +30,7 @@ The KNKT final report closes part of both 5 and 6, so pull it once.
 
 - [ ] Tale and anti-pattern: 16.2, 16.3 and 16.7 record them as read against the French report. Review, then clear `tale` and `antiPattern`.
 - [ ] Considerations: four cite `bea-f-gged` and one cites `ntsb-aar-14-01`. The audit has no item recording that these were read. Check them.
-- [ ] Demo: **the flag is set but the page has no demo** (16.11). Clear the flag or build the demo.
+- [ ] Demo: built on 2026-11-22 as an invented forklift scene (16.11). Review it, including the three-times proportion taken from report section 22.335, then clear `demo`.
 
 ## 2. Graceful Degradation (`03-graceful-degradation.md`)
 
