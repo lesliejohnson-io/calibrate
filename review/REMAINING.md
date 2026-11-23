@@ -124,7 +124,7 @@ One further difference: the page says the call came from the train's conductor, 
 
 | Item | What has to happen |
 |---|---|
-| 16.11 | **The demo does not exist.** The file has no `interface` component, and DEMOS.md holds the concept. |
+| ~~16.11~~ | ~~The demo does not exist.~~ Built on 2026-11-22 as an invented forklift scene, recorded in `DEMOS.md`. Its `demo` draft flag stays until you review it. |
 | 16.8 | Review the drafted risk, reversibility, autonomy, mechanism steps, With side and `cardIntent`. |
 | 16.12 | Decide whether the pattern survives. See section 5. |
 | No audit item | No item names what holds the `tale`, `antiPattern` and `considerations` flags. 16.2 and 16.3 record the tale as read against the French report, so clear these once you have reviewed them. |
